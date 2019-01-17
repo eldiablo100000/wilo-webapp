@@ -6,8 +6,11 @@ import App from './App'
 import router from './router'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import VueSidebarMenu from 'vue-sidebar-menu'
+import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 
 Vue.config.productionTip = false
+Vue.use(VueSidebarMenu)
 Vue.use(BootstrapVue)
 
 /* eslint-disable no-new */
