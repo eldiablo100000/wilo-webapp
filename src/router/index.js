@@ -63,22 +63,22 @@ export default new Router({
     },
     // floor
     {
-      path: '/floors/',
+      path: '/show-building/:id/floors/',
       name: 'FloorList',
       component: FloorList
     },
     {
-      path: '/show-floor/:id',
+      path: '/show-building/:id/show-floor/:id',
       name: 'ShowFloor',
       component: ShowFloor
     },
     {
-      path: '/add-floor',
+      path: '/show-building/:id/add-floor',
       name: 'CreateFloor',
       component: CreateFloor
     },
     {
-      path: '/edit-floor/:id',
+      path: '/show-building/:id/edit-floor/:id',
       name: 'EditFloor',
       component: EditFloor
     }

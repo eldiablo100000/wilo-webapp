@@ -10,7 +10,7 @@
                   horizontal
                   :label-cols="4"
                   breakpoint="md"
-                  label="Enter ISBN">
+                  label="Enter Title">
           <b-form-input id="title" :state="state" v-model.trim="building.title"></b-form-input>
         </b-form-group>
         <b-form-group id="fieldsetHorizontal"

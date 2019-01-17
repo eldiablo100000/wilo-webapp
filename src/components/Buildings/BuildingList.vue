@@ -2,7 +2,7 @@
   <b-row>
     <b-col cols="12">
       <h2>
-        Book List
+        Building List
         <b-link href="#/add-building">(Add Building)</b-link>
       </h2>
       <b-table striped hover :items="buildings" :fields="fields">

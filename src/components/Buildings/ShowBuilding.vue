@@ -10,15 +10,17 @@
           {{building.title}}
         </template>
         <template slot="lead">
-          Title: {{building.isbn}}<br>
+          Title: {{building.title}}<br>
           Description: {{building.description}}<br>
           Address: {{building.address}}<br>
           City: {{building.city}}<br>
+          Floors: {{building.floors}}<br>
         </template>
         <hr class="my-4">
         <p>
           Updated Date: {{building.updated_date}}
         </p>
+        <b-btn variant="success" @click.stop="addfloor(building._id)">Add Floor</b-btn>
         <b-btn variant="success" @click.stop="editbuilding(building._id)">Edit</b-btn>
         <b-btn variant="danger" @click.stop="deletebuilding(building._id)">Delete</b-btn>
       </b-jumbotron>
@@ -47,6 +49,12 @@ export default {
       })
   },
   methods: {
+    addfloor (buildingid) {
+      this.$router.push({
+        name: 'CreateFloor',
+        params: { id: buildingid }
+      })
+    },
     editbuilding (buildingid) {
       this.$router.push({
         name: 'EditBuilding',

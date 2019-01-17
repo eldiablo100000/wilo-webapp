@@ -7,14 +7,10 @@
       </h2>
       <b-jumbotron>
         <template slot="header">
-          {{floor.title}}
+          {{floor.number}}
         </template>
         <template slot="lead">
-          ISBN: {{floor.isbn}}<br>
-          Author: {{floor.author}}<br>
-          Description: {{floor.description}}<br>
-          Published Year: {{floor.published_year}}<br>
-          Publisher: {{floor.publisher}}<br>
+          number: {{floor.number}}<br>
         </template>
         <hr class="my-4">
         <p>

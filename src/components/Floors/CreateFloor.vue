@@ -27,7 +27,9 @@ export default {
   name: 'CreateFloor',
   data () {
     return {
-      floor: {}
+      floor: {},
+      floorId: undefined,
+      buildingId: undefined
     }
   },
   methods: {
@@ -35,10 +37,23 @@ export default {
       evt.preventDefault()
       axios.post(`http://localhost:3000/floor`, this.floor)
         .then(response => {
-          this.$router.push({
-            name: 'ShowFloor',
-            params: { id: response.data._id }
-          })
+          this.floorId = response.data._id
+          this.buildingId = this.$route.params.id
+          axios.get(`http://localhost:3000/building/` + this.buildingId)
+            .then(response => {
+              this.building = response.data
+              this.building.floors.push(this.floorId)
+              axios.put(`http://localhost:3000/building/` + this.buildingId, this.building)
+                .then(response => {
+                  console.log(response)
+                })
+                .catch(e => {
+                  this.errors.push(e)
+                })
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
         })
         .catch(e => {
           this.errors.push(e)
@@ -46,4 +61,10 @@ export default {
     }
   }
 }
+/*
+this.$router.push({
+            name: 'ShowFloor',
+            params: { id: response.data._id }
+          })
+          */
 </script>
