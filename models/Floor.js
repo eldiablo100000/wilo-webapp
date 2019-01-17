@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var FloorSchema = new mongoose.Schema({
-  floor_number: String, 
+  number: String, 
   updated_date: { type: Date, default: Date.now },
 });
 

@@ -2,10 +2,10 @@
   <b-row>
     <b-col cols="12">
       <h2>
-        Book List
-        <b-link href="#/add-book">(Add Book)</b-link>
+        Floor List
+        <b-link href="#/add-floor">(Add Floor)</b-link>
       </h2>
-      <b-table striped hover :items="books" :fields="fields">
+      <b-table striped hover :items="floors" :fields="fields">
         <template slot="actions" scope="row">
           <b-btn size="sm" @click.stop="details(row.item)">Details</b-btn>
         </template>
@@ -24,32 +24,30 @@
 import axios from 'axios'
 
 export default {
-  name: 'BookList',
+  name: 'FloorList',
   data () {
     return {
       fields: {
-        isbn: { label: 'ISBN', sortable: true, 'class': 'text-center' },
-        title: { label: 'Book Title', sortable: true },
-        actions: { label: 'Action', 'class': 'text-center' }
+        number: { label: 'Number', sortable: true, 'class': 'text-center' }
       },
-      books: [],
+      floors: [],
       errors: []
     }
   },
   created () {
-    axios.get(`http://localhost:3000/book`)
+    axios.get(`http://localhost:3000/floor`)
       .then(response => {
-        this.books = response.data
+        this.floors = response.data
       })
       .catch(e => {
         this.errors.push(e)
       })
   },
   methods: {
-    details (book) {
+    details (floor) {
       this.$router.push({
-        name: 'ShowBook',
-        params: { id: book._id }
+        name: 'ShowFloor',
+        params: { id: floor._id }
       })
     }
   }
