@@ -6,6 +6,9 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 
 var book = require('./routes/book');
+var building = require('./routes/building');
+var floor = require('./routes/floor');
+
 var app = express();
 
 var mongoose = require('mongoose');
@@ -18,8 +21,11 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended':'false'}));
 app.use(express.static(path.join(__dirname, 'dist')));
-app.use('/books', express.static(path.join(__dirname, 'dist')));
+app.use('/myapp', express.static(path.join(__dirname, 'dist')));
 app.use('/book', book);
+app.use('/building', building);
+app.use('/floor', floor);
+
 app.set('view engine', 'html')
 
 // catch 404 and forward to error handler
