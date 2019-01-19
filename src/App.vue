@@ -10,7 +10,7 @@
       <hr style="margin: 50px 0px;border: 1px solid #e3e3e3;">
       <router-view/>
     </div>
-  <!--  <sidebar-menu :menu="menu" :collapsed="collapsed" @collapse="onCollapse" :theme="selectedTheme" /> -->
+  <sidebar-menu :menu="menu" :collapsed="collapsed" @collapse="onCollapse" :theme="selectedTheme" />
   </div>
 </template>
 
@@ -41,6 +41,11 @@ export default {
             text: 'pro',
             class: 'badge-danger'
           }
+        },
+        {
+          href: '/buildings',
+          title: 'Buildings',
+          icon: 'fa fa-table'
         },
         {
           href: '/tables',
@@ -158,7 +163,7 @@ export default {
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600');
-
+@import url('https://fonts.googleapis.com/css?family=Material+Icons');
 body,
 html {
   margin: 0;

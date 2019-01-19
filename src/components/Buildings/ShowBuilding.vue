@@ -3,7 +3,7 @@
     <b-col cols="12">
       <h2>
         Edit Building
-        <b-link href="#/building">(Building List)</b-link>
+        <b-link href="#/buildings">(Building List)</b-link>
       </h2>
       <b-jumbotron>
         <template slot="header">
@@ -21,6 +21,9 @@
           Updated Date: {{building.updated_date}}
         </p>
         <b-btn variant="success" @click.stop="addfloor(building._id)">Add Floor</b-btn>
+        <b-btn variant="danger" @click.stop="deletefloor(building._id)">Delete Floor</b-btn>
+        <b-btn variant="warning" @click.stop="floorlist(building._id)">Floor List</b-btn>
+
         <b-btn variant="success" @click.stop="editbuilding(building._id)">Edit</b-btn>
         <b-btn variant="danger" @click.stop="deletebuilding(building._id)">Delete</b-btn>
       </b-jumbotron>
@@ -53,6 +56,18 @@ export default {
       this.$router.push({
         name: 'CreateFloor',
         params: { id: buildingid }
+      })
+    },
+    deletefloor (buildingid) {
+      this.$router.push({
+        name: 'DeleteFloor',
+        params: { id: buildingid }
+      })
+    },
+    floorlist (buildingid) {
+      this.$router.push({
+        name: 'FloorList',
+        path: `#/show-building/${buildingid}/floors`
       })
     },
     editbuilding (buildingid) {

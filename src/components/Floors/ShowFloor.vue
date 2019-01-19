@@ -3,7 +3,7 @@
     <b-col cols="12">
       <h2>
         Edit Floor
-        <b-link href="#/floors">(Floor List)</b-link>
+        <b-link :href="floorList">(Floor List)</b-link>
       </h2>
       <b-jumbotron>
         <template slot="header">
@@ -35,6 +35,8 @@ export default {
     }
   },
   created () {
+    this.floorList = '#/show-building/' + this.$route.params.id + '/floors'
+
     axios.get(`http://localhost:3000/floor/` + this.$route.params.id)
       .then(response => {
         this.floor = response.data

@@ -3,7 +3,7 @@
     <b-col cols="12">
       <h2>
         Add Floor
-        <b-link href="#/floors">(Floor List)</b-link>
+        <b-link :href="floorList">(Floor List)</b-link>
       </h2>
       <b-form @submit="onSubmit">
         <b-form-group id="fieldsetHorizontal"
@@ -29,8 +29,12 @@ export default {
     return {
       floor: {},
       floorId: undefined,
-      buildingId: undefined
+      buildingId: undefined,
+      floorList: ''
     }
+  },
+  created () {
+    this.floorList = '#/show-building/' + this.$route.params.id + '/floors'
   },
   methods: {
     onSubmit (evt) {

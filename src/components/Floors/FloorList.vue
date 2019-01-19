@@ -3,7 +3,7 @@
     <b-col cols="12">
       <h2>
         Floor List
-        <b-link href="#/add-floor">(Add Floor)</b-link>
+        <b-link :href="addFloor">(Add Floor)</b-link>
       </h2>
       <b-table striped hover :items="floors" :fields="fields">
         <template slot="actions" scope="row">
@@ -28,16 +28,31 @@ export default {
   data () {
     return {
       fields: {
-        number: { label: 'Number', sortable: true, 'class': 'text-center' }
+        number: { label: 'Number', sortable: true, 'class': 'text-center' },
+        actions: { label: 'Action', 'class': 'text-center' }
       },
+      buildingId: null,
+      floorsId: [],
       floors: [],
-      errors: []
+      errors: [],
+      addFloor: '#/show-building/' + this.$route.params.id + '/add-floor'
     }
   },
   created () {
-    axios.get(`http://localhost:3000/floor`)
+    this.buildingId = this.$route.params.id
+    axios.get(`http://localhost:3000/building/` + this.buildingId)
       .then(response => {
-        this.floors = response.data
+        console.log(response.data)
+        this.floorsId = response.data.floors
+        for (var el in this.floorsId) {
+          axios.get(`http://localhost:3000/floor/` + this.floorsId[el])
+            .then(response => {
+              this.floors.push(response.data)
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        }
       })
       .catch(e => {
         this.errors.push(e)
