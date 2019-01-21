@@ -29,14 +29,14 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return { 
-        zoom: 2,
-        center: [0, 0],
-        rotation: 0,
-        geolocPosition: undefined,
-      }
-    },
+export default {
+  data () {
+    return {
+      zoom: 2,
+      center: [0, 0],
+      rotation: 0,
+      geolocPosition: undefined
+    }
   }
+}
 </script>
