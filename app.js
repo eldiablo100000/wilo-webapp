@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 var book = require('./routes/book');
 var building = require('./routes/building');
 var floor = require('./routes/floor');
-var jquery = require('jquery')
 
 var app = express();
 var drop = false
