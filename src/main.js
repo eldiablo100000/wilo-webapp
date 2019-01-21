@@ -8,8 +8,11 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueSidebarMenu from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+import VueLayers from 'vuelayers'
+import 'vuelayers/lib/style.css' // needs css-loader
 
 Vue.config.productionTip = false
+Vue.use(VueLayers)
 Vue.use(VueSidebarMenu)
 Vue.use(BootstrapVue)
 

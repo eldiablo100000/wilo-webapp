@@ -14,12 +14,20 @@ import FloorList from '@/components/Floors/FloorList'
 import ShowFloor from '@/components/Floors/ShowFloor'
 import CreateFloor from '@/components/Floors/CreateFloor'
 import EditFloor from '@/components/Floors/EditFloor'
+
+import HelloWorld from '@/components/HelloWorld'
+
 Vue.use(Router)
 
 export default new Router({
   // mode: 'history',
   routes: [
     // book
+    {
+      path: '/',
+      name: 'HelloWorld',
+      component: HelloWorld
+    },
     {
       path: '/books/',
       name: 'BookList',
