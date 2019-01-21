@@ -43,7 +43,7 @@ export default {
     }
   },
   created () {
-    axios.get(`http://localhost:3000/building/` + this.$route.params.id)
+    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
       .then(response => {
         this.building = response.data
       })
@@ -55,25 +55,25 @@ export default {
     addfloor (buildingid) {
       this.$router.push({
         name: 'CreateFloor',
-        params: { id: buildingid }
+        params: { id_building: buildingid }
       })
     },
     deletefloor (buildingid) {
       this.$router.push({
         name: 'DeleteFloor',
-        params: { id: buildingid }
+        params: { id_building: buildingid }
       })
     },
     floorlist (buildingid) {
       this.$router.push({
         name: 'FloorList',
-        path: `#/show-building/${buildingid}/floors`
+        params: { id_building: buildingid }
       })
     },
     editbuilding (buildingid) {
       this.$router.push({
         name: 'EditBuilding',
-        params: { id: buildingid }
+        params: { id_building: buildingid }
       })
     },
     deletebuilding (buildingid) {

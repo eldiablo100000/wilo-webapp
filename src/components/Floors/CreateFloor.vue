@@ -34,7 +34,7 @@ export default {
     }
   },
   created () {
-    this.floorList = '#/show-building/' + this.$route.params.id + '/floors'
+    this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
   },
   methods: {
     onSubmit (evt) {
@@ -42,7 +42,7 @@ export default {
       axios.post(`http://localhost:3000/floor`, this.floor)
         .then(response => {
           this.floorId = response.data._id
-          this.buildingId = this.$route.params.id
+          this.buildingId = this.$route.params.id_building
           axios.get(`http://localhost:3000/building/` + this.buildingId)
             .then(response => {
               this.building = response.data
@@ -68,7 +68,8 @@ export default {
 /*
 this.$router.push({
             name: 'ShowFloor',
-            params: { id: response.data._id }
+            params: { id_building: this.$route.params.id_building, id_floor: response.data._id }
+
           })
           */
 </script>

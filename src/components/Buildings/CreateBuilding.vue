@@ -62,7 +62,7 @@ export default {
         .then(response => {
           this.$router.push({
             name: 'ShowBuilding',
-            params: { id: response.data._id }
+            params: { id_building: response.data._id }
           })
         })
         .catch(e => {

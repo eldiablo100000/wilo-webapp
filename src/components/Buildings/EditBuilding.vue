@@ -56,7 +56,7 @@ export default {
     }
   },
   created () {
-    axios.get(`http://localhost:3000/building/` + this.$route.params.id)
+    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
       .then(response => {
         this.building = response.data
       })
@@ -67,11 +67,11 @@ export default {
   methods: {
     onSubmit (evt) {
       evt.preventDefault()
-      axios.put(`http://localhost:3000/building/` + this.$route.params.id, this.building)
+      axios.put(`http://localhost:3000/building/` + this.$route.params.id_building, this.building)
         .then(response => {
           this.$router.push({
             name: 'ShowBuilding',
-            params: { id: this.$route.params.id }
+            params: { id_building: this.$route.params.id_building }
           })
         })
         .catch(e => {

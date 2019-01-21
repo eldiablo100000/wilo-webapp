@@ -31,23 +31,22 @@ export default {
         number: { label: 'Number', sortable: true, 'class': 'text-center' },
         actions: { label: 'Action', 'class': 'text-center' }
       },
-      buildingId: null,
       floorsId: [],
       floors: [],
       errors: [],
-      addFloor: '#/show-building/' + this.$route.params.id + '/add-floor'
+      addFloor: '#/building/' + this.$route.params.id_building + '/add-floor'
     }
   },
   created () {
-    this.buildingId = this.$route.params.id
-    axios.get(`http://localhost:3000/building/` + this.buildingId)
+    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
       .then(response => {
-        console.log(response.data)
         this.floorsId = response.data.floors
         for (var el in this.floorsId) {
           axios.get(`http://localhost:3000/floor/` + this.floorsId[el])
             .then(response => {
-              this.floors.push(response.data)
+              if (response.data != null) {
+                this.floors.push(response.data)
+              }
             })
             .catch(e => {
               this.errors.push(e)
@@ -62,7 +61,7 @@ export default {
     details (floor) {
       this.$router.push({
         name: 'ShowFloor',
-        params: { id: floor._id }
+        params: { id_building: this.$route.params.id_building, id_floor: floor._id }
       })
     }
   }

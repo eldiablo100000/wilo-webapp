@@ -10,11 +10,16 @@ var floor = require('./routes/floor');
 var jquery = require('jquery')
 
 var app = express();
-
+var drop = false
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 mongoose.connect('mongodb://localhost/mean', { promiseLibrary: require('bluebird') })
-  .then(() =>  console.log('connection succesful'))
+  .then(function() {
+    
+        console.log('connection succesful')
+        if(drop) mongoose.connection.db.dropDatabase()
+        }
+  )
   .catch((err) => console.error(err));
 
 app.use(logger('dev'));

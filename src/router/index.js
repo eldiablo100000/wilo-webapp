@@ -47,7 +47,7 @@ export default new Router({
       component: BuildingList
     },
     {
-      path: '/show-building/:id',
+      path: '/show-building/:id_building',
       name: 'ShowBuilding',
       component: ShowBuilding
     },
@@ -57,28 +57,28 @@ export default new Router({
       component: CreateBuilding
     },
     {
-      path: '/edit-building/:id',
+      path: '/edit-building/:id_building',
       name: 'EditBuilding',
       component: EditBuilding
     },
     // floor
     {
-      path: '/show-building/:id/floors/',
+      path: '/building/:id_building/floors/',
       name: 'FloorList',
       component: FloorList
     },
     {
-      path: '/show-building/:id/show-floor/:id',
+      path: '/building/:id_building/show-floor/:id_floor',
       name: 'ShowFloor',
       component: ShowFloor
     },
     {
-      path: '/show-building/:id/add-floor',
+      path: '/building/:id_building/add-floor',
       name: 'CreateFloor',
       component: CreateFloor
     },
     {
-      path: '/show-building/:id/edit-floor/:id',
+      path: '/building/:id_building/edit-floor/:id_floor',
       name: 'EditFloor',
       component: EditFloor
     }

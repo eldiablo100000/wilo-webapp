@@ -35,9 +35,9 @@ export default {
     }
   },
   created () {
-    this.floorList = '#/show-building/' + this.$route.params.id + '/floors'
+    this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
 
-    axios.get(`http://localhost:3000/floor/` + this.$route.params.id)
+    axios.get(`http://localhost:3000/floor/` + this.$route.params.id_floor)
       .then(response => {
         this.floor = response.data
       })
@@ -49,7 +49,7 @@ export default {
     editfloor (floorid) {
       this.$router.push({
         name: 'EditFloor',
-        params: { id: floorid }
+        params: { id_floor: floorid }
       })
     },
     deletefloor (floorid) {

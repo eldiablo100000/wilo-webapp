@@ -31,7 +31,7 @@ export default {
     }
   },
   created () {
-    axios.get(`http://localhost:3000/floor/` + this.$route.params.id)
+    axios.get(`http://localhost:3000/floor/` + this.$route.params.id_floor)
       .then(response => {
         this.floor = response.data
       })
@@ -42,11 +42,11 @@ export default {
   methods: {
     onSubmit (evt) {
       evt.preventDefault()
-      axios.put(`http://localhost:3000/floor/` + this.$route.params.id, this.floor)
+      axios.put(`http://localhost:3000/floor/` + this.$route.params.id_floor, this.floor)
         .then(response => {
           this.$router.push({
             name: 'ShowFloor',
-            params: { id: this.$route.params.id }
+            params: { id_building: this.$route.params.id_building, id_floor: this.$route.params.id_floor }
           })
         })
         .catch(e => {

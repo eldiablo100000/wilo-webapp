@@ -49,7 +49,7 @@ export default {
     details (building) {
       this.$router.push({
         name: 'ShowBuilding',
-        params: { id: building._id }
+        params: { id_building: building._id }
       })
     }
   }
