@@ -1,6 +1,6 @@
 <template>
   <div id="app" :class="[{'collapsed' : collapsed}]">
-    <div class="demo">
+    <div v-bind:class="myclass">
       <h1>vue-sidebar-menu</h1>
       <div>select theme:
         <select v-model="selectedTheme">
@@ -23,6 +23,7 @@ export default {
   name: 'App',
   data () {
     return {
+      myclass: 'demo extended',
       menu: [
         {
           header: true,
@@ -149,13 +150,18 @@ export default {
       ],
       collapsed: false,
       themes: ['', 'white-theme'],
-      selectedTheme: 'white-theme'
+      selectedTheme: ''
     }
   },
   methods: {
     onCollapse (val) {
       console.log(`collapsed ${val}`)
       this.collapsed = val
+      if (this.collapsed) {
+        this.myclass = 'demo'
+      } else {
+        this.myclass = 'demo extended'
+      }
     }
   }
 }
@@ -164,6 +170,7 @@ export default {
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600');
 @import url('https://fonts.googleapis.com/css?family=Material+Icons');
+
 body,
 html {
   margin: 0;
@@ -175,20 +182,17 @@ body {
   background-color: #f2f4f7;
 }
 
-#demo {
-  padding-left: 350px;
-}
-#demo.collapsed {
-  padding-left: 50px;
-}
-
-.demo {
-  padding: 50px;
-}
-
 .badge-danger {
   background-color: #ff2a2a;
   color: #fff;
+}
+
+.demo {
+  padding-left: 50px;
+}
+
+.demo.extended {
+  padding-left: 350px;
 }
 
 #app {

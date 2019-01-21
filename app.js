@@ -4,10 +4,10 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-
 var book = require('./routes/book');
 var building = require('./routes/building');
 var floor = require('./routes/floor');
+var jquery = require('jquery')
 
 var app = express();
 
