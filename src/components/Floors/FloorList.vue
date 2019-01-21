@@ -39,11 +39,11 @@ export default {
   },
   created () {
     axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
-      .then(response => {
+      .then((response) => {
         this.floorsId = response.data.floors
         for (var el in this.floorsId) {
           axios.get(`http://localhost:3000/floor/` + this.floorsId[el])
-            .then(response => {
+            .then((response) => {
               if (response.data != null) {
                 this.floors.push(response.data)
               }

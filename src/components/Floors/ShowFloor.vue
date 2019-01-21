@@ -31,7 +31,9 @@ export default {
   name: 'ShowFloor',
   data () {
     return {
-      floor: []
+      floor: [],
+      building: [],
+      errors: []
     }
   },
   created () {
@@ -55,6 +57,29 @@ export default {
     deletefloor (floorid) {
       axios.delete('http://localhost:3000/floor/' + floorid)
         .then((result) => {
+          console.log(this.$route.params.id_building)
+          axios.get('http://localhost:3000/building/' + this.$route.params.id_building)
+            .then((result) => {
+              var index = result.data.floors.indexOf(floorid)
+              if (index > -1) {
+                result.data.floors.splice(index, 1)
+                this.building = result.data
+              }
+              axios.put('http://localhost:3000/building/' + this.$route.params.id_building, this.building)
+                .then((result) => {
+                  console.log('okkkkkkkkkk')
+                  this.$router.push({
+                    name: 'FloorList'
+                  })
+                })
+                .catch(e => {
+                  this.errors.push(e)
+                })
+            })
+
+            .catch(e => {
+              this.errors.push(e)
+            })
           this.$router.push({
             name: 'FloorList'
           })
