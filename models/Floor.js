@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 
 var FloorSchema = new mongoose.Schema({
-  number: String, 
+  number: String,
+  anchors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Anchor' }], 
   updated_date: { type: Date, default: Date.now },
 });
 

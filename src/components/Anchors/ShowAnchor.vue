@@ -3,22 +3,21 @@
     <b-col cols="12">
       <h2>
         Edit Floor
-        <b-link :href="floorList">(Floor List)</b-link>
+        <b-link :href="anchorList">(Anchor List)</b-link>
       </h2>
       <b-jumbotron>
         <template slot="header">
           {{floor.number}}
         </template>
         <template slot="lead">
-          number: {{floor.number}}<br>
+          number: {{anchor.number}}<br>
         </template>
         <hr class="my-4">
         <p>
-          Updated Date: {{floor.updated_date}}
+          Updated Date: {{anchor.updated_date}}
         </p>
-        <b-btn variant="success" @click.stop="addanchor(building._id)">Add Anchor</b-btn>
-        <b-btn variant="success" @click.stop="editfloor(floor._id)">Edit</b-btn>
-        <b-btn variant="danger" @click.stop="deletefloor(floor._id)">Delete</b-btn>
+        <b-btn variant="success" @click.stop="editanchor(anchor._id)">Edit</b-btn>
+        <b-btn variant="danger" @click.stop="deleteanchor(anchor._id)">Delete</b-btn>
       </b-jumbotron>
     </b-col>
   </b-row>
@@ -29,52 +28,46 @@
 import axios from 'axios'
 
 export default {
-  name: 'ShowFloor',
+  name: 'ShowAnchor',
   data () {
     return {
-      floor: [],
+      anchor: [],
       building: [],
       errors: []
     }
   },
   created () {
-    this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
+    this.anchorList = '#/building/' + this.$route.params.id_building + '/anchors'
 
-    axios.get(`http://localhost:3000/floor/` + this.$route.params.id_floor)
+    axios.get(`http://localhost:3000/anchor/` + this.$route.params.id_anchor)
       .then(response => {
-        this.floor = response.data
+        this.anchor = response.data
       })
       .catch(e => {
         this.errors.push(e)
       })
   },
   methods: {
-    editfloor (floorid) {
+    editanchor (anchorid) {
       this.$router.push({
-        name: 'EditFloor',
-        params: { id_floor: floorid }
+        name: 'EditAnchor',
+        params: { id_anchor: anchorid }
       })
     },
-    addanchor (floorid) {
-      this.$router.push({
-        name: 'CreateAnchor',
-        params: { id_floor: floorid }
-      })
-    },
-    deletefloor (floorid) {
-      axios.delete('http://localhost:3000/floor/' + floorid)
+    deleteanchor (anchorid) {
+      axios.delete('http://localhost:3000/anchor/' + anchorid)
         .then((result) => {
           axios.get('http://localhost:3000/building/' + this.$route.params.id_building)
             .then((result) => {
-              var index = result.data.floors.indexOf(floorid)
+              var index = result.data.anchors.indexOf(anchorid)
               if (index > -1) {
-                result.data.floors.splice(index, 1)
+                result.data.anchors.splice(index, 1)
                 this.building = result.data
               }
               axios.put('http://localhost:3000/building/' + this.$route.params.id_building, this.building)
                 .then((result) => {
                   this.$router.push({
-                    name: 'FloorList'
+                    name: 'AnchorList'
                   })
                 })
                 .catch(e => {
@@ -86,7 +79,7 @@ export default {
               this.errors.push(e)
             })
           this.$router.push({
-            name: 'FloorList'
+            name: 'AnchorList'
           })
         })
         .catch(e => {
