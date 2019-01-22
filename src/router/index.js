@@ -20,7 +20,9 @@ import CreateAnchor from '@/components/Anchors/CreateAnchor'
 import EditAnchor from '@/components/Anchors/EditAnchor'
 import ShowAnchor from '@/components/Anchors/ShowAnchor'
 
-import HelloWorld from '@/components/HelloWorld'
+// import HelloWorld from '@/components/HelloWorld'
+import MapDemo from '@/components/MapDemo'
+// import Image from '@/components/Image'
 
 Vue.use(Router)
 
@@ -30,8 +32,8 @@ export default new Router({
     // book
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'MapDemo',
+      component: MapDemo
     },
     {
       path: '/books/',
@@ -56,7 +58,7 @@ export default new Router({
     // building
     {
       path: '/buildings/',
-      name: 'BookList',
+      name: 'BuildingList',
       component: BuildingList
     },
     {

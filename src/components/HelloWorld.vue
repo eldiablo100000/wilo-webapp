@@ -22,7 +22,10 @@
             </vl-style-box>
           </vl-feature>
       </template>
-
+      <vl-layer-vector id="draw-pane" v-if="drawType != null">
+            <vl-source-vector :features.sync="drawnFeatures" ident="draw-target" />
+      </vl-layer-vector>
+      <vl-interaction-draw :type="drawType" source="draw-target" v-if="drawType != null" />
       <vl-layer-tile id="osm">
         <vl-source-osm></vl-source-osm>
       </vl-layer-tile>
@@ -44,7 +47,9 @@ export default {
       center: [0, 0],
       rotation: 0,
       geolocPosition: undefined,
-      markers: [ [ 11.360639599999999, 34.5018075 ], [ 11.360639599999999, 54.5018075 ], [ 15.360639599999999, 44.5018075 ] ]
+      markers: [ [ 11.360639599999999, 34.5018075 ], [ 11.360639599999999, 54.5018075 ], [ 15.360639599999999, 44.5018075 ] ],
+      drawType: 'Polygon',
+      drawnFeatures: []
     }
   }
 }
