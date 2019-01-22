@@ -2,7 +2,7 @@
   <b-row>
     <b-col cols="12">
       <h2>
-        Floor List
+        Anchor List
         <b-link :href="addAnchor">(Add Anchor)</b-link>
       </h2>
       <b-table striped hover :items="anchors" :fields="fields">
@@ -28,21 +28,21 @@ export default {
   data () {
     return {
       fields: {
-        number: { label: 'Number', sortable: true, 'class': 'text-center' },
+        name: { label: 'Name', sortable: true, 'class': 'text-center' },
         actions: { label: 'Action', 'class': 'text-center' }
       },
       anchorsId: [],
       anchors: [],
       errors: [],
-      addFloor: '#/building/' + this.$route.params.id_building + '/add-floor'
+      addAnchor: '#/building/' + this.$route.params.id_building + '/floor/' + this.$route.params.id_floor + '/add-anchor'
     }
   },
   created () {
-    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
+    axios.get(`http://localhost:3000/floor/` + this.$route.params.id_floor)
       .then((response) => {
         this.anchorsId = response.data.anchors
         for (var el in this.anchorsId) {
-          axios.get(`http://localhost:3000/floor/` + this.anchorsId[el])
+          axios.get(`http://localhost:3000/anchor/` + this.anchorsId[el])
             .then((response) => {
               if (response.data != null) {
                 this.anchors.push(response.data)
@@ -58,10 +58,10 @@ export default {
       })
   },
   methods: {
-    details (floor) {
+    details (anchor) {
       this.$router.push({
         name: 'ShowAnchor',
-        params: { id_building: this.$route.params.id_building, id_floor: floor._id }
+        params: { id_building: this.$route.params.id_building, id_floor: this.$route.params.id_floor, id_anchor: anchor._id }
       })
     }
   }

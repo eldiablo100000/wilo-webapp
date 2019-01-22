@@ -14,6 +14,7 @@
           <b-form-input id="number" :state="state" v-model.trim="floor.number"></b-form-input>
         </b-form-group>
         <b-button type="submit" variant="primary">Save</b-button>
+        <b-btn variant="success" @click.stop="uploadImage()">Upload Image</b-btn>
       </b-form>
     </b-col>
   </b-row>
@@ -37,6 +38,9 @@ export default {
     this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
   },
   methods: {
+    uploadImage () {
+      alert('ciao')
+    },
     onSubmit (evt) {
       evt.preventDefault()
       axios.post(`http://localhost:3000/floor`, this.floor)
@@ -49,7 +53,10 @@ export default {
               this.building.floors.push(this.floorId)
               axios.put(`http://localhost:3000/building/` + this.buildingId, this.building)
                 .then(response => {
-                  console.log(response)
+                  this.$router.push({
+                    name: 'FloorList',
+                    params: { id_building: this.$route.params.id_building }
+                  })
                 })
                 .catch(e => {
                   this.errors.push(e)
@@ -65,11 +72,4 @@ export default {
     }
   }
 }
-/*
-this.$router.push({
-            name: 'ShowFloor',
-            params: { id_building: this.$route.params.id_building, id_floor: response.data._id }
-
-          })
-          */
 </script>

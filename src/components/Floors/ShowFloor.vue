@@ -2,7 +2,7 @@
   <b-row>
     <b-col cols="12">
       <h2>
-        Edit Floor
+        Show Floor
         <b-link :href="floorList">(Floor List)</b-link>
       </h2>
       <b-jumbotron>
@@ -16,7 +16,8 @@
         <p>
           Updated Date: {{floor.updated_date}}
         </p>
-        <b-btn variant="success" @click.stop="addanchor(building._id)">Add Anchor</b-btn>
+        <b-btn variant="success" @click.stop="addanchor(floor._id)">Add Anchor</b-btn>
+        <b-btn variant="success" @click.stop="anchorlist(floor._id)">Anchor list</b-btn>
         <b-btn variant="success" @click.stop="editfloor(floor._id)">Edit</b-btn>
         <b-btn variant="danger" @click.stop="deletefloor(floor._id)">Delete</b-btn>
       </b-jumbotron>
@@ -58,7 +59,13 @@ export default {
     addanchor (floorid) {
       this.$router.push({
         name: 'CreateAnchor',
-        params: { id_floor: floorid }
+        params: { id_building: this.$route.params.id_building, id_floor: floorid }
+      })
+    },
+    anchorlist (floorid) {
+      this.$router.push({
+        name: 'AnchorList',
+        params: { id_building: this.$route.params.id_building, id_floor: floorid }
       })
     },
     deletefloor (floorid) {
@@ -85,9 +92,6 @@ export default {
             .catch(e => {
               this.errors.push(e)
             })
-          this.$router.push({
-            name: 'FloorList'
-          })
         })
         .catch(e => {
           this.errors.push(e)

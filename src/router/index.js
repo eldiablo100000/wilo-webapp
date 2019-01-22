@@ -99,22 +99,22 @@ export default new Router({
     },
     // anchor
     {
-      path: '/building/:id_building/floors/:id_floor/anchors',
+      path: '/building/:id_building/floor/:id_floor/anchors',
       name: 'AnchorList',
       component: AnchorList
     },
     {
-      path: '/building/:id_building/show-floor/:id_floor/show-anchor/:id_anchor',
+      path: '/building/:id_building/floor/:id_floor/show-anchor/:id_anchor',
       name: 'ShowAnchor',
       component: ShowAnchor
     },
     {
-      path: '/building/:id_building/add-floor/:id_floor/add-anchor',
+      path: '/building/:id_building/floor/:id_floor/add-anchor',
       name: 'CreateAnchor',
       component: CreateAnchor
     },
     {
-      path: '/building/:id_building/edit-floor/:id_floor/edit-anchor/:id_anchor',
+      path: '/building/:id_building/floor/:id_floor/edit-anchor/:id_anchor',
       name: 'EditAnchor',
       component: EditAnchor
     }
