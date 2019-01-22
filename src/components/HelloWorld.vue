@@ -9,11 +9,19 @@
           <vl-feature v-if="geoloc.position" id="position-feature">
             <vl-geom-point :coordinates="geoloc.position"></vl-geom-point>
             <vl-style-box>
-              <vl-style-icon src="docs/_media/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
+              <vl-style-icon src="static/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
             </vl-style-box>
           </vl-feature>
         </template>
       </vl-geoloc>
+      <template v-for="(item, index) in markers">
+          <vl-feature :key="index" >
+            <vl-geom-point :coordinates="item"></vl-geom-point>
+            <vl-style-box>
+              <vl-style-icon src="static/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
+            </vl-style-box>
+          </vl-feature>
+      </template>
 
       <vl-layer-tile id="osm">
         <vl-source-osm></vl-source-osm>
@@ -35,7 +43,8 @@ export default {
       zoom: 2,
       center: [0, 0],
       rotation: 0,
-      geolocPosition: undefined
+      geolocPosition: undefined,
+      markers: [ [ 11.360639599999999, 34.5018075 ], [ 11.360639599999999, 54.5018075 ], [ 15.360639599999999, 44.5018075 ] ]
     }
   }
 }

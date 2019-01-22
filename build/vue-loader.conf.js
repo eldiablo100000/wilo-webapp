@@ -13,10 +13,11 @@ module.exports = {
   }),
   cssSourceMap: sourceMapEnabled,
   cacheBusting: config.dev.cacheBusting,
-  transformToRequire: {
+  transformAssetUrls: {
     video: ['src', 'poster'],
     source: 'src',
     img: 'src',
-    image: 'xlink:href'
+    image: 'xlink:href',
+    'vl-style-icon': 'src',
   }
 }
