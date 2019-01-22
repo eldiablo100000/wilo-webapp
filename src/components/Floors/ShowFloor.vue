@@ -67,7 +67,6 @@ export default {
               }
               axios.put('http://localhost:3000/building/' + this.$route.params.id_building, this.building)
                 .then((result) => {
-                  console.log('okkkkkkkkkk')
                   this.$router.push({
                     name: 'FloorList'
                   })

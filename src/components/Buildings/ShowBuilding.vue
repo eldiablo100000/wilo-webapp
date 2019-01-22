@@ -14,7 +14,7 @@
           Description: {{building.description}}<br>
           Address: {{building.address}}<br>
           City: {{building.city}}<br>
-          Floors: {{building.floors}}<br>
+          Floors: {{numbers}}<br>
         </template>
         <hr class="my-4">
         <p>
@@ -39,13 +39,26 @@ export default {
   name: 'ShowBuilding',
   data () {
     return {
-      building: []
+      building: [],
+      floors: [],
+      numbers: [],
+      errors: []
     }
   },
   created () {
     axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
       .then(response => {
         this.building = response.data
+        for (var el in response.data.floors) {
+          axios.get(`http://localhost:3000/floor/` + response.data.floors[el])
+            .then(response => {
+              this.floors.push(response.data)
+              this.numbers.push(response.data.number)
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        }
       })
       .catch(e => {
         this.errors.push(e)
