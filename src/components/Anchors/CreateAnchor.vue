@@ -2,7 +2,7 @@
   <b-row>
     <b-col cols="12">
       <h2>
-        Add Floor
+        Add Anchor
         <b-link :href="anchorList">(Anchor List)</b-link>
       </h2>
       <b-form @submit="onSubmit">
@@ -10,8 +10,8 @@
                   horizontal
                   :label-cols="4"
                   breakpoint="md"
-                  label="Enter Number">
-          <b-form-input id="number" :state="state" v-model.trim="floor.number"></b-form-input>
+                  label="Enter Name">
+          <b-form-input id="name" :state="state" v-model.trim="anchor.name"></b-form-input>
         </b-form-group>
         <b-button type="submit" variant="primary">Save</b-button>
       </b-form>
@@ -24,32 +24,36 @@
 import axios from 'axios'
 
 export default {
-  name: 'CreateFloor',
+  name: 'CreateAnchor',
   data () {
     return {
       anchor: {},
       anchorId: undefined,
-      buildingId: undefined,
-      anchorList: ''
+      floorId: undefined,
+      anchorList: '',
+      errors: []
     }
   },
   created () {
-    this.anchorList = '#/building/' + this.$route.params.id_building + '/anchors'
+    this.anchorList = '#/building/' + this.$route.params.id_building + '/floor/' + this.$route.params.id_floor + '/anchors'
   },
   methods: {
     onSubmit (evt) {
       evt.preventDefault()
-      axios.post(`http://localhost:3000/anchor`, this.anchor)
+      axios.post(`http://localhost:3000/anchor/`, this.anchor)
         .then(response => {
           this.anchorId = response.data._id
-          this.buildingId = this.$route.params.id_building
-          axios.get(`http://localhost:3000/building/` + this.buildingId)
+          this.floorId = this.$route.params.id_floor
+          axios.get(`http://localhost:3000/floor/` + this.floorId)
             .then(response => {
-              this.building = response.data
-              this.building.anchors.push(this.anchorId)
-              axios.put(`http://localhost:3000/building/` + this.buildingId, this.building)
+              this.floor = response.data
+              this.floor.anchors.push(this.anchorId)
+              axios.put(`http://localhost:3000/floor/` + this.floorId, this.floor)
                 .then(response => {
-                  console.log(response)
+                  this.$router.push({
+                    name: 'ShowAnchor',
+                    params: { id_building: this.$route.params.id_building, id_floor: this.$route.params.id_floor, id_anchor: this.anchorId }
+                  })
                 })
                 .catch(e => {
                   this.errors.push(e)
@@ -65,11 +69,4 @@ export default {
     }
   }
 }
-/*
-this.$router.push({
-            name: 'ShowAnchor',
-            params: { id_building: this.$route.params.id_building, id_anchor: response.data._id }
-
-          })
-          */
 </script>

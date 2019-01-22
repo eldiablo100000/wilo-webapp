@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var AnchorSchema = new mongoose.Schema({
   name: String,
-   location: {
+  /*location: {
    	type: {
       type: String, // Don't do { location: { type: String } }
       enum: ['Point'], // 'location.type' must be 'Point'
@@ -12,7 +12,7 @@ var AnchorSchema = new mongoose.Schema({
       type: [Number],
       required: true
     }
-  },
+  },*/
   updated_date: { type: Date, default: Date.now },
 });
 

@@ -2,16 +2,16 @@
   <b-row>
     <b-col cols="12">
       <h2>
-        Edit Floor
-        <router-link :to="{ name: 'ShowAnchor', params: { id: ancor._id } }">(Show Anchor)</router-link>
+        Edit Anchor
+        <router-link :to="{ name: 'EditAnchor', params: { id: anchor._id } }">(Edit Anchor)</router-link>
       </h2>
       <b-form @submit="onSubmit">
         <b-form-group id="fieldsetHorizontal"
                   horizontal
                   :label-cols="4"
                   breakpoint="md"
-                  label="Enter Number">
-          <b-form-input id="number" :state="state" v-model.trim="anchor.number"></b-form-input>
+                  label="Enter Name">
+          <b-form-input id="name" :state="state" v-model.trim="anchor.name"></b-form-input>
         </b-form-group>
         <b-button type="submit" variant="primary">Update</b-button>
       </b-form>
@@ -46,7 +46,7 @@ export default {
         .then(response => {
           this.$router.push({
             name: 'ShowAnchor',
-            params: { id_building: this.$route.params.id_building, id_anchor: this.$route.params.id_anchor }
+            params: { id_building: this.$route.params.id_building, id_floor: this.$route.params.id_floor, id_anchor: this.$route.params.id_anchor }
           })
         })
         .catch(e => {

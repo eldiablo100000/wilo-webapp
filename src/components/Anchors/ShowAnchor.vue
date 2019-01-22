@@ -2,15 +2,15 @@
   <b-row>
     <b-col cols="12">
       <h2>
-        Edit Floor
+        Edit Anchor
         <b-link :href="anchorList">(Anchor List)</b-link>
       </h2>
       <b-jumbotron>
         <template slot="header">
-          {{floor.number}}
+          {{anchor.name}}
         </template>
         <template slot="lead">
-          number: {{anchor.number}}<br>
+          name: {{anchor.name}}<br>
         </template>
         <hr class="my-4">
         <p>
@@ -32,12 +32,12 @@ export default {
   data () {
     return {
       anchor: [],
-      building: [],
+      floor: [],
       errors: []
     }
   },
   created () {
-    this.anchorList = '#/building/' + this.$route.params.id_building + '/anchors'
+    this.anchorList = '#/building/' + this.$route.params.id_building + '/floor/' + this.$route.params.id_floor + '/anchors'
 
     axios.get(`http://localhost:3000/anchor/` + this.$route.params.id_anchor)
       .then(response => {
@@ -57,14 +57,14 @@ export default {
     deleteanchor (anchorid) {
       axios.delete('http://localhost:3000/anchor/' + anchorid)
         .then((result) => {
-          axios.get('http://localhost:3000/building/' + this.$route.params.id_building)
+          axios.get('http://localhost:3000/floor/' + this.$route.params.id_floor)
             .then((result) => {
               var index = result.data.anchors.indexOf(anchorid)
               if (index > -1) {
                 result.data.anchors.splice(index, 1)
-                this.building = result.data
+                this.floor = result.data
               }
-              axios.put('http://localhost:3000/building/' + this.$route.params.id_building, this.building)
+              axios.put('http://localhost:3000/floor/' + this.$route.params.id_floor, this.floor)
                 .then((result) => {
                   this.$router.push({
                     name: 'AnchorList'
@@ -78,9 +78,6 @@ export default {
             .catch(e => {
               this.errors.push(e)
             })
-          this.$router.push({
-            name: 'AnchorList'
-          })
         })
         .catch(e => {
           this.errors.push(e)
