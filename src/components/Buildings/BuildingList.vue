@@ -30,6 +30,7 @@ export default {
       fields: {
         title: { label: 'Title', sortable: true, 'class': 'text-center' },
         address: { label: 'Address', sortable: true },
+        city: { label: 'City', sortable: true, 'class': 'text-center' },
         actions: { label: 'Action', 'class': 'text-center' }
       },
       buildings: [],

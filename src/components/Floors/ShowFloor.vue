@@ -57,7 +57,6 @@ export default {
     deletefloor (floorid) {
       axios.delete('http://localhost:3000/floor/' + floorid)
         .then((result) => {
-          console.log(this.$route.params.id_building)
           axios.get('http://localhost:3000/building/' + this.$route.params.id_building)
             .then((result) => {
               var index = result.data.floors.indexOf(floorid)
