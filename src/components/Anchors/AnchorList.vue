@@ -60,7 +60,7 @@ export default {
   methods: {
     details (anchor) {
       this.$router.push({
-        name: 'EditAnchor',
+        name: 'ShowAnchor',
         params: { id_building: this.$route.params.id_building, id_floor: this.$route.params.id_floor, id_anchor: anchor._id }
       })
     }

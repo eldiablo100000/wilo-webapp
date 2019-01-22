@@ -2,7 +2,7 @@
   <b-row>
     <b-col cols="12">
       <h2>
-        Edit Floor
+        Show Floor
         <b-link :href="floorList">(Floor List)</b-link>
       </h2>
       <b-jumbotron>

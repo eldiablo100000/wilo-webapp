@@ -2,7 +2,7 @@
   <b-row>
     <b-col cols="12">
       <h2>
-        Edit Anchor
+        Show Anchor
         <b-link :href="anchorList">(Anchor List)</b-link>
       </h2>
       <b-jumbotron>
