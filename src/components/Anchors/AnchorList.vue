@@ -3,9 +3,9 @@
     <b-col cols="12">
       <h2>
         Floor List
-        <b-link :href="addFloor">(Add Floor)</b-link>
+        <b-link :href="addAnchor">(Add Anchor)</b-link>
       </h2>
-      <b-table striped hover :items="floors" :fields="fields">
+      <b-table striped hover :items="anchors" :fields="fields">
         <template slot="actions" scope="row">
           <b-btn size="sm" @click.stop="details(row.item)">Details</b-btn>
         </template>
@@ -24,15 +24,15 @@
 import axios from 'axios'
 
 export default {
-  name: 'FloorList',
+  name: 'AnchorList',
   data () {
     return {
       fields: {
         number: { label: 'Number', sortable: true, 'class': 'text-center' },
         actions: { label: 'Action', 'class': 'text-center' }
       },
-      floorsId: [],
-      floors: [],
+      anchorsId: [],
+      anchors: [],
       errors: [],
       addFloor: '#/building/' + this.$route.params.id_building + '/add-floor'
     }
@@ -40,12 +40,12 @@ export default {
   created () {
     axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
       .then((response) => {
-        this.floorsId = response.data.floors
-        for (var el in this.floorsId) {
-          axios.get(`http://localhost:3000/floor/` + this.floorsId[el])
+        this.anchorsId = response.data.anchors
+        for (var el in this.anchorsId) {
+          axios.get(`http://localhost:3000/floor/` + this.anchorsId[el])
             .then((response) => {
               if (response.data != null) {
-                this.floors.push(response.data)
+                this.anchors.push(response.data)
               }
             })
             .catch(e => {
@@ -60,7 +60,7 @@ export default {
   methods: {
     details (floor) {
       this.$router.push({
-        name: 'ShowFloor',
+        name: 'ShowAnchor',
         params: { id_building: this.$route.params.id_building, id_floor: floor._id }
       })
     }

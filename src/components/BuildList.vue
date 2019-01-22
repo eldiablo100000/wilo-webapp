@@ -2,10 +2,10 @@
   <b-row>
     <b-col cols="12">
       <h2>
-        Building List
-        <b-link href="#/add-building">(Add Building)</b-link>
+        Builds List
+        <b-link href="#/add-build">(Add Build)</b-link>
       </h2>
-      <b-table striped hover :items="buildings" :fields="fields">
+      <b-table striped hover :items="builds" :fields="fields">
         <template slot="actions" scope="row">
           <b-btn size="sm" @click.stop="details(row.item)">Details</b-btn>
         </template>
@@ -24,33 +24,32 @@
 import axios from 'axios'
 
 export default {
-  name: 'BookList',
+  name: 'BuildList',
   data () {
     return {
       fields: {
-        title: { label: 'Title', sortable: true, 'class': 'text-center' },
-        address: { label: 'Address', sortable: true },
-        city: { label: 'City', sortable: true, 'class': 'text-center' },
-        actions: { label: 'Action', 'class': 'text-center' }
+        title: { label: 'Build Title', sortable: true },
+        actions: { label: 'Action', 'class': 'text-center' },
+        address: { label: 'Address', sortable: true, 'class': 'text-center' }
       },
-      buildings: [],
+      builds: [],
       errors: []
     }
   },
   created () {
-    axios.get(`http://localhost:3000/building`)
+    axios.get(`http://localhost:3000/Build`)
       .then(response => {
-        this.buildings = response.data
+        this.builds = response.data
       })
       .catch(e => {
         this.errors.push(e)
       })
   },
   methods: {
-    details (building) {
+    details (build) {
       this.$router.push({
-        name: 'ShowBuilding',
-        params: { id_building: building._id }
+        name: 'ShowBuild',
+        params: { id: build._id }
       })
     }
   }

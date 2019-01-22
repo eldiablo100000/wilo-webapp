@@ -10,18 +10,17 @@
           {{building.title}}
         </template>
         <template slot="lead">
-          Title: {{building.title}}<br>
-          Description: {{building.description}}<br>
+          <!-- Title: {{building.title}}<br> -->
           Address: {{building.address}}<br>
           City: {{building.city}}<br>
-          Floors: {{building.floors}}<br>
+          Floors: {{numbers}}<br>
+          Description: {{building.description}}<br>
         </template>
         <hr class="my-4">
         <p>
           Updated Date: {{building.updated_date}}
         </p>
         <b-btn variant="success" @click.stop="addfloor(building._id)">Add Floor</b-btn>
-        <b-btn variant="danger" @click.stop="deletefloor(building._id)">Delete Floor</b-btn>
         <b-btn variant="warning" @click.stop="floorlist(building._id)">Floor List</b-btn>
 
         <b-btn variant="success" @click.stop="editbuilding(building._id)">Edit</b-btn>
@@ -39,13 +38,26 @@ export default {
   name: 'ShowBuilding',
   data () {
     return {
-      building: []
+      building: [],
+      floors: [],
+      numbers: [],
+      errors: []
     }
   },
   created () {
     axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
       .then(response => {
         this.building = response.data
+        for (var el in response.data.floors) {
+          axios.get(`http://localhost:3000/floor/` + response.data.floors[el])
+            .then(response => {
+              this.floors.push(response.data)
+              this.numbers.push(response.data.number)
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        }
       })
       .catch(e => {
         this.errors.push(e)
@@ -55,12 +67,6 @@ export default {
     addfloor (buildingid) {
       this.$router.push({
         name: 'CreateFloor',
-        params: { id_building: buildingid }
-      })
-    },
-    deletefloor (buildingid) {
-      this.$router.push({
-        name: 'DeleteFloor',
         params: { id_building: buildingid }
       })
     },

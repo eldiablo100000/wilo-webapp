@@ -15,6 +15,11 @@ import ShowFloor from '@/components/Floors/ShowFloor'
 import CreateFloor from '@/components/Floors/CreateFloor'
 import EditFloor from '@/components/Floors/EditFloor'
 
+import AnchorList from '@/components/Anchors/AnchorList'
+import CreateAnchor from '@/components/Anchors/CreateAnchor'
+import EditAnchor from '@/components/Anchors/EditAnchor'
+import ShowAnchor from '@/components/Anchors/ShowAnchor'
+
 import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
@@ -89,6 +94,27 @@ export default new Router({
       path: '/building/:id_building/edit-floor/:id_floor',
       name: 'EditFloor',
       component: EditFloor
+    },
+    // anchor
+    {
+      path: '/building/:id_building/floors/:id_floor/anchors',
+      name: 'AnchorList',
+      component: AnchorList
+    },
+    {
+      path: '/building/:id_building/show-floor/:id_floor/show-anchor/:id_anchor',
+      name: 'ShowAnchor',
+      component: ShowAnchor
+    },
+    {
+      path: '/building/:id_building/add-floor/:id_floor/add-anchor',
+      name: 'CreateAnchor',
+      component: CreateAnchor
+    },
+    {
+      path: '/building/:id_building/edit-floor/:id_floor/edit-anchor/:id_anchor',
+      name: 'EditAnchor',
+      component: EditAnchor
     }
   ]
 })
