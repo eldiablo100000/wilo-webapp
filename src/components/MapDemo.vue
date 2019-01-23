@@ -9,9 +9,20 @@
         <button @click="drawType = 'Polygon'">Draw polygon</button>
         <button @click="drawType = 'Point'">Draw point</button>
 
-        <button @click="drawType = undefined">Stop draw</button>
-        <div>
-          {{ selectedFeatures }}
+        <button @click="drawType = null">Stop draw</button>
+        <div v-if="drawType == null && selectedFeatures.length > 0" style="background-color: rgba(10, 105, 169, 0.5);">
+          <p><b>Type</b>: {{ selectedFeatures[0].type }}</p>
+          <p><b>Id</b>: {{ selectedFeatures[0].id }}</p>
+          <p><b>Geom-Type</b>: {{ selectedFeatures[0].geometry.type }}</p>
+          <p><b>Geom-Coords</b>: {{ selectedFeatures[0].geometry.coordinates }}</p>
+          <p><b>Geom-Props</b>: {{ selectedFeatures[0].geometry.properties }}</p>
+        </div>
+        <div v-if="drawType != null && drawnFeatures.length > 0" style="background-color: rgba(18, 169, 10, 0.5);">
+          <p><b>Type</b>: {{ drawnFeatures[drawnFeatures.length - 1].type }}</p>
+          <p><b>Id</b>: {{ drawnFeatures[drawnFeatures.length - 1].id }}</p>
+          <p><b>Geom-Type</b>: {{ drawnFeatures[drawnFeatures.length - 1].geometry.type }}</p>
+          <p><b>Geom-Coords</b>: {{ drawnFeatures[drawnFeatures.length - 1].geometry.coordinates }}</p>
+          <p><b>Geom-Props</b>: {{ drawnFeatures[drawnFeatures.length - 1].geometry.properties }}</p>
         </div>
       </div>
 
@@ -40,7 +51,6 @@
             <vl-style-stroke color="black" />
           </vl-style-text>
         </vl-graticule>
-        <vl-interaction-select :condition="selectCondition" :features.sync="selectedFeatures" />
 
         <vl-layer-tile>
           <vl-source-osm />
@@ -61,10 +71,17 @@
               </vl-style-box>
             </vl-feature>
         </template>
-        <vl-layer-vector id="draw-pane" v-if="drawType != null" :z-index="0">
+        <vl-layer-vector id="draw-pane" :z-index="0">
           <vl-source-vector :features.sync="drawnFeatures" ident="draw-target" />
         </vl-layer-vector>
         <vl-interaction-draw :type="drawType" source="draw-target" v-if="drawType != null" />
+        <vl-interaction-select v-if="drawType == null" :condition="selectCondition" :features.sync="selectedFeatures" />
+          <vl-feature v-if="selectedFeatures.length == 1" :properties="{ start: Date.now(), duration: 2500 }">
+            <vl-geom-point :coordinates="selectedFeatures[0].geometry.coordinates"></vl-geom-point>
+            <vl-style-box>
+              <vl-style-icon src="/static/logo.png" :scale="0.5" :anchor="[0.1, 0.95]" :size="[128, 128]"></vl-style-icon>
+            </vl-style-box>
+          </vl-feature>
       </vl-map>
     </div>
   </div>
@@ -157,6 +174,9 @@ export default {
   created () {
   },
   watch: {
+    selectedFeatures: function (val) {
+      console.log(val)
+    },
     drawnFeatures: function (val) {
       console.log(this.features)
       var index = val.length - 1
@@ -203,8 +223,8 @@ export default {
   .panel {
     position: absolute;
     bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 65%;
+    transform: translateX(-65%);
     width: 70vw;
     background: rgba(255, 255, 255, 0.7);
     box-shadow: 0 0 20px rgba(2, 2, 2, 0.1);
