@@ -10,12 +10,15 @@ import VueSidebarMenu from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 import VueLayers from 'vuelayers'
 import 'vuelayers/lib/style.css' // needs css-loader
+import ImageUploader from 'vue-image-upload-resize'
 
 Vue.config.productionTip = false
 Vue.use(VueLayers)
 Vue.use(VueSidebarMenu)
 Vue.use(BootstrapVue)
+Vue.use(ImageUploader)
 
+Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

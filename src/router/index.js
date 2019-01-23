@@ -24,6 +24,10 @@ import ShowAnchor from '@/components/Anchors/ShowAnchor'
 import MapDemo from '@/components/MapDemo'
 // import Image from '@/components/Image'
 
+import Upload from '@/components/Upload'
+
+import ManipulateImage from '@/components/ManipulateImage'
+
 Vue.use(Router)
 
 export default new Router({
@@ -34,6 +38,16 @@ export default new Router({
       path: '/',
       name: 'MapDemo',
       component: MapDemo
+    },
+    {
+      path: '/Upload/',
+      name: 'Upload',
+      component: Upload
+    },
+    {
+      path: '/ManipulateImage/',
+      name: 'ManipulateImage',
+      component: ManipulateImage
     },
     {
       path: '/books/',
