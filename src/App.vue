@@ -1,10 +1,10 @@
 <template>
   <div id="app" :class="[{'collapsed' : collapsed}]">
     <div v-bind:class="myclass">
-      <h1>vue-sidebar-menu</h1>
-      <div>select theme:
+      <h1>WiLo Project</h1>
+      <div id="theme-selector">Mode:
         <select v-model="selectedTheme">
-          <option v-for="(theme, index) in themes" :key="index">{{theme == '' ? 'default-theme' : theme}}</option>
+          <option v-for="(theme, index) in themes" :key="index" selected="dark-theme">{{theme == 'dark-theme' ? 'dark-theme' : theme}}</option>
         </select>
       </div>
       <hr style="margin: 50px 0px;border: 1px solid #e3e3e3;">
@@ -149,8 +149,8 @@ export default {
         }
       ],
       collapsed: false,
-      themes: ['', 'white-theme'],
-      selectedTheme: ''
+      themes: ['dark-theme', 'white-theme'],
+      selectedTheme: 'dark-theme'
     }
   },
   methods: {
@@ -195,6 +195,9 @@ body {
   padding-left: 350px;
 }
 
+#theme-selector {
+  float:right;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
