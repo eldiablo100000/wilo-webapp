@@ -15,6 +15,8 @@
         </b-form-group>
         <b-button type="submit" variant="primary">Save</b-button>
         <b-btn variant="success" @click.stop="uploadImage()">Upload Image</b-btn>
+        <input type="file" @change="onFileChanged">
+        <button @click="onUpload">Upload!</button>
       </b-form>
     </b-col>
   </b-row>
@@ -31,13 +33,21 @@ export default {
       floor: {},
       floorId: undefined,
       buildingId: undefined,
-      floorList: ''
+      floorList: '',
+      selectedFile: undefined
     }
   },
   created () {
     this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
   },
   methods: {
+    onFileChanged (event) {
+      this.selectedFile = event.target.files[0]
+    },
+    onUpload () {
+      console.log(this.selectedFile)
+      // upload file
+    },
     uploadImage () {
       alert('ciao')
     },
