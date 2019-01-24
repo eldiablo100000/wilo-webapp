@@ -5,14 +5,20 @@
         <button @click="selectByHover = !selectByHover">Select by {{ !selectByHover ? 'hover' : 'click' }}</button>
         <button @click="graticule = !graticule">Graticule</button>
 
+        <button @click="drawType = 'Polygon'">Draw polygon</button>
+        <button @click="drawType = 'Point'">Draw point</button>
+        <button @click="drawType = null">Stop draw</button>
+        <br/>
         <button @click="image = !image">Static Image</button>
         <button @click="imgBigger()">+ Image</button>
         <button @click="imgSmaller()">- Image</button>
-
-        <button @click="drawType = 'Polygon'">Draw polygon</button>
-        <button @click="drawType = 'Point'">Draw point</button>
-
-        <button @click="drawType = null">Stop draw</button>
+        <br/>
+        <button @click="imgMove('y', 1)">Up</button>
+        <br/>
+        <button @click="imgMove('x', 1)">Left</button>
+        <button @click="imgMove('x', 2)">Right</button>
+        <br/>
+        <button @click="imgMove('y', 2)">Down</button>
 
         <div v-if="drawType == null && selectedFeatures.length > 0" style="background-color: rgba(10, 105, 169, 0.5);">
           <p><b>Type</b>: {{ selectedFeatures[0].type }}</p>
@@ -31,10 +37,10 @@
       </div>
 
       <vl-map ref="map" v-if="showMap" data-projection="EPSG:4326" renderer="webgl">
-        <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom" />
-        <vl-layer-image id="xkcd" v-if="image" :overlay="true" :opacity="0.5">
-          <vl-source-image-static :url="imgUrl" :size="imgSize" :extent="imgExtent" :projection="projection"
-                                  :attributions="imgCopyright" ></vl-source-image-static>
+        <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
+        <vl-layer-image id="xkcd" v-if="image" :overlay="true" :opacity="0.5" >
+        <vl-source-image-static :url="imgUrl" :size="imgSize" :extent="imgExtent" :projection="projection"
+                                  :attributions="imgCopyright"></vl-source-image-static>
         </vl-layer-image>
         <vl-geoloc @update:position="geolocPosition = center = $event">
           <template slot-scope="geoloc">
@@ -126,17 +132,40 @@ const computed = {
     return this.selectByHover ? eventCondition.pointerMove : eventCondition.singleClick
   }
 }
+const step = 1000000
+let size = [1000000, 1000000]
+var extent = [0, 0, 1000000, 1000000]
 
+let customProj = createProj({
+  code: 'xkcd-image',
+  units: 'pixels',
+  extent
+})
+addProj(customProj)
 const methods = {
   imgBigger () {
-    this.imgSize = [Math.floor(this.imgSize[0] * 2), Math.floor(this.imgSize[1] * 2)]
-    this.imgExtent = [0, 0, this.imgSize[0], this.imgSize[1]]
+    this.imgSize = [Math.floor(this.imgSize[0] * 1.1), Math.floor(this.imgSize[1] * 1.1)]
+    this.imgExtent = [0, 0, Math.floor(this.imgExtent[2] * 1.1), Math.floor(this.imgExtent[3] * 1.1)]
   },
   imgSmaller () {
-    this.imgSize = [Math.floor(this.imgSize[0] / 2), Math.floor(this.imgSize[1] / 2)]
-    this.imgExtent = [0, 0, this.imgSize[0], this.imgSize[1]]
+    this.imgSize = [Math.floor(this.imgSize[0] / 1.1), Math.floor(this.imgSize[1] / 1.1)]
+    this.imgExtent = [0, 0, Math.floor(this.imgExtent[2] / 1.1), Math.floor(this.imgExtent[3] / 1.1)]
   },
-
+  imgMove (axis, direction) {
+    if (axis === 'x') {
+      if (direction === 1) {
+        this.imgExtent = [this.imgExtent[0] - step, this.imgExtent[1], this.imgExtent[2] - step, this.imgExtent[3]]
+      } else if (direction === 2) {
+        this.imgExtent = [this.imgExtent[0] + step, this.imgExtent[1], this.imgExtent[2] + step, this.imgExtent[3]]
+      }
+    } else if (axis === 'y') {
+      if (direction === 1) {
+        this.imgExtent = [this.imgExtent[0], this.imgExtent[1] + step, this.imgExtent[2], this.imgExtent[3] + step]
+      } else if (direction === 2) {
+        this.imgExtent = [this.imgExtent[0], this.imgExtent[1] - step, this.imgExtent[2], this.imgExtent[3] - step]
+      }
+    }
+  },
   getCenter (arr) {
     var x = arr.map(function (a) { return a[0] })
     var y = arr.map(function (a) { return a[1] })
@@ -147,17 +176,7 @@ const methods = {
     return [(minX + maxX) / 2, (minY + maxY) / 2]
   }
 }
-let size = [13000000, 7000000]
-var extent = [0, 0, 13000000, 7000000]
-// NOTE: VueLayers.olExt available only in UMD build
-// in ES build it should be imported explicitly from 'vuelayers/lib/ol-ext'
-let customProj = createProj({
-  code: 'xkcd-image',
-  units: 'pixels',
-  extent
-})
-// add it to the list of known projections
-addProj(customProj)
+
 export default {
   name: 'app',
   computed,
@@ -170,6 +189,7 @@ export default {
       // maxZoom: 8,
       center: [0, 0],
       rotation: 0,
+      rotation1: 1,
       features,
       selectedFeatures: [],
       graticule: false,
@@ -179,7 +199,7 @@ export default {
       drawnFeatures: [],
       selectByHover: false,
       projection: customProj.getCode(),
-      imgUrl: 'https://imgs.xkcd.com/comics/online_communities.png',
+      imgUrl: '/static/logo.png',
       imgCopyright: '© <a href="http://xkcd.com/license.html">xkcd</a>',
       imgSize: size,
       imgExtent: extent,
@@ -194,6 +214,8 @@ export default {
     },
     geolocPosition: function (val) {
       this.imgCenter = val
+      this.center = val
+      this.center1 = val
     },
     selectedFeatures: function (val) {
       console.log(val)
