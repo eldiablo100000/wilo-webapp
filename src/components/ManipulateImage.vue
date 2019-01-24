@@ -53,7 +53,8 @@ export default {
           text: 'upload image',
           styles: {
             // background: undefined, // 'linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)'
-            backgroundImage: undefined // "url('static/logo.png')"
+            backgroundImage: undefined, // "url('static/logo.png')"
+            opacity: 0.7
           }
         }
       ],
@@ -80,17 +81,29 @@ export default {
     onFileChanged (event) {
       alert(event)
       var path = 'static/' + event.target.files[0].name
-      var img = new Image()
-      img.src = path
-      alert(img.height + ' ' + img.width)
-      this.elements[0].height = img.height
-      this.elements[0].width = img.width
-      this.elements[0].styles.backgroundImage = 'url(' + path + ')'
-      this.elements[0].text = ''
+      this.resetElement(path)
     },
     onUpload () {
       console.log(this.img)
       // upload file
+    },
+
+    resetElement: async function (path) {
+      var img = new Image()
+      img.src = path
+      await this.sleep(500)
+      this.elements[0].width = img.width
+      this.elements[0].height = img.height
+      this.elements[0].angle = 0
+      this.elements[0].text = ''
+      this.elements[0].styles.backgroundImage = 'url(' + path + ')'
+      this.elements[0].scaleX = 1
+      this.elements[0].scaleY = 1
+      this.elements[0].x = 100
+      this.elements[0].y = 100
+    },
+    sleep (ms) {
+      return new Promise(resolve => setTimeout(resolve, ms))
     },
     getElementStyles (element) {
       const styles = element.styles ? element.styles : {}
