@@ -49,7 +49,7 @@ export default new Router({
     },
     {
       path: '/manipulate-img/',
-      name: 'ManipulateImage',
+      name: 'ManipulateImg',
       component: ManipulateImage
     },
 
@@ -77,7 +77,7 @@ export default new Router({
 
     // building
     {
-      path: '/buildings/',
+      path: '/buildings',
       name: 'BuildingList',
       component: BuildingList
     },
@@ -96,63 +96,84 @@ export default new Router({
       name: 'EditBuilding',
       component: EditBuilding
     },
+
     // floor
     {
-      path: '/building/:id_building/floors/',
-      name: 'FloorList',
-      component: FloorList
+      path: '/building/:id_building',
+      name: 'Building',
+      children: [
+        {
+          path: 'floors',
+          name: 'FloorList',
+          component: FloorList
+        },
+        {
+          path: 'show-floor/:id_floor',
+          name: 'ShowFloor',
+          component: ShowFloor
+        },
+        {
+          path: 'add-floor',
+          name: 'CreateFloor',
+          component: CreateFloor
+        },
+        {
+          path: 'edit-floor/:id_floor',
+          name: 'EditFloor',
+          component: EditFloor
+        },
+        // anchor
+        {
+          path: 'floor/:id_floor',
+          name: 'Floor',
+          children: [
+            {
+              path: 'anchors',
+              name: 'AnchorList',
+              component: AnchorList
+            },
+            {
+              path: 'show-anchor/:id_anchor',
+              name: 'ShowAnchor',
+              component: ShowAnchor
+            },
+            {
+              path: 'add-anchor',
+              name: 'CreateAnchor',
+              component: CreateAnchor
+            },
+            {
+              path: 'edit-anchor/:id_anchor',
+              name: 'EditAnchor',
+              component: EditAnchor
+            }
+          ]
+        }
+      ]
     },
-    {
-      path: '/building/:id_building/show-floor/:id_floor',
-      name: 'ShowFloor',
-      component: ShowFloor
-    },
-    {
-      path: '/building/:id_building/add-floor',
-      name: 'CreateFloor',
-      component: CreateFloor
-    },
-    {
-      path: '/building/:id_building/edit-floor/:id_floor',
-      name: 'EditFloor',
-      component: EditFloor
-    },
-    // anchor
-    {
-      path: '/building/:id_building/floor/:id_floor/anchors',
-      name: 'AnchorList',
-      component: AnchorList
-    },
-    {
-      path: '/building/:id_building/floor/:id_floor/show-anchor/:id_anchor',
-      name: 'ShowAnchor',
-      component: ShowAnchor
-    },
-    {
-      path: '/building/:id_building/floor/:id_floor/add-anchor',
-      name: 'CreateAnchor',
-      component: CreateAnchor
-    },
-    {
-      path: '/building/:id_building/floor/:id_floor/edit-anchor/:id_anchor',
-      name: 'EditAnchor',
-      component: EditAnchor
-    },
-    {
-      path: '/admin/buildings',
-      name: 'AdminBuildingList',
-      component: AdminBuildingList
-    },
-    {
-      path: '/admin/floors',
-      name: 'AdminFloorList',
-      component: AdminFloorList
-    },
-    {
-      path: '/admin/anchors',
-      name: 'AdminAnchorList',
-      component: AdminAnchorList
-    }
 
+    // admin
+    {
+      path: '/admin',
+      name: 'Admin',
+      children: [
+        {
+          path: '/buildings',
+          name: 'AdminBuildingList',
+          component: AdminBuildingList
+        },
+        {
+          path: '/floors',
+          name: 'AdminFloorList',
+          component: AdminFloorList
+        },
+        {
+          path: '/anchors',
+          name: 'AdminAnchorList',
+          component: AdminAnchorList
+        }
+      ]
+    }
   ]
 })
+

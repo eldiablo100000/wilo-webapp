@@ -27,14 +27,14 @@ export default {
       menu: [
         {
           header: true,
-          title: 'Main Navigation'
+          title: 'Navigator'
         },
         {
           href: '/',
-          title: 'Dashboard',
-          icon: 'fa fa-user'
+          title: 'Map',
+          icon: 'fa fa-map'
         },
-        {
+        /* {
           href: '/charts',
           title: 'Charts',
           icon: 'fa fa-chart-area',
@@ -42,18 +42,28 @@ export default {
             text: 'pro',
             class: 'badge-danger'
           }
-        },
+        }, */
         {
           href: '/buildings',
-          title: 'Buildings',
-          icon: 'fa fa-table'
+          title: 'My Buildings',
+          icon: 'fa fa-building'
+        },
+        {
+          href: '/upload',
+          title: 'Upload',
+          icon: 'fa fa-upload'
+        },
+        {
+          href: '/manipulate-img',
+          title: 'Manipulate Image',
+          icon: 'fa fa-file-image'
         },
         {
           href: '/tables',
           title: 'Tables',
           icon: 'fa fa-table'
         },
-        {
+        /* {
           href: '/disabled',
           title: 'Disabled',
           icon: 'fa fa-cog',
@@ -61,16 +71,41 @@ export default {
           badge: {
             text: '20'
           }
-        },
+        }, */
         {
           header: true,
           component: separator
         },
         {
           header: true,
-          title: 'Other'
+          title: 'Options'
         },
         {
+          title: 'APIs',
+          icon: 'fa fa-database',
+          href: '/api',
+          badge: {
+            text: 'new'
+          },
+          child: [
+            {
+              href: '/admin/buildings',
+              title: 'Admin Building List',
+              icon: 'fa fa-building'
+            },
+            {
+              href: '/admin/floors',
+              title: 'Admin Floor List',
+              icon: 'fa fa-map-marker'
+            },
+            {
+              href: '/admin/anchors',
+              title: 'Admin Anchor List',
+              icon: 'fa fa-anchor'
+            }
+          ]
+        },
+        /* {
           title: 'Pages',
           icon: 'fa fa-file',
           href: '/auth',
@@ -95,7 +130,7 @@ export default {
               disabled: true
             }
           ]
-        },
+        }, */
         {
           href: '#',
           title: 'Mailbox',
@@ -196,7 +231,7 @@ body {
 }
 
 #theme-selector {
-  float:right;
+  float: top right;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

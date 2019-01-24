@@ -40,6 +40,8 @@ export default {
   methods: {
     onSubmit (evt) {
       evt.preventDefault()
+      this.anchor.id_building = this.$route.params.id_building
+      this.anchor.id_floor = this.$route.params.id_floor
       axios.post(`http://localhost:3000/anchor/`, this.anchor)
         .then(response => {
           this.anchorId = response.data._id

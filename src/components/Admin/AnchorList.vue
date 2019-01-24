@@ -40,19 +40,10 @@ export default {
     }
   },
   created () {
-    axios.get(`http://localhost:3000/floor/` + this.$route.params.id_floor)
+    axios.get(`http://localhost:3000/anchor/`)
       .then((response) => {
-        this.anchorsId = response.data.anchors
-        for (var el in this.anchorsId) {
-          axios.get(`http://localhost:3000/anchor/` + this.anchorsId[el])
-            .then((response) => {
-              if (response.data != null) {
-                this.anchors.push(response.data)
-              }
-            })
-            .catch(e => {
-              this.errors.push(e)
-            })
+        if (response.data != null) {
+          this.anchors = response.data
         }
       })
       .catch(e => {

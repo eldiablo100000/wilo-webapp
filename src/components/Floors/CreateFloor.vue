@@ -53,6 +53,7 @@ export default {
     },
     onSubmit (evt) {
       evt.preventDefault()
+      this.floor.id_building = this.$route.params.id_building
       axios.post(`http://localhost:3000/floor`, this.floor)
         .then(response => {
           this.floorId = response.data._id

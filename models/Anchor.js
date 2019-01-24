@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 
 var AnchorSchema = new mongoose.Schema({
   name: String,
+  id_building: { type: mongoose.Schema.Types.ObjectId, ref: 'Building' },
+  id_floor: { type: mongoose.Schema.Types.ObjectId, ref: 'Floor' },
   /*location: {
    	type: {
       type: String, // Don't do { location: { type: String } }

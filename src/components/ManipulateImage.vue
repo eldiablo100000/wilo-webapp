@@ -81,8 +81,7 @@ export default {
     },
     onFileChanged (event) {
       var path = 'static/' + event.target.files[0].name
-      var x = this.getMeta(path)
-      alert(x)
+      // var x = this.getMeta(path)
       this.elements[0].styles.backgroundImage = 'url(' + path + ')'
       this.elements[0].text = ''
     },
@@ -93,11 +92,12 @@ export default {
     getMeta (url) {
       var img = new Image()
       img.addEventListener('load', function () {
-        alert(this.naturalWidth + ' ' + this.naturalHeight)
+        // alert(this.naturalWidth + ' ' + this.naturalHeight)
         // var width = this.naturalWidth
-        var height = this.naturalHeight
+        var height = this.height
+        var width = this.width
         return {
-          // width,
+          width,
           height
         }
       })
@@ -117,7 +117,6 @@ export default {
 
 <style>
     #app {
-        display: flex;
         background: #F8FAFC;
     }
 
@@ -127,7 +126,6 @@ export default {
 
     .workspace {
         width: 800px;
-        height: 800px;
         margin: 25px auto;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);
         border: 1px solid rgba(0, 0, 0, 0.10);

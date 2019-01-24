@@ -39,19 +39,10 @@ export default {
     }
   },
   created () {
-    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
+    axios.get(`http://localhost:3000/floor/`)
       .then((response) => {
-        this.floorsId = response.data.floors
-        for (var el in this.floorsId) {
-          axios.get(`http://localhost:3000/floor/` + this.floorsId[el])
-            .then((response) => {
-              if (response.data != null) {
-                this.floors.push(response.data)
-              }
-            })
-            .catch(e => {
-              this.errors.push(e)
-            })
+        if (response.data != null) {
+          this.floors = response.data
         }
       })
       .catch(e => {
