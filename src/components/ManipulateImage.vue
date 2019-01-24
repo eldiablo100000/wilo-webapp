@@ -1,33 +1,31 @@
 <template>
   <div id="app">
-    <div class="App">
-      <div class="wrapper">
-        <div class="workspace" ref="workspace">
-          <FreeTransform
-            v-for="element in elements"
-            :key="element.id"
-            :x="element.x"
-            :y="element.y"
-            :scale-x="element.scaleX"
-            :scale-y="element.scaleY"
-            :width="element.width"
-            :height="element.height"
-            :angle="element.angle"
-            :offset-x="offsetX"
-            :offset-y="offsetY"
-            :disable-scale="element.disableScale === true"
-            @update="update(element.id,$event)">
-            <div class="element" :style="getElementStyles(element)">
-              {{element.text}}
-            </div>
-          </FreeTransform>
-        </div>
+    <div id="click">
+        <input type="file" @change="onFileChanged">
+        <button @click="onUpload">Upload!</button>
+    </div>
+    <div class="wrapper">
+      <div class="workspace" ref="workspace">
+        <FreeTransform
+          v-for="element in elements"
+          :key="element.id"
+          :x="element.x"
+          :y="element.y"
+          :scale-x="element.scaleX"
+          :scale-y="element.scaleY"
+          :width="element.width"
+          :height="element.height"
+          :angle="element.angle"
+          :offset-x="offsetX"
+          :offset-y="offsetY"
+          :disable-scale="element.disableScale === true"
+          @update="update(element.id,$event)">
+          <div class="element" :style="getElementStyles(element)">
+            {{element.text}}
+          </div>
+        </FreeTransform>
       </div>
     </div>
-    <b-row>
-      <input type="file" @change="onFileChanged">
-      <button @click="onUpload">Upload!</button>
-    </b-row>
   </div>
 </template>
 
@@ -45,11 +43,11 @@ export default {
         {
           id: 'el-1',
           x: 100,
-          y: 50,
+          y: 100,
           scaleX: 1,
           scaleY: 1,
-          width: 100,
-          height: 100,
+          width: 200,
+          height: 200,
           angle: 0,
           classPrefix: 'tr',
           text: 'upload image',
@@ -81,7 +79,10 @@ export default {
     },
     onFileChanged (event) {
       var path = 'static/' + event.target.files[0].name
-      // var x = this.getMeta(path)
+      var img = this.getMeta(path)
+      console.log(img)
+      this.elements[0].height = img.height
+      this.elements[0].width = img.width
       this.elements[0].styles.backgroundImage = 'url(' + path + ')'
       this.elements[0].text = ''
     },
@@ -91,7 +92,7 @@ export default {
     },
     getMeta (url) {
       var img = new Image()
-      img.addEventListener('load', function () {
+      img.addEventListener('load', function (dimensions) {
         // alert(this.naturalWidth + ' ' + this.naturalHeight)
         // var width = this.naturalWidth
         var height = this.height
@@ -101,7 +102,9 @@ export default {
           height
         }
       })
+
       img.src = url
+      return img
     },
     getElementStyles (element) {
       const styles = element.styles ? element.styles : {}
@@ -125,7 +128,6 @@ export default {
     }
 
     .workspace {
-        width: 800px;
         margin: 25px auto;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);
         border: 1px solid rgba(0, 0, 0, 0.10);
@@ -212,4 +214,7 @@ export default {
         top: calc(100% - 7px);
     }
 
+    #click {
+        float: top;
+    }
 </style>
