@@ -46,8 +46,8 @@ export default {
           y: 100,
           scaleX: 1,
           scaleY: 1,
-          width: 200,
-          height: 200,
+          width: 100,
+          height: 100,
           angle: 0,
           classPrefix: 'tr',
           text: 'upload image',
@@ -78,9 +78,11 @@ export default {
       })
     },
     onFileChanged (event) {
+      alert(event)
       var path = 'static/' + event.target.files[0].name
-      var img = this.getMeta(path)
-      console.log(img)
+      var img = new Image()
+      img.src = path
+      alert(img.height + ' ' + img.width)
       this.elements[0].height = img.height
       this.elements[0].width = img.width
       this.elements[0].styles.backgroundImage = 'url(' + path + ')'
@@ -89,22 +91,6 @@ export default {
     onUpload () {
       console.log(this.img)
       // upload file
-    },
-    getMeta (url) {
-      var img = new Image()
-      img.addEventListener('load', function (dimensions) {
-        // alert(this.naturalWidth + ' ' + this.naturalHeight)
-        // var width = this.naturalWidth
-        var height = this.height
-        var width = this.width
-        return {
-          width,
-          height
-        }
-      })
-
-      img.src = url
-      return img
     },
     getElementStyles (element) {
       const styles = element.styles ? element.styles : {}

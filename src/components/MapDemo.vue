@@ -4,12 +4,16 @@
       <div class="panel">
         <button @click="selectByHover = !selectByHover">Select by {{ !selectByHover ? 'hover' : 'click' }}</button>
         <button @click="graticule = !graticule">Graticule</button>
+
         <button @click="image = !image">Static Image</button>
+        <button @click="imgBigger()">+ Image</button>
+        <button @click="imgSmaller()">- Image</button>
 
         <button @click="drawType = 'Polygon'">Draw polygon</button>
         <button @click="drawType = 'Point'">Draw point</button>
 
         <button @click="drawType = null">Stop draw</button>
+
         <div v-if="drawType == null && selectedFeatures.length > 0" style="background-color: rgba(10, 105, 169, 0.5);">
           <p><b>Type</b>: {{ selectedFeatures[0].type }}</p>
           <p><b>Id</b>: {{ selectedFeatures[0].id }}</p>
@@ -28,10 +32,10 @@
 
       <vl-map ref="map" v-if="showMap" data-projection="EPSG:4326" renderer="webgl">
         <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom" />
-        <!--<vl-layer-image id="xkcd" v-if="image">
+        <vl-layer-image id="xkcd" v-if="image" :overlay="true" :opacity="0.5">
           <vl-source-image-static :url="imgUrl" :size="imgSize" :extent="imgExtent" :projection="projection"
-                                  :attributions="imgCopyright"></vl-source-image-static>
-        </vl-layer-image>-->
+                                  :attributions="imgCopyright" ></vl-source-image-static>
+        </vl-layer-image>
         <vl-geoloc @update:position="geolocPosition = center = $event">
           <template slot-scope="geoloc">
             <vl-feature v-if="geoloc.position" id="position-feature">
@@ -103,7 +107,7 @@
 
 <script>
 import * as eventCondition from 'ol/events/condition'
-// import {createProj, addProj} from 'vuelayers/lib/ol-ext'
+import {createProj, addProj} from 'vuelayers/lib/ol-ext'
 
 const features = [
   // {
@@ -124,6 +128,15 @@ const computed = {
 }
 
 const methods = {
+  imgBigger () {
+    this.imgSize = [Math.floor(this.imgSize[0] * 2), Math.floor(this.imgSize[1] * 2)]
+    this.imgExtent = [0, 0, this.imgSize[0], this.imgSize[1]]
+  },
+  imgSmaller () {
+    this.imgSize = [Math.floor(this.imgSize[0] / 2), Math.floor(this.imgSize[1] / 2)]
+    this.imgExtent = [0, 0, this.imgSize[0], this.imgSize[1]]
+  },
+
   getCenter (arr) {
     var x = arr.map(function (a) { return a[0] })
     var y = arr.map(function (a) { return a[1] })
@@ -134,17 +147,17 @@ const methods = {
     return [(minX + maxX) / 2, (minY + maxY) / 2]
   }
 }
-// let size = [700000, 1300000]
-// var extent = [0, 0, 700000, 1300000]
-// // NOTE: VueLayers.olExt available only in UMD build
-// // in ES build it should be imported explicitly from 'vuelayers/lib/ol-ext'
-// let customProj = createProj({
-//   code: 'xkcd-image',
-//   units: 'pixels',
-//   extent
-// })
-// // add it to the list of known projections
-// addProj(customProj)
+let size = [13000000, 7000000]
+var extent = [0, 0, 13000000, 7000000]
+// NOTE: VueLayers.olExt available only in UMD build
+// in ES build it should be imported explicitly from 'vuelayers/lib/ol-ext'
+let customProj = createProj({
+  code: 'xkcd-image',
+  units: 'pixels',
+  extent
+})
+// add it to the list of known projections
+addProj(customProj)
 export default {
   name: 'app',
   computed,
@@ -152,6 +165,7 @@ export default {
   data () {
     return {
       geolocPosition: undefined,
+      // maxResolution: 5,
       zoom: 5,
       // maxZoom: 8,
       center: [0, 0],
@@ -163,17 +177,24 @@ export default {
       showMap: true,
       drawType: undefined,
       drawnFeatures: [],
-      selectByHover: false
-      // projection: customProj.getCode(),
-      // imgUrl: 'https://imgs.xkcd.com/comics/online_communities.png',
-      // imgCopyright: '© <a href="http://xkcd.com/license.html">xkcd</a>',
-      // imgSize: size,
-      // imgExtent: extent
+      selectByHover: false,
+      projection: customProj.getCode(),
+      imgUrl: 'https://imgs.xkcd.com/comics/online_communities.png',
+      imgCopyright: '© <a href="http://xkcd.com/license.html">xkcd</a>',
+      imgSize: size,
+      imgExtent: extent,
+      imgCenter: undefined
     }
   },
   created () {
   },
   watch: {
+    imgSize: function (val) {
+      // alert(val)
+    },
+    geolocPosition: function (val) {
+      this.imgCenter = val
+    },
     selectedFeatures: function (val) {
       console.log(val)
     },
