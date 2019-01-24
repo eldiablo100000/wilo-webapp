@@ -1,55 +1,136 @@
 <template>
-  <b-row>
-    <b-col cols="12">
-      <h2>
-        Add Floor
-        <b-link :href="floorList">(Floor List)</b-link>
-      </h2>
-      <b-form @submit="onSubmit">
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
-                  :label-cols="4"
-                  breakpoint="md"
-                  label="Enter Number">
-          <b-form-input id="number" :state="state" v-model.trim="floor.number"></b-form-input>
-        </b-form-group>
-        <b-button type="submit" variant="primary">Save</b-button>
-        <b-btn variant="success" @click.stop="uploadImage()">Upload Image</b-btn>
+  <div id="app">
+    <h2>
+      Add Floor
+      <b-link :href="floorList">(Floor List)</b-link>
+    </h2>
+    <b-form @submit="onSubmit">
+      <b-form-group id="fieldsetHorizontal"
+        horizontal
+        :label-cols="4"
+        breakpoint="md"
+        label="Enter Number">
+        <b-form-input id="number" :state="state" v-model.trim="floor.number"></b-form-input>
+      </b-form-group>
+    </b-form>
+    <div id="click">
         <input type="file" @change="onFileChanged">
-        <button @click="onUpload">Upload!</button>
-      </b-form>
-    </b-col>
-  </b-row>
+        <button @click="save">Save!</button>
+    </div>
+    <div class="wrapper">
+      <div class="workspace" ref="workspace">
+        <FreeTransform
+          v-for="element in elements"
+          :key="element.id"
+          :x="element.x"
+          :y="element.y"
+          :scale-x="element.scaleX"
+          :scale-y="element.scaleY"
+          :width="element.width"
+          :height="element.height"
+          :angle="element.angle"
+          :offset-x="offsetX"
+          :offset-y="offsetY"
+          :disable-scale="element.disableScale === true"
+          @update="update(element.id,$event)">
+          <div class="element" :style="getElementStyles(element)">
+            {{element.text}}
+          </div>
+        </FreeTransform>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-
+import FreeTransform from 'vue-free-transform'
 import axios from 'axios'
 
 export default {
-  name: 'CreateFloor',
+  name: 'ManipulateImage',
+  components: {
+    FreeTransform
+  },
   data () {
     return {
       floor: {},
       floorId: undefined,
       buildingId: undefined,
       floorList: '',
-      selectedFile: undefined
+      elements: [
+        {
+          id: 'el-1',
+          x: 100,
+          y: 100,
+          scaleX: 1,
+          scaleY: 1,
+          width: 200,
+          height: 200,
+          angle: 0,
+          classPrefix: 'tr',
+          text: 'upload image',
+          styles: {
+            // background: undefined, // 'linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)'
+            backgroundImage: undefined, // "url('static/logo.png')"
+            opacity: 0.7
+          }
+        }
+      ],
+      offsetX: 0,
+      offsetY: 0
     }
+  },
+  mounted () {
+    this.offsetX = this.$refs.workspace.offsetLeft
+    this.offsetY = this.$refs.workspace.offsetTop
   },
   created () {
     this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
   },
   methods: {
-    onFileChanged (event) {
-      this.selectedFile = event.target.files[0]
+    update (id, payload) {
+      this.elements = this.elements.map(item => {
+        if (item.id === id) {
+          return {
+            ...item,
+            ...payload
+          }
+        }
+        return item
+      })
     },
-    onUpload () {
-      console.log(this.selectedFile)
+    onFileChanged (event) {
+      var path = 'static/' + event.target.files[0].name
+      this.resetElement(path)
+    },
+    save () {
+      console.log(this.img)
       // upload file
     },
-    uploadImage () {
-      alert('ciao')
+    resetElement: async function (path) {
+      var img = new Image()
+      img.src = path
+      await this.sleep(500)
+      this.elements[0].width = img.width
+      this.elements[0].height = img.height
+      this.elements[0].angle = 0
+      this.elements[0].text = ''
+      this.elements[0].styles.backgroundImage = 'url(' + path + ')'
+      this.elements[0].scaleX = 1
+      this.elements[0].scaleY = 1
+      this.elements[0].x = 100
+      this.elements[0].y = 100
+    },
+    sleep (ms) {
+      return new Promise(resolve => setTimeout(resolve, ms))
+    },
+    getElementStyles (element) {
+      const styles = element.styles ? element.styles : {}
+      return {
+        width: `${element.width}px`,
+        height: `${element.height}px`,
+        ...styles
+      }
     },
     onSubmit (evt) {
       evt.preventDefault()
@@ -84,3 +165,104 @@ export default {
   }
 }
 </script>
+
+<style>
+    #app {
+        background: #F8FAFC;
+    }
+
+    .wrapper {
+        flex: 1;
+    }
+
+    .workspace {
+        margin: 25px auto;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);
+        border: 1px solid rgba(0, 0, 0, 0.10);
+        background: #fff;
+
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .tr-transform__content {
+        user-select: none;
+    }
+
+    .tr-transform__rotator {
+        top: -45px;
+        left: calc(50% - 7px);
+    }
+
+    .tr-transform__rotator,
+    .tr-transform__scale-point {
+        background: #fff;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        position: absolute;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+    }
+
+    .tr-transform__rotator:hover,
+    .tr-transform__scale-point:hover {
+        background: #F1F5F8;
+    }
+
+    .tr-transform__rotator:active,
+    .tr-transform__scale-point:active {
+        background: #DAE1E7;
+    }
+
+    .tr-transform__scale-point {
+
+    }
+
+    .tr-transform__scale-point--tl {
+        top: -7px;
+        left: -7px;
+    }
+
+    .tr-transform__scale-point--ml {
+        top: calc(50% - 7px);
+        left: -7px;
+    }
+
+    .tr-transform__scale-point--tr {
+        left: calc(100% - 7px);
+        top: -7px;
+    }
+
+    .tr-transform__scale-point--tm {
+        left: calc(50% - 7px);
+        top: -7px;
+    }
+
+    .tr-transform__scale-point--mr {
+        left: calc(100% - 7px);
+        top: calc(50% - 7px);
+    }
+
+    .tr-transform__scale-point--bl {
+        left: -7px;
+        top: calc(100% - 7px);
+    }
+
+    .tr-transform__scale-point--bm {
+        left: calc(50% - 7px);
+        top: calc(100% - 7px);
+    }
+
+    .tr-transform__scale-point--br {
+        left: calc(100% - 7px);
+        top: calc(100% - 7px);
+    }
+
+    #click {
+        float: top;
+    }
+</style>
