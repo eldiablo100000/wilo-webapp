@@ -1,7 +1,35 @@
 <template>
   <div id="app">
     <div style="height: 100%">
-      <div class="panel">
+      <div id="click">
+            <input type="file" @change="onFileChanged">
+            <button @click="onUpload">Upload!</button>
+        </div>
+        <div class="wrapper">
+          <div class="workspace" ref="workspace">
+            <FreeTransform
+              v-for="element in elements"
+              :key="element.id"
+              :x="element.x"
+              :y="element.y"
+              :scale-x="element.scaleX"
+              :scale-y="element.scaleY"
+              :width="element.width"
+              :height="element.height"
+              :angle="element.angle"
+              :offset-x="offsetX"
+              :offset-y="offsetY"
+              :disable-scale="element.disableScale === true"
+              @update="update(element.id,$event)"
+              >
+              <div class="element" :style="getElementStyles(element)">
+                {{element.text}}
+              </div>
+            </FreeTransform>
+          </div>
+        </div>
+      <button class="collapsible" @click="switchPanel()">Open Collapsible</button>
+      <div class="panel" id="panel">
         <button @click="selectByHover = !selectByHover">Select by {{ !selectByHover ? 'hover' : 'click' }}</button>
         <button @click="graticule = !graticule">Graticule</button>
         <br/>
@@ -39,13 +67,12 @@
           <p><b>Geom-Props</b>: {{ drawnFeatures[drawnFeatures.length - 1].geometry.properties }}</p>
         </div>
       </div>
-
       <vl-map ref="map" v-if="showMap" data-projection="EPSG:4326" renderer="webgl">
         <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
-        <!-- <vl-layer-image id="xkcd" v-if="image" :overlay="true" :opacity="0.5" >
+        <vl-layer-image id="xkcd" v-if="image" :overlay="true" :opacity="0.5" >
           <vl-source-image-static :url="imgUrl" :size="imgSize" :extent="imgExtent" :projection="projection"
                                     :attributions="imgCopyright"></vl-source-image-static>
-        </vl-layer-image> -->
+        </vl-layer-image>
 
         <vl-geoloc @update:position="geolocPosition = $event">
           <template slot-scope="geoloc">
@@ -70,14 +97,13 @@
         <vl-layer-tile>
           <vl-source-osm />
         </vl-layer-tile>
-
-        <vl-feature v-if="imgStatic" id="static-image">
+        <!--<vl-feature v-if="imgStatic" id="static-image">
           <vl-geom-point :coordinates="[12.4098176, 44.51205119999997]" :z-index="3"></vl-geom-point>
             <vl-style-box>
               <vl-style-icon src="static/logo.png" :scale="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
             </vl-style-box>
-        </vl-feature>
-        <vl-feature id="marker">
+        </vl-feature>-->
+       <vl-feature id="marker">
           <vl-geom-point :coordinates="[0, 0]" />
             <vl-style-box>
               <vl-style-icon src="static/logo.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
@@ -101,9 +127,10 @@
         <vl-interaction-draw :type="drawType" source="draw-target" v-if="drawType != null" />
         <vl-interaction-select v-if="drawType == null" :condition="selectCondition" :features.sync="selectedFeatures" />
           <vl-feature v-if="selectedFeatures.length == 1" :properties="{ start: Date.now(), duration: 2500 }">
-            <vl-geom-point :coordinates="selectedFeatures[0].geometry.coordinates"></vl-geom-point>
+            <vl-geom-point v-if="selectedFeatures[0].geometry.type === 'Point'" :coordinates="selectedFeatures[0].geometry.coordinates" :z-index="3"></vl-geom-point>
+            <vl-geom-point v-if="selectedFeatures[0].geometry.type === 'Polygon'" :coordinates="selectedFeatures[0].geometry.coordinates[0][0]" :z-index="3"></vl-geom-point>
             <vl-style-box>
-              <vl-style-icon src="/static/logo.png" :scale="0.5" :anchor="[0.1, 0.95]" :size="[128, 128]"></vl-style-icon>
+              <vl-style-icon src="static/mario.png" :scale="0.1" :anchor="[0.5, 1]" ></vl-style-icon>
             </vl-style-box>
           </vl-feature>
       </vl-map>
@@ -128,6 +155,7 @@
 <script>
 import * as eventCondition from 'ol/events/condition'
 import {createProj, addProj, transformPoint} from 'vuelayers/lib/ol-ext'
+import FreeTransform from 'vue-free-transform'
 
 const features = [
   // {
@@ -233,11 +261,65 @@ const methods = {
     var minY = Math.min.apply(null, y)
     var maxY = Math.max.apply(null, y)
     return [(minX + maxX) / 2, (minY + maxY) / 2]
+  },
+  update (id, payload) {
+    this.elements = this.elements.map(item => {
+      if (item.id === id) {
+        return {
+          ...item,
+          ...payload
+        }
+      }
+      return item
+    })
+  },
+  onFileChanged (event) {
+    alert(event)
+    var path = 'static/' + event.target.files[0].name
+    this.resetElement(path)
+  },
+  onUpload () {
+    console.log(this.img)
+    // upload file
+  },
+
+  resetElement: async function (path) {
+    var img = new Image()
+    img.src = path
+    await this.sleep(500)
+    this.elements[0].width = img.width
+    this.elements[0].height = img.height
+    this.elements[0].angle = 0
+    this.elements[0].text = ''
+    this.elements[0].styles.backgroundImage = 'url(' + path + ')'
+    this.elements[0].scaleX = 1
+    this.elements[0].scaleY = 1
+    this.elements[0].x = 100
+    this.elements[0].y = 100
+  },
+  getElementStyles (element) {
+    const styles = element.styles ? element.styles : {}
+    return {
+      width: `${element.width}px`,
+      height: `${element.height}px`,
+      ...styles
+    }
+  },
+  switchPanel () {
+    var panel = document.getElementById('panel')
+    if (panel.style.display === 'block') {
+      panel.style.display = 'none'
+    } else {
+      panel.style.display = 'block'
+    }
   }
 }
 
 export default {
   name: 'app',
+  components: {
+    FreeTransform
+  },
   computed,
   methods,
   data () {
@@ -268,10 +350,36 @@ export default {
       imgRotation: 0,
       imgScaleValue: 0.4,
       imgAnchor: [0, 0],
-      imgStatic: true
+      imgStatic: true,
+
+      elements: [
+        {
+          id: 'el-1',
+          x: 100,
+          y: 100,
+          scaleX: 1,
+          scaleY: 1,
+          width: 100,
+          height: 100,
+          angle: 0,
+          classPrefix: 'tr',
+          text: 'upload image',
+          styles: {
+            // background: undefined, // 'linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)'
+            backgroundImage: undefined, // "url('static/logo.png')"
+            opacity: 0.7
+          }
+        }
+      ],
+      offsetX: 0,
+      offsetY: 0
     }
   },
   created () {
+  },
+  mounted () {
+    this.offsetX = this.$refs.workspace.offsetLeft
+    this.offsetY = this.$refs.workspace.offsetTop
   },
   watch: {
     imgSize: function (val) {
@@ -296,11 +404,10 @@ export default {
       this.projection = customProj.getCode()
     },
     selectedFeatures: function (val) {
-      console.log(val)
     },
     drawnFeatures: function (val) {
-      // console.log(this.features)
       var index = val.length - 1
+      console.log(val[index])
       var type = val[index].geometry.type
       var coord = null
       var marker =
@@ -341,6 +448,21 @@ export default {
     }
   }
 
+  .collapsible {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+  }
+
+  .active, .collapsible:hover {
+    background-color: #ccc;
+  }
   .panel {
     position: absolute;
     bottom: 10px;
@@ -352,11 +474,110 @@ export default {
     padding: 5px;
     text-align: center;
     z-index: 1;
-
+    display: none;
+    overflow: hidden;
     > button {
       margin: 5px;
       padding: 5px 10px;
       text-transform: uppercase;
     }
+  }
+
+  .wrapper {
+      flex: 1;
+  }
+
+  .workspace {
+      margin: 25px auto;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);
+      border: 1px solid rgba(0, 0, 0, 0.10);
+      background: #fff;
+  }
+
+  * {
+      box-sizing: border-box;
+  }
+
+  .tr-transform__content {
+      user-select: none;
+      z-index: 3;
+  }
+
+  .tr-tranform__controls {
+      z-index: 3;
+  }
+  .tr-transform__rotator {
+      top: -45px;
+      left: calc(50% - 7px);
+  }
+
+  .tr-transform__rotator,
+  .tr-transform__scale-point {
+      background: #fff;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      position: absolute;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+  }
+
+  .tr-transform__rotator:hover,
+  .tr-transform__scale-point:hover {
+      background: #F1F5F8;
+  }
+
+  .tr-transform__rotator:active,
+  .tr-transform__scale-point:active {
+      background: #DAE1E7;
+  }
+
+  .tr-transform__scale-point {
+
+  }
+
+  .tr-transform__scale-point--tl {
+      top: -7px;
+      left: -7px;
+  }
+
+  .tr-transform__scale-point--ml {
+      top: calc(50% - 7px);
+      left: -7px;
+  }
+
+  .tr-transform__scale-point--tr {
+      left: calc(100% - 7px);
+      top: -7px;
+  }
+
+  .tr-transform__scale-point--tm {
+      left: calc(50% - 7px);
+      top: -7px;
+  }
+
+  .tr-transform__scale-point--mr {
+      left: calc(100% - 7px);
+      top: calc(50% - 7px);
+  }
+
+  .tr-transform__scale-point--bl {
+      left: -7px;
+      top: calc(100% - 7px);
+  }
+
+  .tr-transform__scale-point--bm {
+      left: calc(50% - 7px);
+      top: calc(100% - 7px);
+  }
+
+  .tr-transform__scale-point--br {
+      left: calc(100% - 7px);
+      top: calc(100% - 7px);
+  }
+
+  #click {
+      float: top;
   }
 </style>
