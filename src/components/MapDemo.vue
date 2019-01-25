@@ -4,14 +4,18 @@
       <div class="panel">
         <button @click="selectByHover = !selectByHover">Select by {{ !selectByHover ? 'hover' : 'click' }}</button>
         <button @click="graticule = !graticule">Graticule</button>
-
+        <br/>
         <button @click="drawType = 'Polygon'">Draw polygon</button>
         <button @click="drawType = 'Point'">Draw point</button>
         <button @click="drawType = null">Stop draw</button>
         <br/>
         <button @click="image = !image">Static Image</button>
-        <button @click="imgBigger()">+ Image</button>
-        <button @click="imgSmaller()">- Image</button>
+        <button @click="imgScale(1)">+ Image</button>
+        <button @click="imgScale(2)">- Image</button>
+        <br/>
+        <button @click="imgRotate(1); imgReload()">Anti-clockwise</button>
+        <button id="reload" @click="imgReload()">Reload</button>
+        <button @click="imgRotate(2); imgReload()">Clockwise</button>
         <br/>
         <button @click="imgMove('y', 1)">Up</button>
         <br/>
@@ -38,11 +42,12 @@
 
       <vl-map ref="map" v-if="showMap" data-projection="EPSG:4326" renderer="webgl">
         <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
-        <vl-layer-image id="xkcd" v-if="image" :overlay="true" :opacity="0.5" >
-        <vl-source-image-static :url="imgUrl" :size="imgSize" :extent="imgExtent" :projection="projection"
-                                  :attributions="imgCopyright"></vl-source-image-static>
-        </vl-layer-image>
-        <vl-geoloc @update:position="geolocPosition = center = $event">
+        <!-- <vl-layer-image id="xkcd" v-if="image" :overlay="true" :opacity="0.5" >
+          <vl-source-image-static :url="imgUrl" :size="imgSize" :extent="imgExtent" :projection="projection"
+                                    :attributions="imgCopyright"></vl-source-image-static>
+        </vl-layer-image> -->
+
+        <vl-geoloc @update:position="geolocPosition = $event">
           <template slot-scope="geoloc">
             <vl-feature v-if="geoloc.position" id="position-feature">
               <vl-geom-point :coordinates="geoloc.position"></vl-geom-point>
@@ -66,8 +71,17 @@
           <vl-source-osm />
         </vl-layer-tile>
 
+        <vl-feature v-if="imgStatic" id="static-image">
+          <vl-geom-point :coordinates="[12.4098176, 44.51205119999997]" :z-index="3"></vl-geom-point>
+            <vl-style-box>
+              <vl-style-icon src="static/logo.png" :scale="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
+            </vl-style-box>
+        </vl-feature>
         <vl-feature id="marker">
           <vl-geom-point :coordinates="[0, 0]" />
+            <vl-style-box>
+              <vl-style-icon src="static/logo.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
+            </vl-style-box>
         </vl-feature>
 
         <vl-layer-vector id="features" >
@@ -113,7 +127,7 @@
 
 <script>
 import * as eventCondition from 'ol/events/condition'
-import {createProj, addProj} from 'vuelayers/lib/ol-ext'
+import {createProj, addProj, transformPoint} from 'vuelayers/lib/ol-ext'
 
 const features = [
   // {
@@ -132,39 +146,84 @@ const computed = {
     return this.selectByHover ? eventCondition.pointerMove : eventCondition.singleClick
   }
 }
-const step = 1000000
-let size = [1000000, 1000000]
-var extent = [0, 0, 1000000, 1000000]
 
-let customProj = createProj({
-  code: 'xkcd-image',
-  units: 'pixels',
-  extent
-})
-addProj(customProj)
 const methods = {
-  imgBigger () {
-    this.imgSize = [Math.floor(this.imgSize[0] * 1.1), Math.floor(this.imgSize[1] * 1.1)]
-    this.imgExtent = [0, 0, Math.floor(this.imgExtent[2] * 1.1), Math.floor(this.imgExtent[3] * 1.1)]
+  // imgBigger () {
+  //   this.growing = this.growing + 1
+  //   this.imgSize = [Math.floor(this.imgSize[0] * 1.1), Math.floor(this.imgSize[1] * 1.1)]
+  //   this.imgExtent = [this.imgExtent[0], this.imgExtent[1], this.imgExtent[2] * 1.1, this.imgExtent[3] * 1.1]
+  //   console.log('bigger -> size -> ' + this.imgSize + ' ; extent -> ' + this.imgExtent + ' ; growing -> ' + this.growing)
+  // },
+  // imgSmaller () {
+  //   this.growing = this.growing - 1
+  //   this.imgSize = [Math.floor(this.imgSize[0] / 1.1), Math.floor(this.imgSize[1] / 1.1)]
+  //   this.imgExtent = [this.imgExtent[0], this.imgExtent[1], this.imgExtent[2] / 1.1, this.imgExtent[3] / 1.1]
+  //   console.log('smaller -> size -> ' + this.imgSize + ' ; extent -> ' + this.imgExtent + ' ; growing -> ' + this.growing)
+  // },
+  // imgMove (axis, direction) {
+  //   var stepSized
+  //   if (this.growing > 0) {
+  //     stepSized = this.step * 1.1 * this.growing
+  //   } else if (this.growing < 0) {
+  //     stepSized = this.step / 1.1 * this.growing
+  //   } else {
+  //     stepSized = this.step
+  //   }
+  //   if (axis === 'x') {
+  //     if (direction === 1) {
+  //       this.imgExtent = [this.imgExtent[0] - stepSized, this.imgExtent[1], this.imgExtent[2] - stepSized, this.imgExtent[3]]
+  //     } else if (direction === 2) {
+  //       this.imgExtent = [this.imgExtent[0] + stepSized, this.imgExtent[1], this.imgExtent[2] + stepSized, this.imgExtent[3]]
+  //     }
+  //   } else if (axis === 'y') {
+  //     if (direction === 1) {
+  //       this.imgExtent = [this.imgExtent[0], this.imgExtent[1] + stepSized, this.imgExtent[2], this.imgExtent[3] + stepSized]
+  //     } else if (direction === 2) {
+  //       this.imgExtent = [this.imgExtent[0], this.imgExtent[1] - stepSized, this.imgExtent[2], this.imgExtent[3] - stepSized]
+  //     }
+  //   }
+  //   console.log('move -> axis ' + axis + ' ; direction -> ' + direction + ' ; ext -> ' + this.imgExtent + ' ; stepSized -> ' + stepSized + ' ; growing -> ' + this.growing)
+  // },
+  sleep (ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
   },
-  imgSmaller () {
-    this.imgSize = [Math.floor(this.imgSize[0] / 1.1), Math.floor(this.imgSize[1] / 1.1)]
-    this.imgExtent = [0, 0, Math.floor(this.imgExtent[2] / 1.1), Math.floor(this.imgExtent[3] / 1.1)]
+  imgScale (direction) {
+    if (direction === 1) { // Image bigger
+      this.imgScaleValue = this.imgScaleValue - 0.1
+    } else if (direction === 2) { // Image smaller
+      this.imgScaleValue = this.imgScaleValue + 0.1
+    }
   },
   imgMove (axis, direction) {
+    var stepSized = 0.1
     if (axis === 'x') {
-      if (direction === 1) {
-        this.imgExtent = [this.imgExtent[0] - step, this.imgExtent[1], this.imgExtent[2] - step, this.imgExtent[3]]
-      } else if (direction === 2) {
-        this.imgExtent = [this.imgExtent[0] + step, this.imgExtent[1], this.imgExtent[2] + step, this.imgExtent[3]]
+      if (direction === 1) { // Left
+        this.imgAnchor = [this.imgAnchor[0] + stepSized, this.imgAnchor[1]]
+      } else if (direction === 2) { // Right
+        this.imgAnchor = [this.imgAnchor[0] - stepSized, this.imgAnchor[1]]
       }
     } else if (axis === 'y') {
-      if (direction === 1) {
-        this.imgExtent = [this.imgExtent[0], this.imgExtent[1] + step, this.imgExtent[2], this.imgExtent[3] + step]
-      } else if (direction === 2) {
-        this.imgExtent = [this.imgExtent[0], this.imgExtent[1] - step, this.imgExtent[2], this.imgExtent[3] - step]
+      if (direction === 1) { // Up
+        this.imgAnchor = [this.imgAnchor[0], this.imgAnchor[1] + stepSized]
+      } else if (direction === 2) { // Down
+        this.imgAnchor = [this.imgAnchor[0], this.imgAnchor[1] - stepSized]
       }
     }
+    console.log('move -> axis ' + axis + ' ; direction -> ' + direction + ' ; stepSized -> ' + stepSized)
+  },
+  async imgReload () {
+    await this.sleep(1000)
+    this.imgStatic = true
+  },
+  imgRotate (direction) {
+    if (direction === 1) { // Rotation anti-clockwise
+      this.imgRotation = this.imgRotation - 0.1
+    } else if (direction === 2) { // Rotation clockwise
+      this.imgRotation = this.imgRotation + 0.1
+    }
+    this.imgStatic = false
+    // this.imgReload()
+    document.getElementById('reload').click()
   },
   getCenter (arr) {
     var x = arr.map(function (a) { return a[0] })
@@ -183,6 +242,8 @@ export default {
   methods,
   data () {
     return {
+      step: 1000000,
+      growing: 0,
       geolocPosition: undefined,
       // maxResolution: 5,
       zoom: 5,
@@ -198,12 +259,16 @@ export default {
       drawType: undefined,
       drawnFeatures: [],
       selectByHover: false,
-      projection: customProj.getCode(),
+      projection: '',
       imgUrl: '/static/logo.png',
       imgCopyright: '© <a href="http://xkcd.com/license.html">xkcd</a>',
-      imgSize: size,
-      imgExtent: extent,
-      imgCenter: undefined
+      imgSize: [],
+      imgExtent: [],
+      imgCenter: undefined,
+      imgRotation: 0,
+      imgScaleValue: 0.4,
+      imgAnchor: [0, 0],
+      imgStatic: true
     }
   },
   created () {
@@ -216,12 +281,25 @@ export default {
       this.imgCenter = val
       this.center = val
       this.center1 = val
+      var a = transformPoint(this.center, 'EPSG:4326', 'EPSG:3857')
+      var size = 1000000
+      this.imgSize = [size, size]
+      this.imgExtent = [a[0], a[1], a[0] + size, a[1] + size]
+      console.log(this.imgExtent)
+      var tmp = this.imgExtent
+      var customProj = createProj({
+        code: 'xkcd-image',
+        units: 'pixels',
+        tmp
+      })
+      addProj(customProj)
+      this.projection = customProj.getCode()
     },
     selectedFeatures: function (val) {
       console.log(val)
     },
     drawnFeatures: function (val) {
-      console.log(this.features)
+      // console.log(this.features)
       var index = val.length - 1
       var type = val[index].geometry.type
       var coord = null
