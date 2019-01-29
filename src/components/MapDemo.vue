@@ -156,6 +156,7 @@
 import * as eventCondition from 'ol/events/condition'
 import {createProj, addProj, transformPoint} from 'vuelayers/lib/ol-ext'
 import FreeTransform from 'vue-free-transform'
+import Geocoder from 'ol-geocoder'
 
 const features = [
   // {
@@ -327,6 +328,7 @@ export default {
       step: 1000000,
       growing: 0,
       geolocPosition: undefined,
+      geocoder: undefined,
       // maxResolution: 5,
       zoom: 5,
       // maxZoom: 8,
@@ -378,6 +380,27 @@ export default {
   created () {
   },
   mounted () {
+    // now ol.Map instance is ready and we can work with it directly
+    this.geocoder = new Geocoder('nominatim', {
+      provider: 'osm',
+      lang: 'en',
+      placeholder: 'Search for ...',
+      limit: 5,
+      debug: false,
+      autoComplete: true,
+      keepOpen: true
+    })
+    // this.$refs.map.$map.addControl(geocoder)
+    console.log(this.geocoder)
+    // console.log(this.$refs.map.$map.getControls())
+    this.$refs.map.$createPromise.then(() => {
+      this.$refs.map.$map.addControl(this.geocoder)
+      console.log(this.$refs.map.$map.getControls())
+      this.geocoder.on('addresschosen', function (evt) {
+        // it's up to you
+        console.info(evt)
+      })
+    })
     this.offsetX = this.$refs.workspace.offsetLeft
     this.offsetY = this.$refs.workspace.offsetTop
   },

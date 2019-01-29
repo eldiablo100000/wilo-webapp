@@ -17,7 +17,6 @@ Vue.use(VueLayers)
 Vue.use(VueSidebarMenu)
 Vue.use(BootstrapVue)
 Vue.use(ImageUploader)
-
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
