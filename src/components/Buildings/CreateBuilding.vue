@@ -25,7 +25,7 @@
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter City">
-          <b-form-input id="city" :state="state" v-model.trim="building.city"></b-form-input>
+          <b-form-input  id="city" :state="state" v-model.trim="building.city"></b-form-input>
         </b-form-group>
         <b-form-group id="fieldsetHorizontal"
                   horizontal
@@ -53,6 +53,14 @@ export default {
   data () {
     return {
       building: {}
+    }
+  },
+  watch: {
+    'building.address': function (val) {
+      console.log(val)
+    },
+    'building.city': function (val) {
+      console.log(val)
     }
   },
   methods: {
