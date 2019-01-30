@@ -6,7 +6,7 @@
           Add Building
           <b-link href="#/buildings">(Building List)</b-link>
         </h2>
-        <b-form @submit="onSubmit">
+        <b-form @submit="onSubmit" v-on:keydown.enter="onKey">
           <b-form-group id="fieldsetHorizontal"
                     horizontal
                     :label-cols="4"
@@ -50,7 +50,6 @@
 </template>
 
 <script>
-
 import axios from 'axios'
 import MapComponent from '../MapComponent.vue'
 
@@ -73,7 +72,7 @@ export default {
     'building.address': function (val) {
       console.log(val)
       document.getElementsByClassName('gcd-gl-control')[0].className += ' gcd-gl-expanded'
-      var string = val + ' ' + this.building.city
+      var string = val + ', ' + this.building.city
       document.getElementById('gcd-input-query').value = ''
       for (var i in string) {
         document.getElementById('gcd-input-query').value += string[i]
@@ -83,7 +82,7 @@ export default {
     'building.city': function (val) {
       console.log(val)
       document.getElementsByClassName('gcd-gl-control')[0].className += ' gcd-gl-expanded'
-      var string = this.building.address + ' ' + val
+      var string = this.building.address + ', ' + val
       document.getElementById('gcd-input-query').value = ''
       for (var i in string) {
         document.getElementById('gcd-input-query').value += string[i]
@@ -91,6 +90,10 @@ export default {
     }
   },
   methods: {
+    onKey (evt) {
+      console.log('ciao')
+      document.getElementById('gcd-input-query').focus()
+    },
     sleep (ms) {
       return new Promise(resolve => setTimeout(resolve, ms))
     },
@@ -103,7 +106,7 @@ export default {
       // }
       document.getElementById('gcd-input-query').focus()
       // await this.sleep(3000)
-      this.pressChar(document.getElementById('gcd-input-query'), 'a')
+      // this.pressChar(document.getElementById('gcd-input-query'), 'a')
       // var results = document.getElementsByClassName('gcd-gl-result')
       // if (results.length > 1) {
       //   this.checked = true
@@ -114,12 +117,13 @@ export default {
         var eventObj = document.createEventObject ? document.createEventObject() : document.createEvent('Events')
 
         if (eventObj.initEvent) {
-          eventObj.initEvent('keypress', true, true)
+          eventObj.initEvent('keydown', true, true)
         }
 
         eventObj.keyCode = keyCode
         eventObj.which = keyCode
-
+        document.getElementById('gcd-input-query').focus()
+        document.getElementById('gcd-input-query').value += 'x'
         el.dispatchEvent ? el.dispatchEvent(eventObj) : el.fireEvent('onkeydown', eventObj)
         console.log(eventObj)
       } catch (e) {

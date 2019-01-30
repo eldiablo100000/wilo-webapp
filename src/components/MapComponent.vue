@@ -60,7 +60,7 @@ export default {
       lang: 'it',
       placeholder: 'Search for ...',
       limit: 5,
-      debug: false,
+      debug: true,
       autoComplete: true,
       keepOpen: true
     })
