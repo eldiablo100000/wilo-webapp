@@ -91,6 +91,15 @@ export default {
     update (id, payload) {
       this.elements = this.elements.map(item => {
         if (item.id === id) {
+          console.log(item.width)
+          console.log(item.angle)
+          console.log(item.height)
+          console.log(item.x)
+          console.log(item.y)
+          console.log(item)
+          console.log(item.scaleX)
+          console.log('x: ' + item.x + ' y: ' + item.y + ' width: ' + item.width * item.scaleX + ' height: ' + item.height * item.scaleY + ' angle: ' + item.angle)
+
           return {
             ...item,
             ...payload

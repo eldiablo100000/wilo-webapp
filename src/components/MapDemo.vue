@@ -5,29 +5,6 @@
             <input type="file" @change="onFileChanged">
             <button @click="onUpload">Upload!</button>
         </div>
-        <div class="wrapper">
-          <div class="workspace" ref="workspace">
-            <FreeTransform
-              v-for="element in elements"
-              :key="element.id"
-              :x="element.x"
-              :y="element.y"
-              :scale-x="element.scaleX"
-              :scale-y="element.scaleY"
-              :width="element.width"
-              :height="element.height"
-              :angle="element.angle"
-              :offset-x="offsetX"
-              :offset-y="offsetY"
-              :disable-scale="element.disableScale === true"
-              @update="update(element.id,$event)"
-              >
-              <div class="element" :style="getElementStyles(element)">
-                {{element.text}}
-              </div>
-            </FreeTransform>
-          </div>
-        </div>
       <button class="collapsible" @click="switchPanel()">Open Collapsible</button>
       <div class="panel" id="panel">
         <button @click="selectByHover = !selectByHover">Select by {{ !selectByHover ? 'hover' : 'click' }}</button>
@@ -73,6 +50,29 @@
           <vl-source-image-static :url="imgUrl" :size="imgSize" :extent="imgExtent" :projection="projection"
                                     :attributions="imgCopyright"></vl-source-image-static>
         </vl-layer-image>
+        <div class="wrapper" position="absolute">
+          <div class="workspace" ref="workspace">
+            <FreeTransform
+              v-for="element in elements"
+              :key="element.id"
+              :x="element.x"
+              :y="element.y"
+              :scale-x="element.scaleX"
+              :scale-y="element.scaleY"
+              :width="element.width"
+              :height="element.height"
+              :angle="element.angle"
+              :offset-x="offsetX"
+              :offset-y="offsetY"
+              :disable-scale="element.disableScale === true"
+              @update="update(element.id,$event)"
+              >
+              <div class="element" :style="getElementStyles(element)">
+                {{element.text}}
+              </div>
+            </FreeTransform>
+          </div>
+        </div>
 
         <vl-geoloc @update:position="geolocPosition = $event">
           <template slot-scope="geoloc">
@@ -157,6 +157,7 @@ import * as eventCondition from 'ol/events/condition'
 import {createProj, addProj, transformPoint} from 'vuelayers/lib/ol-ext'
 import FreeTransform from 'vue-free-transform'
 import Geocoder from 'ol-geocoder'
+// import * as ol from 'ol'
 
 const features = [
   // {
@@ -266,6 +267,13 @@ const methods = {
   update (id, payload) {
     this.elements = this.elements.map(item => {
       if (item.id === id) {
+        // console.log(item.x)
+        console.log('X: ' + item.x + ' Y: ' + item.y + '\nWidth: ' + item.width + ' height: ' + item.height + '\nScaleX: ' + item.scaleX + ' scaleY: ' + item.scaleY + '\n' + this.$refs.map.getCoordinateFromPixel([item.x, item.y]))
+        console.log('X: ' + item.x + ' Y: ' + item.y + '\nWidth: ' + item.width + ' height: ' + item.height + '\nScaleX: ' + item.scaleX + ' scaleY: ' + item.scaleY + '\n' + this.$refs.map.getCoordinateFromPixel([item.x + (item.width * item.scaleX), item.y + (item.height * item.scaleX)]))
+        console.log('X: ' + item.x + ' Y: ' + item.y + '\nWidth: ' + item.width + ' height: ' + item.height + '\nScaleX: ' + item.scaleX + ' scaleY: ' + item.scaleY + '\n' + this.$refs.map.getCoordinateFromPixel([item.x + (item.width * item.scaleX), item.y]))
+        console.log('X: ' + item.x + ' Y: ' + item.y + '\nWidth: ' + item.width + ' height: ' + item.height + '\nScaleX: ' + item.scaleX + ' scaleY: ' + item.scaleY + '\n' + this.$refs.map.getCoordinateFromPixel([item.x, item.y + (item.height * item.scaleX)]))
+        console.log('\n \n')
+
         return {
           ...item,
           ...payload
@@ -344,8 +352,8 @@ export default {
       drawnFeatures: [],
       selectByHover: false,
       projection: '',
-      imgUrl: '/static/logo.png',
-      imgCopyright: '© <a href="http://xkcd.com/license.html">xkcd</a>',
+      // imgUrl: '/static/logo.png',
+      // imgCopyright: '© <a href="http://xkcd.com/license.html">xkcd</a>',
       imgSize: [],
       imgExtent: [],
       imgCenter: undefined,
