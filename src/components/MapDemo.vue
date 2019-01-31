@@ -97,12 +97,12 @@
         <vl-layer-tile>
           <vl-source-osm />
         </vl-layer-tile>
-        <!--<vl-feature v-if="imgStatic" id="static-image">
+        <vl-feature v-if="imgStatic && image" id="static-image">
           <vl-geom-point :coordinates="[12.4098176, 44.51205119999997]" :z-index="3"></vl-geom-point>
             <vl-style-box>
               <vl-style-icon src="static/logo.png" :scale="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
             </vl-style-box>
-        </vl-feature>-->
+        </vl-feature>
        <vl-feature id="marker">
           <vl-geom-point :coordinates="[0, 0]" />
             <vl-style-box>
@@ -125,7 +125,8 @@
           <vl-source-vector :features.sync="drawnFeatures" ident="draw-target" />
         </vl-layer-vector>
         <vl-interaction-draw :type="drawType" source="draw-target" v-if="drawType != null" />
-        <vl-interaction-select v-if="drawType == null" :condition="selectCondition" :features.sync="selectedFeatures" />
+        <vl-interaction-modify :type="drawType" source="draw-target" v-if="drawType != null" />
+        <vl-interaction-select ref="select" v-if="drawType == null" :condition="selectCondition" :features.sync="selectedFeatures" />
           <vl-feature v-if="selectedFeatures.length == 1" :properties="{ start: Date.now(), duration: 2500 }">
             <vl-geom-point v-if="selectedFeatures[0].geometry.type === 'Point'" :coordinates="selectedFeatures[0].geometry.coordinates" :z-index="3"></vl-geom-point>
             <vl-geom-point v-if="selectedFeatures[0].geometry.type === 'Polygon'" :coordinates="selectedFeatures[0].geometry.coordinates[0][0]" :z-index="3"></vl-geom-point>
@@ -157,6 +158,9 @@ import * as eventCondition from 'ol/events/condition'
 import {createProj, addProj, transformPoint} from 'vuelayers/lib/ol-ext'
 import FreeTransform from 'vue-free-transform'
 import Geocoder from 'ol-geocoder'
+import {DragRotateAndZoom} from 'ol/interaction'
+import RotateFeatureInteraction from 'ol-rotate-feature'
+// import ol from 'openlayers'
 
 const features = [
   // {
@@ -241,7 +245,7 @@ const methods = {
     console.log('move -> axis ' + axis + ' ; direction -> ' + direction + ' ; stepSized -> ' + stepSized)
   },
   async imgReload () {
-    await this.sleep(1000)
+    await this.sleep(200)
     this.imgStatic = true
   },
   imgRotate (direction) {
@@ -251,8 +255,8 @@ const methods = {
       this.imgRotation = this.imgRotation + 0.1
     }
     this.imgStatic = false
-    // this.imgReload()
-    document.getElementById('reload').click()
+    this.imgReload()
+    // document.getElementById('reload').click()
   },
   getCenter (arr) {
     var x = arr.map(function (a) { return a[0] })
@@ -329,6 +333,8 @@ export default {
       growing: 0,
       geolocPosition: undefined,
       geocoder: undefined,
+      drz: undefined,
+      rotate: undefined,
       // maxResolution: 5,
       zoom: 5,
       // maxZoom: 8,
@@ -390,16 +396,20 @@ export default {
       autoComplete: true,
       keepOpen: true
     })
+
+    this.drz = new DragRotateAndZoom()
+
     // this.$refs.map.$map.addControl(geocoder)
-    console.log(this.geocoder)
+    // console.log(this.geocoder)
     // console.log(this.$refs.map.$map.getControls())
     this.$refs.map.$createPromise.then(() => {
       this.$refs.map.$map.addControl(this.geocoder)
-      console.log(this.$refs.map.$map.getControls())
+      // console.log(this.$refs.map.$map.getControls())
       this.geocoder.on('addresschosen', function (evt) {
         // it's up to you
         console.info(evt)
       })
+      this.$refs.map.$map.addInteraction(this.drz)
     })
     this.offsetX = this.$refs.workspace.offsetLeft
     this.offsetY = this.$refs.workspace.offsetTop
@@ -427,6 +437,16 @@ export default {
       this.projection = customProj.getCode()
     },
     selectedFeatures: function (val) {
+      console.log(this.$refs.select.getFeatures()[0].getGeometry().flatCoordinates)
+      this.rotate = new RotateFeatureInteraction({
+        features: this.$refs.select.getFeatures(),
+        anchor: [this.$refs.select.getFeatures()[0].getGeometry().flatCoordinates[0], this.$refs.select.getFeatures()[0].getGeometry().flatCoordinates[1]],
+        angle: -90 * Math.PI / 180
+      })
+      this.rotate.on('rotatestart', evt => console.log('rotate start', evt))
+      this.rotate.on('rotating', evt => console.log('rotating', evt))
+      this.rotate.on('rotateend', evt => console.log('rotate end', evt))
+      this.$refs.map.$map.addInteraction(this.rotate)
     },
     drawnFeatures: function (val) {
       var index = val.length - 1

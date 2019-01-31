@@ -7,6 +7,7 @@
           <b-link href="#/buildings">(Building List)</b-link>
         </h2>
         <b-form @submit="onSubmit" v-on:keydown.enter="onKey">
+
           <b-form-group id="fieldsetHorizontal"
                     horizontal
                     :label-cols="4"
@@ -14,7 +15,7 @@
                     label="Enter Title">
             <b-form-input id="title" :state="state" v-model.trim="building.title"></b-form-input>
           </b-form-group>
-          <b-form-group id="fieldsetHorizontal"
+          <!--<b-form-group id="fieldsetHorizontal"
                     horizontal
                     :label-cols="4"
                     breakpoint="md"
@@ -27,6 +28,13 @@
                     breakpoint="md"
                     label="Enter City">
             <b-form-input  id="city" :state="state" v-model.trim="building.city"></b-form-input>
+          </b-form-group> -->
+          <b-form-group id="fieldsetHorizontal"
+                    horizontal
+                    :label-cols="4"
+                    breakpoint="md"
+                    label="Enter Address">
+          <MapComponent></MapComponent>
           </b-form-group>
           <b-form-group id="fieldsetHorizontal"
                     horizontal
@@ -45,7 +53,6 @@
         </b-form>
       </b-col>
     </b-row>
-    <MapComponent></MapComponent>
   </div>
 </template>
 
