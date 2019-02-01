@@ -158,13 +158,8 @@ import * as eventCondition from 'ol/events/condition'
 import {createProj, addProj, transformPoint} from 'vuelayers/lib/ol-ext'
 import FreeTransform from 'vue-free-transform'
 import Geocoder from 'ol-geocoder'
-<<<<<<< HEAD
-// import * as ol from 'ol'
-=======
 import {DragRotateAndZoom} from 'ol/interaction'
 import RotateFeatureInteraction from 'ol-rotate-feature'
-// import ol from 'openlayers'
->>>>>>> 6a984dbaeca6e4380e13f6a3e940c16cb44dcf42
 
 const features = [
   // {
