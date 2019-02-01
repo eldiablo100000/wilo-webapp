@@ -268,10 +268,10 @@ const methods = {
     this.elements = this.elements.map(item => {
       if (item.id === id) {
         // console.log(item.x)
-        console.log('X: ' + item.x + ' Y: ' + item.y + '\nWidth: ' + item.width + ' height: ' + item.height + '\nScaleX: ' + item.scaleX + ' scaleY: ' + item.scaleY + '\n' + this.$refs.map.getCoordinateFromPixel([item.x, item.y]))
-        console.log('X: ' + item.x + ' Y: ' + item.y + '\nWidth: ' + item.width + ' height: ' + item.height + '\nScaleX: ' + item.scaleX + ' scaleY: ' + item.scaleY + '\n' + this.$refs.map.getCoordinateFromPixel([item.x + (item.width * item.scaleX), item.y + (item.height * item.scaleX)]))
-        console.log('X: ' + item.x + ' Y: ' + item.y + '\nWidth: ' + item.width + ' height: ' + item.height + '\nScaleX: ' + item.scaleX + ' scaleY: ' + item.scaleY + '\n' + this.$refs.map.getCoordinateFromPixel([item.x + (item.width * item.scaleX), item.y]))
-        console.log('X: ' + item.x + ' Y: ' + item.y + '\nWidth: ' + item.width + ' height: ' + item.height + '\nScaleX: ' + item.scaleX + ' scaleY: ' + item.scaleY + '\n' + this.$refs.map.getCoordinateFromPixel([item.x, item.y + (item.height * item.scaleX)]))
+        console.log('X: ' + item.x + ' Y: ' + item.y + '\nWidth: ' + item.width + ' height: ' + item.height + '\nCoords: ' + this.$refs.map.getCoordinateFromPixel([item.x, item.y]))
+        console.log('X: ' + (item.x + (item.width * item.scaleX)) + ' Y: ' + item.y + '\nWidth: ' + item.width + ' height: ' + item.height + '\nCoords: ' + this.$refs.map.getCoordinateFromPixel([(item.x + (item.width * item.scaleX)), item.y]))
+        console.log('X: ' + (item.x + (item.width * item.scaleX)) + ' Y: ' + (item.y + (item.height * item.scaleX)) + '\nWidth: ' + item.width + ' height: ' + item.height + '\nCoords: ' + this.$refs.map.getCoordinateFromPixel([(item.x + (item.width * item.scaleX)), (item.y + (item.height * item.scaleX))]))
+        console.log('X: ' + item.x + ' Y: ' + (item.y + (item.height * item.scaleX)) + '\nWidth: ' + item.width + ' height: ' + item.height + '\nCoords: ' + this.$refs.map.getCoordinateFromPixel([item.x, (item.y + (item.height * item.scaleX))]))
         console.log('\n \n')
 
         return {
@@ -377,7 +377,7 @@ export default {
           styles: {
             // background: undefined, // 'linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)'
             backgroundImage: undefined, // "url('static/logo.png')"
-            opacity: 0.7
+            opacity: 0.8
           }
         }
       ],
