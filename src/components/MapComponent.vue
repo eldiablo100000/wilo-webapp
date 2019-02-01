@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <div style="height: 100%">
+    <!--<div style="height: 100%; width: 40%; float:right; padding: 10px; ">-->
+    <div style="height: 100%; width: 60%;  ">
       <vl-map ref="map" v-if="showMap" data-projection="EPSG:4326" renderer="webgl">
         <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
 
@@ -84,6 +85,8 @@ export default {
 }
 </script>
 
+<style></style>
+<!--
 <style lang="scss" rel="stylesheet/scss">
   @import "~ol/ol";
 
@@ -100,3 +103,4 @@ export default {
     }
   }
 </style>
+-->
