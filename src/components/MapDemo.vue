@@ -159,9 +159,9 @@ import {createProj, addProj, transformPoint} from 'vuelayers/lib/ol-ext'
 import FreeTransform from 'vue-free-transform'
 import Geocoder from 'ol-geocoder'
 // import * as ol from 'ol'
+// import ol from 'openlayers'
 import {DragRotateAndZoom} from 'ol/interaction'
 import RotateFeatureInteraction from 'ol-rotate-feature'
-// import ol from 'openlayers'
 
 const features = [
   // {

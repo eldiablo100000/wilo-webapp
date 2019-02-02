@@ -4,14 +4,18 @@ var FloorSchema = new mongoose.Schema({
   number: String,
   id_building: { type: mongoose.Schema.Types.ObjectId, ref: 'Building' },
   anchors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Anchor' }], 
-  /*pathImage: String,
-  server: String,
+  // pathImage: String,
+  // server: String,
+
   angleImage: Number,
   widthImage: Number,
   heightImage: Number,
   xImage: Number,
-  yImage: Number, 
-  location: {
+  yImage: Number,
+  scaleX: Number,
+  scaleY: Number,
+  location: [[Number]], 
+  /* location: {
    	type: {
       type: String, // Don't do { location: { type: String } }
       enum: ['Point'], // 'location.type' must be 'Point'
