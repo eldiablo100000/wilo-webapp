@@ -76,23 +76,17 @@
             <vl-style-icon src="static/logo.png" :scale="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
           </vl-style-box>
       </vl-feature>
-     <vl-feature id="marker">
-        <vl-geom-point :coordinates="[0, 0]" />
-          <vl-style-box>
-            <vl-style-icon src="static/logo.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
-          </vl-style-box>
-      </vl-feature>
 
       <vl-layer-vector id="features" >
         <vl-source-vector :features.sync="features" />
       </vl-layer-vector>
       <template v-for="(item, index) in features">
-          <vl-feature :key="index" >
-            <vl-geom-point :coordinates="item.geometry.coordinates" :z-index="3"></vl-geom-point>
-            <vl-style-box>
-              <vl-style-icon src="static/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
-            </vl-style-box>
-          </vl-feature>
+        <vl-feature :key="index">
+              <vl-geom-point :coordinates="item.geometry.coordinates" :z-index="3"></vl-geom-point>
+              <vl-style-box>
+                <vl-style-icon src="static/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
+              </vl-style-box>
+        </vl-feature>
       </template>
       <vl-layer-vector id="draw-pane" :z-index="0">
         <vl-source-vector :features.sync="drawnFeatures" ident="draw-target" />
@@ -140,7 +134,7 @@ export default {
       center: [0, 0],
       rotation: 0,
       rotation1: 1,
-      // features,
+      features: [],
       selectedFeatures: [],
       graticule: false,
       image: false,
@@ -187,6 +181,45 @@ export default {
   },
   created () {
     this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
+    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
+      .then((response) => {
+        this.floorsId = response.data.floors
+        for (var el in this.floorsId) {
+          axios.get(`http://localhost:3000/floor/` + this.floorsId[el])
+            .then((response) => {
+              if (response.data != null) {
+                console.log(response.data.location)
+                for (var t in response.data.location) {
+                  var tmp = {
+                    id: response.data._id + t,
+                    type: 'Feature',
+                    properties: null,
+                    geometry: {
+                      type: 'Point',
+                      coordinates: response.data.location[t]
+                    }
+                  }
+                  console.log(tmp)
+                  this.features.push(tmp)
+                }
+              }
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        }
+      })
+      .catch(e => {
+        this.errors.push(e)
+      })
+  },
+  watch: {
+    drawnFeatures: function (val) {
+      console.log(val)
+    },
+    features: function (val) {
+      console.log(val)
+    }
   },
   methods: {
     update (id, payload) {
@@ -202,7 +235,6 @@ export default {
           this.location[1] = this.$refs.map.getCoordinateFromPixel([(item.x + (item.width * item.scaleX)), item.y])
           this.location[2] = this.$refs.map.getCoordinateFromPixel([(item.x + (item.width * item.scaleX)), (item.y + (item.height * item.scaleX))])
           this.location[3] = this.$refs.map.getCoordinateFromPixel([item.x, (item.y + (item.height * item.scaleX))])
-
           return {
             ...item,
             ...payload
@@ -223,6 +255,8 @@ export default {
       this.floor.yImage = this.elements[0].y
       this.floor.scaleX = this.elements[0].scaleX
       this.floor.scaleY = this.elements[0].scaleY
+      this.location[4] = this.location[0]
+
       console.log(this.location)
       this.floor.location = this.location
       console.log(this.floor)
