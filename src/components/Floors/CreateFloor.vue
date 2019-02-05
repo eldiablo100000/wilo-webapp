@@ -108,6 +108,7 @@
 <script>
 import FreeTransform from 'vue-free-transform'
 import axios from 'axios'
+// import map from 'map'
 
 export default {
   name: 'ManipulateImage',
@@ -188,7 +189,7 @@ export default {
           axios.get(`http://localhost:3000/floor/` + this.floorsId[el])
             .then((response) => {
               if (response.data != null) {
-                console.log(response.data.location)
+                // console.log(response.data.location)
                 for (var t in response.data.location) {
                   var tmp = {
                     id: response.data._id + t,
@@ -199,7 +200,7 @@ export default {
                       coordinates: response.data.location[t]
                     }
                   }
-                  console.log(tmp)
+                  // console.log(tmp)
                   this.features.push(tmp)
                 }
               }
@@ -215,26 +216,16 @@ export default {
   },
   watch: {
     drawnFeatures: function (val) {
-      console.log(val)
+      // console.log(val)
     },
     features: function (val) {
-      console.log(val)
+      // console.log(val)
     }
   },
   methods: {
     update (id, payload) {
       this.elements = this.elements.map(item => {
         if (item.id === id) {
-          // console.log('x: ' + item.x + ' y: ' + item.y + ' width: ' + item.width * item.scaleX + ' height: ' + item.height * item.scaleY + ' angle: ' + item.angle)
-          // console.log('X: ' + item.x + ' Y: ' + item.y + '\nWidth: ' + item.width + ' height: ' + item.height + '\nCoords: ' + this.$refs.map.getCoordinateFromPixel([item.x, item.y]))
-          // console.log('X: ' + (item.x + (item.width * item.scaleX)) + ' Y: ' + item.y + '\nWidth: ' + item.width + ' height: ' + item.height + '\nCoords: ' + this.$refs.map.getCoordinateFromPixel([(item.x + (item.width * item.scaleX)), item.y]))
-          // console.log('X: ' + (item.x + (item.width * item.scaleX)) + ' Y: ' + (item.y + (item.height * item.scaleX)) + '\nWidth: ' + item.width + ' height: ' + item.height + '\nCoords: ' + this.$refs.map.getCoordinateFromPixel([(item.x + (item.width * item.scaleX)), (item.y + (item.height * item.scaleX))]))
-          // console.log('X: ' + item.x + ' Y: ' + (item.y + (item.height * item.scaleX)) + '\nWidth: ' + item.width + ' height: ' + item.height + '\nCoords: ' + this.$refs.map.getCoordinateFromPixel([item.x, (item.y + (item.height * item.scaleX))]))
-          // console.log('\n \n')
-          this.location[0] = this.$refs.map.getCoordinateFromPixel([item.x, item.y])
-          this.location[1] = this.$refs.map.getCoordinateFromPixel([(item.x + (item.width * item.scaleX)), item.y])
-          this.location[2] = this.$refs.map.getCoordinateFromPixel([(item.x + (item.width * item.scaleX)), (item.y + (item.height * item.scaleX))])
-          this.location[3] = this.$refs.map.getCoordinateFromPixel([item.x, (item.y + (item.height * item.scaleX))])
           return {
             ...item,
             ...payload
@@ -255,7 +246,11 @@ export default {
       this.floor.yImage = this.elements[0].y
       this.floor.scaleX = this.elements[0].scaleX
       this.floor.scaleY = this.elements[0].scaleY
-      this.location[4] = this.location[0]
+      this.location[0] = this.$refs.map.getCoordinateFromPixel([this.elements[0].x, this.elements[0].y])
+      this.location[1] = this.$refs.map.getCoordinateFromPixel([(this.elements[0].x + (this.elements[0].width * this.elements[0].scaleX)), this.elements[0].y])
+      this.location[2] = this.$refs.map.getCoordinateFromPixel([(this.elements[0].x + (this.elements[0].width * this.elements[0].scaleX)), (this.elements[0].y + (this.elements[0].height * this.elements[0].scaleX))])
+      this.location[3] = this.$refs.map.getCoordinateFromPixel([this.elements[0].x, (this.elements[0].y + (this.elements[0].height * this.elements[0].scaleX))])
+      // this.location[4] = this.location[0]
 
       console.log(this.location)
       this.floor.location = this.location
@@ -287,7 +282,7 @@ export default {
         })
         .catch(e => {
           this.errors.push(e)
-          console.log(e)
+          // console.log(e)
         })
       // upload file
     },
