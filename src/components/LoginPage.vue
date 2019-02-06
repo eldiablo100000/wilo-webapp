@@ -1,0 +1,64 @@
+<template>
+  <div id="app">
+    <h2>
+      Login
+    </h2>
+    <b-form>
+      <b-form-group id="fieldsetHorizontal"
+        horizontal
+        :label-cols="4"
+        breakpoint="md"
+        label="Username">
+        <b-form-input id="username" :state="state" v-model.trim="username"></b-form-input>
+      </b-form-group>
+      <b-form-group id="fieldsetHorizontal"
+        horizontal
+        :label-cols="4"
+        breakpoint="md"
+        label="Password">
+        <b-form-input id="password" :state="state" v-model.trim="password"></b-form-input>
+      </b-form-group>
+    </b-form>
+    <div id="click">
+        <button @click="login">login</button>
+        <router-link to="/register" class="btn btn-link">Register</router-link>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from 'axios'
+export default{
+  name: 'LoginPage',
+  data () {
+    return {
+      errors: [],
+      username: '',
+      password: '',
+      notPresent: true
+    }
+  },
+  methods: {
+    login () {
+      axios.get(`http://localhost:3000/user`)
+        .then(response => {
+          console.log(response.data)
+          for (var el in response.data) {
+            if (this.username === response.data[el].username && this.password === response.data[el].password) {
+              this.notPresent = false
+              this.$router.push({
+                name: 'BuildingList',
+                params: { id_user: response.data[el]._id }
+              })
+            }
+          }
+          if (this.notPresent) alert('utente non registrato')
+        })
+        .catch(e => {
+          this.errors.push(e)
+        })
+    }
+  }
+}
+
+</script>

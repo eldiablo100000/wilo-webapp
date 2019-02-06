@@ -4,7 +4,7 @@
       <b-col cols="12">
         <h2>
           Add Building
-          <b-link href="#/buildings">(Building List)</b-link>
+          <b-link @click.stop="GoToBuildingList()">(Building List)</b-link>
         </h2>
         <b-form @submit="onSubmit" v-on:keydown.enter="onKey">
 
@@ -67,10 +67,14 @@ export default {
   },
   data () {
     return {
+      errors: [],
       building: {
         address: '',
         city: ''
       },
+      user: {},
+      userId: '',
+      buildingId: '',
       checked: false,
       state: 'required'
     }
@@ -97,6 +101,12 @@ export default {
     }
   },
   methods: {
+    GoToBuildingList () {
+      this.$router.push({
+        name: 'BuildingList',
+        params: { id_user: this.$route.params.id_user }
+      })
+    },
     onKey (evt) {
       console.log('ciao')
       document.getElementById('gcd-input-query').focus()
@@ -142,10 +152,28 @@ export default {
       evt.preventDefault()
       axios.post(`http://localhost:3000/building`, this.building)
         .then(response => {
-          this.$router.push({
-            name: 'ShowBuilding',
-            params: { id_building: response.data._id }
-          })
+          this.userId = this.$route.params.id_user
+          this.buildingId = response.data._id
+          axios.get(`http://localhost:3000/user/` + this.userId)
+            .then(response => {
+              this.user = response.data
+              this.user.buildings.push(this.buildingId)
+              axios.put(`http://localhost:3000/user/` + this.userId, this.user)
+                .then(response => {
+                  this.$router.push({
+                    name: 'ShowBuilding',
+                    params: { id_building: response.data._id }
+                  })
+                })
+                .catch(e => {
+                  this.errors.push(e)
+                  console.log(e)
+                })
+            })
+            .catch(e => {
+              this.errors.push(e)
+              console.log(e)
+            })
         })
         .catch(e => {
           this.errors.push(e)

@@ -31,6 +31,8 @@ import MapDemo from '@/components/MapDemo'
 import Upload from '@/components/Upload'
 
 import ManipulateImage from '@/components/ManipulateImage'
+import LoginPage from '@/components/LoginPage'
+import RegisterPage from '@/components/RegisterPage'
 
 Vue.use(Router)
 
@@ -41,6 +43,16 @@ export default new Router({
       path: '/',
       name: 'MapDemo',
       component: MapDemo
+    },
+    {
+      path: '/login/',
+      name: 'LoginPage',
+      component: LoginPage
+    },
+    {
+      path: '/register/',
+      name: 'RegisterPage',
+      component: RegisterPage
     },
     {
       path: '/upload/',
@@ -77,22 +89,22 @@ export default new Router({
 
     // building
     {
-      path: '/buildings/',
+      path: '/:id_user/buildings/',
       name: 'BuildingList',
       component: BuildingList
     },
     {
-      path: '/show-building/:id_building',
+      path: '/:id_user/show-building/:id_building',
       name: 'ShowBuilding',
       component: ShowBuilding
     },
     {
-      path: '/add-building',
+      path: '/:id_user/add-building',
       name: 'CreateBuilding',
       component: CreateBuilding
     },
     {
-      path: '/edit-building/:id_building',
+      path: '/:id_user/edit-building/:id_building',
       name: 'EditBuilding',
       component: EditBuilding
     },

@@ -8,6 +8,7 @@ var book = require('./routes/book');
 var building = require('./routes/building');
 var floor = require('./routes/floor');
 var anchor = require('./routes/anchor');
+var user = require('./routes/user');
 
 var app = express();
 var drop = false
@@ -31,6 +32,7 @@ app.use('/book', book);
 app.use('/building', building);
 app.use('/floor', floor);
 app.use('/anchor', anchor);
+app.use('/user', user);
 
 app.set('view engine', 'html')
 

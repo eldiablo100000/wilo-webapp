@@ -2,8 +2,8 @@
   <b-row>
     <b-col cols="12">
       <h2>
-        Edit Building
-        <b-link href="#/buildings">(Building List)</b-link>
+        Show Building
+        <b-link @click.stop="GoToBuildingList()">(Building List)</b-link>
       </h2>
       <b-jumbotron>
         <template slot="header">
@@ -47,16 +47,18 @@ export default {
   created () {
     axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
       .then(response => {
-        this.building = response.data
-        for (var el in response.data.floors) {
-          axios.get(`http://localhost:3000/floor/` + response.data.floors[el])
-            .then(response => {
-              this.floors.push(response.data)
-              this.numbers.push(response.data.number)
-            })
-            .catch(e => {
-              this.errors.push(e)
-            })
+        if (response.data != null) {
+          this.building = response.data
+          for (var el in response.data.floors) {
+            axios.get(`http://localhost:3000/floor/` + response.data.floors[el])
+              .then(response => {
+                this.floors.push(response.data)
+                this.numbers.push(response.data.number)
+              })
+              .catch(e => {
+                this.errors.push(e)
+              })
+          }
         }
       })
       .catch(e => {
@@ -64,6 +66,12 @@ export default {
       })
   },
   methods: {
+    GoToBuildingList () {
+      this.$router.push({
+        name: 'BuildingList',
+        params: { id_user: this.$route.params.id_user }
+      })
+    },
     addfloor (buildingid) {
       this.$router.push({
         name: 'CreateFloor',
