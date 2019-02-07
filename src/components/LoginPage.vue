@@ -8,15 +8,16 @@
         horizontal
         :label-cols="4"
         breakpoint="md"
+        margin-right="20px"
         label="Username">
-        <b-form-input id="username" :state="state" v-model.trim="username"></b-form-input>
+        <b-form-input id="username" :state="state" v-model.trim="username" style="width: 50%"></b-form-input>
       </b-form-group>
       <b-form-group id="fieldsetHorizontal"
         horizontal
         :label-cols="4"
         breakpoint="md"
         label="Password">
-        <b-form-input id="password" :state="state" v-model.trim="password"></b-form-input>
+        <b-form-input id="password" :state="state" v-model.trim="password" style="width: 50%"></b-form-input>
       </b-form-group>
     </b-form>
     <div id="click">

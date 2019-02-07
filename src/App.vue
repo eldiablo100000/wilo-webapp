@@ -1,12 +1,12 @@
 <template>
   <div id="app" :class="[{'collapsed' : collapsed}]">
     <div v-bind:class="myclass">
-      <h1>WiLo Project</h1>
-      <div id="theme-selector">Mode:
+      <h1>IndLoc</h1>
+      <!--<div id="theme-selector">Mode:
         <select v-model="selectedTheme">
           <option v-for="(theme, index) in themes" :key="index" selected="dark-theme">{{theme == 'dark-theme' ? 'dark-theme' : theme}}</option>
         </select>
-      </div>
+      </div>-->
       <hr style="margin: 50px 0px;border: 1px solid #e3e3e3;">
       <router-view/>
     </div>
@@ -214,7 +214,7 @@ html {
 
 body {
   font-family: 'Source Sans Pro', sans-serif;
-  background-color: #f2f4f7;
+  background-color: #99ebff; //#f2f4f7;
 }
 
 .badge-danger {

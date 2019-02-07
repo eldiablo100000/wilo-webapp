@@ -8,36 +8,36 @@
         horizontal
         :label-cols="4"
         breakpoint="md"
-        label="name">
-        <b-form-input id="name" :state="state" v-model.trim="user.name"></b-form-input>
+        label="Name">
+        <b-form-input id="name" :state="state" v-model.trim="user.name" style="width: 50%"></b-form-input>
       </b-form-group>
       <b-form-group id="fieldsetHorizontal"
         horizontal
         :label-cols="4"
         breakpoint="md"
-        label="surname">
-        <b-form-input id="surname" :state="state" v-model.trim="user.surname"></b-form-input>
+        label="Surname">
+        <b-form-input id="surname" :state="state" v-model.trim="user.surname" style="width: 50%"></b-form-input>
       </b-form-group>
       <b-form-group id="fieldsetHorizontal"
         horizontal
         :label-cols="4"
         breakpoint="md"
         label="Username">
-        <b-form-input id="username" :state="state" v-model.trim="user.username"></b-form-input>
+        <b-form-input id="username" :state="state" v-model.trim="user.username" style="width: 50%"></b-form-input>
       </b-form-group>
       <b-form-group id="fieldsetHorizontal"
         horizontal
         :label-cols="4"
         breakpoint="md"
         label="Password">
-        <b-form-input id="password" :state="state" v-model.trim="user.password"></b-form-input>
+        <b-form-input id="password" :state="state" v-model.trim="user.password" style="width: 50%"></b-form-input>
       </b-form-group>
       <b-form-group id="fieldsetHorizontal"
         horizontal
         :label-cols="4"
         breakpoint="md"
         label="Repeat Password">
-        <b-form-input id="Repeat_password" :state="state" v-model.trim="RepeatPassword"></b-form-input>
+        <b-form-input id="Repeat_password" :state="state" v-model.trim="RepeatPassword" style="width: 50%"></b-form-input>
       </b-form-group>
     </b-form>
     <div id="click">
