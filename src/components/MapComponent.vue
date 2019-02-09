@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!--<div style="height: 100%; width: 40%; float:right; padding: 10px; ">-->
-    <div style="height: 100%; width: 60%;  ">
+    <div style="height: 100%; width: 100%;  ">
       <vl-map ref="map" v-if="showMap" data-projection="EPSG:4326" renderer="webgl">
         <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
 
@@ -15,7 +15,17 @@
               <vl-style-icon src="static/logo.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
             </vl-style-box>
         </vl-feature>
-
+        <vl-layer-vector id="features" >
+          <vl-source-vector :features.sync="features" />
+       </vl-layer-vector>
+        <template v-for="(item, index) in features">
+          <vl-feature :key="index">
+            <vl-geom-point :coordinates="item.geometry.coordinates" :z-index="3"></vl-geom-point>
+            <vl-style-box>
+              <vl-style-icon src="static/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
+            </vl-style-box>
+          </vl-feature>
+        </template>
       </vl-map>
     </div>
   </div>
@@ -24,6 +34,7 @@
 <script>
 import * as eventCondition from 'ol/events/condition'
 import Geocoder from 'ol-geocoder'
+import axios from 'axios'
 
 const features = [
 ]
@@ -43,6 +54,8 @@ export default {
   methods,
   data () {
     return {
+      errors: [],
+      floorList: '',
       geocoder: undefined,
       // maxResolution: 5,
       zoom: 5,
@@ -53,6 +66,40 @@ export default {
       image: false,
       showMap: true
     }
+  },
+  created () {
+    this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
+    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
+      .then((response) => {
+        this.floorsId = response.data.floors
+        for (var el in this.floorsId) {
+          axios.get(`http://localhost:3000/floor/` + this.floorsId[el])
+            .then((response) => {
+              if (response.data != null) {
+                // console.log(response.data.location)
+                for (var t in response.data.location) {
+                  var tmp = {
+                    id: response.data._id + t,
+                    type: 'Feature',
+                    properties: null,
+                    geometry: {
+                      type: 'Point',
+                      coordinates: response.data.location[t]
+                    }
+                  }
+                  // console.log(tmp)
+                  this.features.push(tmp)
+                }
+              }
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        }
+      })
+      .catch(e => {
+        this.errors.push(e)
+      })
   },
   mounted () {
     // now ol.Map instance is ready and we can work with it directly

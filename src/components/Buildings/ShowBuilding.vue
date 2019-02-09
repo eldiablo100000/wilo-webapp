@@ -1,41 +1,49 @@
 <template>
-  <b-row>
-    <b-col cols="12">
-      <h2>
-        Show Building
-        <b-link @click.stop="GoToBuildingList()">(Building List)</b-link>
-      </h2>
-      <b-jumbotron>
-        <template slot="header">
-          {{building.title}}
-        </template>
-        <template slot="lead">
-          <!-- Title: {{building.title}}<br> -->
-          Address: {{building.address}}<br>
-          City: {{building.city}}<br>
-          Floors: {{numbers}}<br>
-          Description: {{building.description}}<br>
-        </template>
-        <hr class="my-4">
-        <p>
-          Updated Date: {{building.updated_date}}
-        </p>
-        <b-btn variant="success" @click.stop="addfloor(building._id)">Add Floor</b-btn>
-        <b-btn variant="warning" @click.stop="floorlist(building._id)">Floor List</b-btn>
+  <div>
+    <b-row>
+      <b-col cols="12">
+        <h2>
+          Show Building
+          <b-link @click.stop="GoToBuildingList()">(Building List)</b-link>
+        </h2>
+        <b-jumbotron>
+          <template slot="header">
+            {{building.title}}
+          </template>
+          <template slot="lead">
+            <!-- Title: {{building.title}}<br> -->
+            Address: {{building.address}}<br>
+            City: {{building.city}}<br>
+            Floors: {{numbers}}<br>
+            Description: {{building.description}}<br>
+          </template>
+          <MapComponent>
+          </MapComponent>
+          <hr class="my-4">
+          <p>
+            Updated Date: {{building.updated_date}}
+          </p>
+          <b-btn variant="success" @click.stop="addfloor(building._id)">Add Floor</b-btn>
+          <b-btn variant="warning" @click.stop="floorlist(building._id)">Floor List</b-btn>
 
-        <b-btn variant="success" @click.stop="editbuilding(building._id)">Edit</b-btn>
-        <b-btn variant="danger" @click.stop="deletebuilding(building._id)">Delete</b-btn>
-      </b-jumbotron>
-    </b-col>
-  </b-row>
+          <b-btn variant="success" @click.stop="editbuilding(building._id)">Edit</b-btn>
+          <b-btn variant="danger" @click.stop="deletebuilding(building._id)">Delete</b-btn>
+        </b-jumbotron>
+      </b-col>
+    </b-row>
+  </div>
 </template>
 
 <script>
 
 import axios from 'axios'
+import MapComponent from '../MapComponent'
 
 export default {
   name: 'ShowBuilding',
+  components: {
+    MapComponent
+  },
   data () {
     return {
       building: [],
