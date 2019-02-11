@@ -115,7 +115,7 @@ export default new Router({
       component: FloorList
     },
     {
-      path: '/building/:id_building/show-floor/:id_floor',
+      path: '/ building/:id_building/show-floor/:id_floor',
       name: 'ShowFloor',
       component: ShowFloor
     },

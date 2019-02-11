@@ -1,30 +1,37 @@
 <template>
-  <b-row>
-    <b-col cols="12">
-      <h2>
-        Add Anchor
-        <b-link :href="anchorList">(Anchor List)</b-link>
-      </h2>
-      <b-form @submit="onSubmit">
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
-                  :label-cols="4"
-                  breakpoint="md"
-                  label="Enter Name">
-          <b-form-input id="name" :state="state" v-model.trim="anchor.name"></b-form-input>
-        </b-form-group>
-        <b-button type="submit" variant="primary">Save</b-button>
-      </b-form>
-    </b-col>
-  </b-row>
+  <div>
+    <b-row>
+      <b-col cols="12">
+        <h2>
+          Add Anchor
+          <b-link :href="anchorList">(Anchor List)</b-link>
+        </h2>
+        <b-form @submit="onSubmit">
+          <b-form-group id="fieldsetHorizontal"
+                    horizontal
+                    :label-cols="4"
+                    breakpoint="md"
+                    label="Enter Name">
+            <b-form-input id="name" :state="state" v-model.trim="anchor.name"></b-form-input>
+          </b-form-group>
+          <b-button type="submit" variant="primary">Save</b-button>
+        </b-form>
+      </b-col>
+    </b-row>
+    <AnchorComponent></AnchorComponent>
+  </div>
 </template>
 
 <script>
 
 import axios from 'axios'
+import AnchorComponent from '../AnchorComponent'
 
 export default {
   name: 'CreateAnchor',
+  components: {
+    AnchorComponent
+  },
   data () {
     return {
       anchor: {},
