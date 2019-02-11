@@ -271,13 +271,6 @@ const methods = {
   update (id, payload) {
     this.elements = this.elements.map(item => {
       if (item.id === id) {
-        // console.log(item.x)
-        console.log('X: ' + item.x + ' Y: ' + item.y + '\nWidth: ' + item.width + ' height: ' + item.height + '\nCoords: ' + this.$refs.map.getCoordinateFromPixel([item.x, item.y]))
-        console.log('X: ' + (item.x + (item.width * item.scaleX)) + ' Y: ' + item.y + '\nWidth: ' + item.width + ' height: ' + item.height + '\nCoords: ' + this.$refs.map.getCoordinateFromPixel([(item.x + (item.width * item.scaleX)), item.y]))
-        console.log('X: ' + (item.x + (item.width * item.scaleX)) + ' Y: ' + (item.y + (item.height * item.scaleX)) + '\nWidth: ' + item.width + ' height: ' + item.height + '\nCoords: ' + this.$refs.map.getCoordinateFromPixel([(item.x + (item.width * item.scaleX)), (item.y + (item.height * item.scaleX))]))
-        console.log('X: ' + item.x + ' Y: ' + (item.y + (item.height * item.scaleX)) + '\nWidth: ' + item.width + ' height: ' + item.height + '\nCoords: ' + this.$refs.map.getCoordinateFromPixel([item.x, (item.y + (item.height * item.scaleX))]))
-        console.log('\n \n')
-
         return {
           ...item,
           ...payload

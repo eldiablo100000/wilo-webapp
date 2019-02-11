@@ -11,7 +11,7 @@
         <vl-feature v-if="imgStatic && image" id="static-image">
           <vl-geom-point :coordinates="coordinates" :z-index="3"></vl-geom-point>
             <vl-style-box>
-              <vl-style-icon src="static/marker.png" :size="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
+              <vl-style-icon class="planimetria" src="static/marker.png" :size="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation" style="transform: scale(0.2)"></vl-style-icon>
             </vl-style-box>
         </vl-feature>
         <vl-layer-vector id="features" >
@@ -56,6 +56,8 @@ export default {
       errors: [],
       floorList: '',
       geocoder: undefined,
+      scaleX: undefined,
+      scaleY: undefined,
       // maxResolution: 5,
       zoom: 5,
       // maxZoom: 8,
@@ -96,12 +98,15 @@ export default {
                   // }
                   // // console.log(tmp)
                   // this.features.push(tmp)
-                  alert(response.data.location[t])
+                  // alert(response.data.location[t])
                   this.coordinates = response.data.location[t]
                   break
                 }
                 this.imgRotation = response.data.angleImage * Math.PI / 180
                 this.imgScaleValue = [response.data.widthImage * response.data.scaleX, response.data.heightImage * response.data.scaleY]
+                console.log('ciao')
+                this.scaleX = response.data.scaleX
+                this.scaleY = response.data.scaleY
                 this.image = true
               }
             })

@@ -31,7 +31,7 @@
             :angle="element.angle"
             :offset-x="offsetX"
             :offset-y="offsetY"
-            :disable-scale="element.disableScale === true"
+            :disable-scale="element.disableScale === false"
             @update="update(element.id,$event)"
             >
             <div class="element" :style="getElementStyles(element)">
@@ -226,6 +226,7 @@ export default {
     update (id, payload) {
       this.elements = this.elements.map(item => {
         if (item.id === id) {
+          // item.scaleY = this.elements[0].scaleX
           return {
             ...item,
             ...payload
