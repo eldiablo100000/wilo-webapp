@@ -4,11 +4,13 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var fs = require('fs');
 var book = require('./routes/book');
 var building = require('./routes/building');
 var floor = require('./routes/floor');
 var anchor = require('./routes/anchor');
 var user = require('./routes/user');
+var image = require('./routes/image')
 
 var app = express();
 var drop = false
@@ -33,7 +35,7 @@ app.use('/building', building);
 app.use('/floor', floor);
 app.use('/anchor', anchor);
 app.use('/user', user);
-
+app.use('/image', image);
 app.set('view engine', 'html')
 
 // catch 404 and forward to error handler
@@ -53,5 +55,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;
