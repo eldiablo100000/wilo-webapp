@@ -6,7 +6,6 @@ var FloorSchema = new mongoose.Schema({
   anchors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Anchor' }], 
   // pathImage: String,
   // server: String,
-
   angleImage: Number,
   widthImage: Number,
   heightImage: Number,
@@ -15,6 +14,7 @@ var FloorSchema = new mongoose.Schema({
   scaleX: Number,
   scaleY: Number,
   location: [[Number]], 
+  image: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Image' }],
   /* location: {
    	type: {
       type: String, // Don't do { location: { type: String } }

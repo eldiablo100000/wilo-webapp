@@ -144,6 +144,7 @@ export default {
       drawnFeatures: [],
       selectByHover: false,
       projection: '',
+      selectedImage: null,
       // imgUrl: '/static/logo.png',
       // imgCopyright: '© <a href="http://xkcd.com/license.html">xkcd</a>',
       imgSize: [],
@@ -237,6 +238,7 @@ export default {
     },
     onFileChanged (event) {
       var path = 'static/' + event.target.files[0].name
+      this.selectedImage = event.target.files[0]
       this.resetElement(path)
     },
     save () {
@@ -252,26 +254,35 @@ export default {
       this.location[2] = this.$refs.map.getCoordinateFromPixel([(this.elements[0].x + (this.elements[0].width * this.elements[0].scaleX)), (this.elements[0].y + (this.elements[0].height * this.elements[0].scaleX))])
       this.location[3] = this.$refs.map.getCoordinateFromPixel([this.elements[0].x, (this.elements[0].y + (this.elements[0].height * this.elements[0].scaleX))])
       // this.location[4] = this.location[0]
-
       console.log(this.location)
       this.floor.location = this.location
       console.log(this.floor)
-
-      this.floor.id_building = this.$route.params.id_building
-      axios.post(`http://localhost:3000/floor`, this.floor)
+      const formData = new FormData()
+      formData.append('myFile', this.selectedImage, this.selectedImage.name)
+      console.log(formData.getAll('myFile'))
+      axios.post('http://localhost:3000/image', formData)
         .then(response => {
-          this.floorId = response.data._id
-          this.buildingId = this.$route.params.id_building
-          axios.get(`http://localhost:3000/building/` + this.buildingId)
+          console.log(response)
+          this.floor.image = response.data
+          this.floor.id_building = this.$route.params.id_building
+          axios.post(`http://localhost:3000/floor`, this.floor)
             .then(response => {
-              this.building = response.data
-              this.building.floors.push(this.floorId)
-              axios.put(`http://localhost:3000/building/` + this.buildingId, this.building)
+              this.floorId = response.data._id
+              this.buildingId = this.$route.params.id_building
+              axios.get(`http://localhost:3000/building/` + this.buildingId)
                 .then(response => {
-                  this.$router.push({
-                    name: 'FloorList',
-                    params: { id_building: this.$route.params.id_building }
-                  })
+                  this.building = response.data
+                  this.building.floors.push(this.floorId)
+                  axios.put(`http://localhost:3000/building/` + this.buildingId, this.building)
+                    .then(response => {
+                      this.$router.push({
+                        name: 'FloorList',
+                        params: { id_building: this.$route.params.id_building }
+                      })
+                    })
+                    .catch(e => {
+                      this.errors.push(e)
+                    })
                 })
                 .catch(e => {
                   this.errors.push(e)
@@ -279,12 +290,13 @@ export default {
             })
             .catch(e => {
               this.errors.push(e)
+              // console.log(e)
             })
         })
         .catch(e => {
           this.errors.push(e)
-          // console.log(e)
         })
+
       // upload file
     },
     resetElement: async function (path) {

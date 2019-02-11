@@ -11,7 +11,11 @@
         <vl-feature v-if="imgStatic && image" id="static-image">
           <vl-geom-point :coordinates="coordinates" :z-index="3"></vl-geom-point>
             <vl-style-box>
+<<<<<<< HEAD
               <vl-style-icon class="planimetria" src="static/marker.png" :size="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation" style="transform: scale(0.2)"></vl-style-icon>
+=======
+              <vl-style-icon :src="imgSrc" :size="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
+>>>>>>> 8321e0f5f593f68086f9fa7beeaff97915c8121d
             </vl-style-box>
         </vl-feature>
         <vl-layer-vector id="features" >
@@ -73,7 +77,8 @@ export default {
       imgScaleValue: 0.4,
       imgAnchor: [0, 0],
       imgStatic: true,
-      coordinates: []
+      coordinates: [],
+      imgSrc: ''
     }
   },
   created () {
@@ -98,7 +103,10 @@ export default {
                   // }
                   // // console.log(tmp)
                   // this.features.push(tmp)
+<<<<<<< HEAD
                   // alert(response.data.location[t])
+=======
+>>>>>>> 8321e0f5f593f68086f9fa7beeaff97915c8121d
                   this.coordinates = response.data.location[t]
                   break
                 }
@@ -108,6 +116,17 @@ export default {
                 this.scaleX = response.data.scaleX
                 this.scaleY = response.data.scaleY
                 this.image = true
+                axios.get(`http://localhost:3000/image/` + response.data.image[0])
+                  .then((response) => {
+                    console.log(response)
+                    if (response.data != null) {
+                      var tmp = response.data.path.replace('dist/', '')
+                      this.imgSrc = 'http://localhost:3000/' + tmp
+                    }
+                  })
+                  .catch(e => {
+                    this.errors.push(e)
+                  })
               }
             })
             .catch(e => {
@@ -145,6 +164,9 @@ export default {
   watch: {
     geocoder: function (val) {
       console.log(val)
+    },
+    imgSrc: function (val) {
+      alert(val)
     }
   }
 }
