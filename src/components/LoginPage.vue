@@ -17,7 +17,7 @@
         :label-cols="4"
         breakpoint="md"
         label="Password">
-        <b-form-input id="password" :state="state" v-model.trim="password" style="width: 50%"></b-form-input>
+        <b-form-input id="password" type="password" :state="state" v-model.trim="password" style="width: 50%"></b-form-input>
       </b-form-group>
     </b-form>
     <div id="click">
@@ -29,6 +29,7 @@
 
 <script>
 import axios from 'axios'
+import md5 from 'js-md5'
 export default{
   name: 'LoginPage',
   data () {
@@ -45,7 +46,9 @@ export default{
         .then(response => {
           console.log(response.data)
           for (var el in response.data) {
-            if (this.username === response.data[el].username && this.password === response.data[el].password) {
+            console.log(md5(this.password))
+            console.log(response.data[el].password)
+            if (this.username === response.data[el].username && md5(this.password) === response.data[el].password) {
               this.notPresent = false
               this.$router.push({
                 name: 'BuildingList',

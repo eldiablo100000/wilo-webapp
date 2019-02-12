@@ -11,11 +11,7 @@
         <vl-feature v-if="imgStatic && image" id="static-image">
           <vl-geom-point :coordinates="coordinates" :z-index="3"></vl-geom-point>
             <vl-style-box>
-<<<<<<< HEAD
-              <vl-style-icon class="planimetria" src="static/marker.png" :size="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation" style="transform: scale(0.2)"></vl-style-icon>
-=======
               <vl-style-icon :src="imgSrc" :size="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
->>>>>>> 8321e0f5f593f68086f9fa7beeaff97915c8121d
             </vl-style-box>
         </vl-feature>
         <vl-layer-vector id="features" >
@@ -103,10 +99,6 @@ export default {
                   // }
                   // // console.log(tmp)
                   // this.features.push(tmp)
-<<<<<<< HEAD
-                  // alert(response.data.location[t])
-=======
->>>>>>> 8321e0f5f593f68086f9fa7beeaff97915c8121d
                   this.coordinates = response.data.location[t]
                   break
                 }

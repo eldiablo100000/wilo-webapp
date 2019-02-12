@@ -227,7 +227,13 @@ export default {
     update (id, payload) {
       this.elements = this.elements.map(item => {
         if (item.id === id) {
-          // item.scaleY = this.elements[0].scaleX
+          /* if (item.scaleX !== item.scaleY) {
+            item.scaleX = item.scaleY
+            this.elements[0].scaleX = this.elements[0].scaleY
+            var event = new CustomEvent('update')
+            console.log('call update')
+            this.update(id, event)
+          } */
           return {
             ...item,
             ...payload

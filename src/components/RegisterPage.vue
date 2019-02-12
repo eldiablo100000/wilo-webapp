@@ -30,14 +30,14 @@
         :label-cols="4"
         breakpoint="md"
         label="Password">
-        <b-form-input id="password" :state="state" v-model.trim="user.password" style="width: 50%"></b-form-input>
+        <b-form-input id="password" type="password" :state="state" v-model.trim="user.password" style="width: 50%"></b-form-input>
       </b-form-group>
       <b-form-group id="fieldsetHorizontal"
         horizontal
         :label-cols="4"
         breakpoint="md"
         label="Repeat Password">
-        <b-form-input id="Repeat_password" :state="state" v-model.trim="RepeatPassword" style="width: 50%"></b-form-input>
+        <b-form-input id="Repeat_password" type="password" :state="state" v-model.trim="RepeatPassword" style="width: 50%"></b-form-input>
       </b-form-group>
     </b-form>
     <div id="click">
@@ -48,6 +48,7 @@
 
 <script>
 import axios from 'axios'
+import md5 from 'js-md5'
 export default{
   name: 'RegisterPage',
   data () {
@@ -65,6 +66,7 @@ export default{
     register () {
       if (this.user.password !== this.RepeatPassword) alert('password errata')
       else {
+        this.user.password = md5(this.user.password)
         this.usernameOk = true
         axios.get(`http://localhost:3000/user`)
           .then(response => {
