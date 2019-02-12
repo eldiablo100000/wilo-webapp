@@ -8,11 +8,10 @@
         <vl-layer-tile>
           <vl-source-osm />
         </vl-layer-tile>
-
-       <vl-feature id="marker">
-          <vl-geom-point :coordinates="[0, 0]" />
+        <vl-feature v-if="imgStatic && image" id="static-image">
+          <vl-geom-point :coordinates="coordinates" :z-index="3"></vl-geom-point>
             <vl-style-box>
-              <vl-style-icon src="static/logo.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
+              <vl-style-icon :src="imgSrc" :size="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
             </vl-style-box>
         </vl-feature>
         <vl-layer-vector id="features" >
@@ -64,32 +63,70 @@ export default {
       rotation: 0,
       features,
       image: false,
-      showMap: true
+      showMap: true,
+      scaleX: undefined,
+      scaleY: undefined,
+      imgSize: [],
+      imgExtent: [],
+      imgCenter: undefined,
+      imgRotation: 0,
+      imgScaleValue: 0.4,
+      imgAnchor: [0, 0],
+      imgStatic: true,
+      coordinates: [],
+      imgSrc: ''
     }
   },
   created () {
     this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
-    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
-      .then((response) => {
-        this.floorsId = response.data.floors
-        for (var el in this.floorsId) {
-          axios.get(`http://localhost:3000/floor/` + this.floorsId[el])
+    axios.get(`http://localhost:3000/user/` + this.$cookies.get('user')._id)
+      .then(response => {
+        for (var el in response.data.buildings) {
+          axios.get('http://localhost:3000/building/' + response.data.buildings[el])
             .then((response) => {
-              if (response.data != null) {
-                // console.log(response.data.location)
-                for (var t in response.data.location) {
-                  var tmp = {
-                    id: response.data._id + t,
-                    type: 'Feature',
-                    properties: null,
-                    geometry: {
-                      type: 'Point',
-                      coordinates: response.data.location[t]
+              this.floorsId = response.data.floors
+              for (var el in this.floorsId) {
+                axios.get(`http://localhost:3000/floor/` + this.floorsId[el])
+                  .then((response) => {
+                    if (response.data != null) {
+                      // console.log(response.data.location)
+                      for (var t in response.data.location) {
+                        // var tmp = {
+                        //   id: response.data._id + t,
+                        //   type: 'Feature',
+                        //   properties: null,
+                        //   geometry: {
+                        //     type: 'Point',
+                        //     coordinates: response.data.location[t]
+                        //   }
+                        // }
+                        // // console.log(tmp)
+                        // this.features.push(tmp)
+                        this.coordinates = response.data.location[t]
+                        break
+                      }
+                      this.imgRotation = response.data.angleImage * Math.PI / 180
+                      this.imgScaleValue = [response.data.widthImage * response.data.scaleX, response.data.heightImage * response.data.scaleY]
+                      console.log('ciao')
+                      this.scaleX = response.data.scaleX
+                      this.scaleY = response.data.scaleY
+                      this.image = true
+                      axios.get(`http://localhost:3000/image/` + response.data.image[0])
+                        .then((response) => {
+                          console.log(response)
+                          if (response.data != null) {
+                            var tmp = response.data.path.replace('dist/', '')
+                            this.imgSrc = 'http://localhost:3000/' + tmp
+                          }
+                        })
+                        .catch(e => {
+                          this.errors.push(e)
+                        })
                     }
-                  }
-                  // console.log(tmp)
-                  this.features.push(tmp)
-                }
+                  })
+                  .catch(e => {
+                    this.errors.push(e)
+                  })
               }
             })
             .catch(e => {

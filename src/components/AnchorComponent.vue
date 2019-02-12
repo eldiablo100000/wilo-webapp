@@ -79,46 +79,38 @@ export default {
   },
   created () {
     this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
-    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
+    this.floorId = this.$route.params.id_floor
+    axios.get(`http://localhost:3000/floor/` + this.floorId)
       .then((response) => {
-        this.floorsId = response.data.floors
-        for (var el in this.floorsId) {
-          axios.get(`http://localhost:3000/floor/` + this.floorsId[el])
+        if (response.data != null) {
+          // console.log(response.data.location)
+          for (var t in response.data.location) {
+            // var tmp = {
+            //   id: response.data._id + t,
+            //   type: 'Feature',
+            //   properties: null,
+            //   geometry: {
+            //     type: 'Point',
+            //     coordinates: response.data.location[t]
+            //   }
+            // }
+            // // console.log(tmp)
+            // this.features.push(tmp)
+            this.coordinates = response.data.location[t]
+            break
+          }
+          this.imgRotation = response.data.angleImage * Math.PI / 180
+          this.imgScaleValue = [response.data.widthImage * response.data.scaleX, response.data.heightImage * response.data.scaleY]
+          console.log('ciao')
+          this.scaleX = response.data.scaleX
+          this.scaleY = response.data.scaleY
+          this.image = true
+          axios.get(`http://localhost:3000/image/` + response.data.image[0])
             .then((response) => {
+              console.log(response)
               if (response.data != null) {
-                // console.log(response.data.location)
-                for (var t in response.data.location) {
-                  // var tmp = {
-                  //   id: response.data._id + t,
-                  //   type: 'Feature',
-                  //   properties: null,
-                  //   geometry: {
-                  //     type: 'Point',
-                  //     coordinates: response.data.location[t]
-                  //   }
-                  // }
-                  // // console.log(tmp)
-                  // this.features.push(tmp)
-                  this.coordinates = response.data.location[t]
-                  break
-                }
-                this.imgRotation = response.data.angleImage * Math.PI / 180
-                this.imgScaleValue = [response.data.widthImage * response.data.scaleX, response.data.heightImage * response.data.scaleY]
-                console.log('ciao')
-                this.scaleX = response.data.scaleX
-                this.scaleY = response.data.scaleY
-                this.image = true
-                axios.get(`http://localhost:3000/image/` + response.data.image[0])
-                  .then((response) => {
-                    console.log(response)
-                    if (response.data != null) {
-                      var tmp = response.data.path.replace('dist/', '')
-                      this.imgSrc = 'http://localhost:3000/' + tmp
-                    }
-                  })
-                  .catch(e => {
-                    this.errors.push(e)
-                  })
+                var tmp = response.data.path.replace('dist/', '')
+                this.imgSrc = 'http://localhost:3000/' + tmp
               }
             })
             .catch(e => {

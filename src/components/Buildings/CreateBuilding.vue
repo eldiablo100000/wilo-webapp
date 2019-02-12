@@ -103,8 +103,7 @@ export default {
   methods: {
     GoToBuildingList () {
       this.$router.push({
-        name: 'BuildingList',
-        params: { id_user: this.$route.params.id_user }
+        name: 'BuildingList'
       })
     },
     onKey (evt) {
@@ -152,7 +151,7 @@ export default {
       evt.preventDefault()
       axios.post(`http://localhost:3000/building`, this.building)
         .then(response => {
-          this.userId = this.$route.params.id_user
+          this.userId = this.$cookies.get('user')._id
           this.buildingId = response.data._id
           axios.get(`http://localhost:3000/user/` + this.userId)
             .then(response => {

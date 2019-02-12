@@ -38,7 +38,7 @@ export default {
     }
   },
   created () {
-    axios.get(`http://localhost:3000/user/` + this.$route.params.id_user)
+    axios.get(`http://localhost:3000/user/` + this.$cookies.get('user')._id)
       .then(response => {
         for (var el in response.data.buildings) {
           axios.get('http://localhost:3000/building/' + response.data.buildings[el])
@@ -57,14 +57,13 @@ export default {
   methods: {
     GoToCreateBuilding () {
       this.$router.push({
-        name: 'CreateBuilding',
-        params: { id_user: this.$route.params.id_user }
+        name: 'CreateBuilding'
       })
     },
     details (building) {
       this.$router.push({
         name: 'ShowBuilding',
-        params: { id_building: building._id, id_user: this.$route.params.id_user }
+        params: { id_building: building._id }
       })
     }
   }

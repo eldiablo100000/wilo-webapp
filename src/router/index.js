@@ -89,22 +89,22 @@ export default new Router({
 
     // building
     {
-      path: '/:id_user/buildings/',
+      path: '/buildings/',
       name: 'BuildingList',
       component: BuildingList
     },
     {
-      path: '/:id_user/show-building/:id_building',
+      path: '/show-building/:id_building',
       name: 'ShowBuilding',
       component: ShowBuilding
     },
     {
-      path: '/:id_user/add-building',
+      path: '/add-building',
       name: 'CreateBuilding',
       component: CreateBuilding
     },
     {
-      path: '/:id_user/edit-building/:id_building',
+      path: '/edit-building/:id_building',
       name: 'EditBuilding',
       component: EditBuilding
     },
@@ -115,7 +115,7 @@ export default new Router({
       component: FloorList
     },
     {
-      path: '/ building/:id_building/show-floor/:id_floor',
+      path: '/building/:id_building/show-floor/:id_floor',
       name: 'ShowFloor',
       component: ShowFloor
     },

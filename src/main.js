@@ -12,7 +12,14 @@ import VueLayers from 'vuelayers'
 import 'vuelayers/lib/style.css' // needs css-loader
 import ImageUploader from 'vue-image-upload-resize'
 // import map from './components/map'
+import VueCookies from 'vue-cookies'
+Vue.use(VueCookies)
 
+// set default config
+VueCookies.config('7d')
+
+// set global cookie
+VueCookies.set('theme', 'default')
 Vue.config.productionTip = false
 Vue.use(VueLayers)
 Vue.use(VueSidebarMenu)

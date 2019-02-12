@@ -77,8 +77,7 @@ export default {
   methods: {
     GoToBuildingList () {
       this.$router.push({
-        name: 'BuildingList',
-        params: { id_user: this.$route.params.id_user }
+        name: 'BuildingList'
       })
     },
     addfloor (buildingid) {
@@ -102,14 +101,14 @@ export default {
     deletebuilding (buildingid) {
       axios.delete('http://localhost:3000/building/' + buildingid)
         .then((result) => {
-          axios.get('http://localhost:3000/user/' + this.$route.params.id_user)
+          axios.get('http://localhost:3000/user/' + this.$cookies.get('user')._id)
             .then(result => {
               var index = result.data.buildings.indexOf(buildingid)
               if (index > -1) {
                 result.data.buildings.splice(index, 1)
                 this.user = result.data
               }
-              axios.put('http://localhost:3000/user/' + this.$route.params.id_user, this.user)
+              axios.put('http://localhost:3000/user/' + this.$cookies.get('user')._id, this.user)
                 .then(result => {
                   this.$router.push({
                     name: 'BuildingList'

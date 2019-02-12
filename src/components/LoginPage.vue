@@ -50,6 +50,7 @@ export default{
             console.log(response.data[el].password)
             if (this.username === response.data[el].username && md5(this.password) === response.data[el].password) {
               this.notPresent = false
+              this.$cookies.set('user', response.data[el])
               this.$router.push({
                 name: 'BuildingList',
                 params: { id_user: response.data[el]._id }
