@@ -14,8 +14,15 @@
       </b-form-group>
     </b-form>
     <div id="click">
-        <input type="file" @change="onFileChanged">
-        <button @click="save">Save!</button>
+      <div v-if="!image">
+        <h2>Select an image</h2>
+        <input type="file" @change="onFileChange">
+      </div>
+      <div v-else>
+        <!--<img :src="image" />-->
+        <button @click="removeImage">Remove image</button>
+      </div>
+      <button @click="save">Save!</button>
     </div>
       <div class="wrapper" position="absolute">
         <div class="workspace" ref="workspace">
@@ -37,12 +44,13 @@
             <div class="element" :style="getElementStyles(element)">
               {{element.text}}
             </div>
+            <!--<img :src="image" />-->
           </FreeTransform>
         </div>
       </div>
     <vl-map ref="map" v-if="showMap" data-projection="EPSG:4326" renderer="webgl">
       <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
-      <vl-layer-image id="xkcd" v-if="image" :overlay="true" :opacity="0.5" >
+      <vl-layer-image id="xkcd" v-if="img" :overlay="true" :opacity="0.5" >
         <vl-source-image-static :url="imgUrl" :size="imgSize" :extent="imgExtent" :projection="projection"
                                   :attributions="imgCopyright"></vl-source-image-static>
       </vl-layer-image>
@@ -70,7 +78,7 @@
       <vl-layer-tile>
         <vl-source-osm />
       </vl-layer-tile>
-      <vl-feature v-if="imgStatic && image" id="static-image">
+      <vl-feature v-if="imgStatic && img" id="static-image">
         <vl-geom-point :coordinates="[12.4098176, 44.51205119999997]" :z-index="3"></vl-geom-point>
           <vl-style-box>
             <vl-style-icon src="static/logo.png" :scale="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
@@ -138,7 +146,8 @@ export default {
       features: [],
       selectedFeatures: [],
       graticule: false,
-      image: false,
+      img: false,
+      image: undefined,
       showMap: true,
       drawType: undefined,
       drawnFeatures: [],
@@ -242,9 +251,33 @@ export default {
         return item
       })
     },
+    onFileChange (e) {
+      var files = e.target.files || e.dataTransfer.files
+      if (!files.length) {
+        return
+      }
+      this.selectedImage = e.target.files[0]
+      this.createImage(files[0])
+    },
+    createImage (file) {
+      console.log(file)
+      var reader = new FileReader()
+      var vm = this
+      vm.image = new Image()
+      reader.onload = (e) => {
+        vm.image = e.target.result
+      }
+      reader.readAsDataURL(file)
+      var _URL = window.URL || window.webkitURL
+      this.resetElement(_URL.createObjectURL(file))
+    },
+    removeImage: function (e) {
+      this.image = ''
+    },
     onFileChanged (event) {
       var path = 'static/' + event.target.files[0].name
       this.selectedImage = event.target.files[0]
+      console.log(event.target.files[0])
       this.resetElement(path)
     },
     save () {

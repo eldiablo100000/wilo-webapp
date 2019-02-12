@@ -158,7 +158,7 @@ export default {
       console.log(val)
     },
     imgSrc: function (val) {
-      alert(val)
+      // alert(val)
     }
   }
 }
