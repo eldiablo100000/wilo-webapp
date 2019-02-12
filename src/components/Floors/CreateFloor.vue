@@ -418,10 +418,12 @@ export default {
         box-sizing: border-box;
     }
 
+    .tr-transform__controls {
+      z-index: 3;
+    }
     .tr-transform__content {
         user-select: none;
     }
-
     .tr-transform__rotator {
         top: -45px;
         left: calc(50% - 7px);

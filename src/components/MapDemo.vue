@@ -547,7 +547,7 @@ export default {
       z-index: 3;
   }
 
-  .tr-tranform__controls {
+  .tr-transform__controls {
       z-index: 3;
   }
   .tr-transform__rotator {
