@@ -200,6 +200,7 @@ export default {
             .then((response) => {
               if (response.data != null) {
                 // console.log(response.data.location)
+                this.floor = response.data
                 for (var t in response.data.location) {
                   var tmp = {
                     id: response.data._id + t,
@@ -212,6 +213,7 @@ export default {
                   }
                   // console.log(tmp)
                   this.features.push(tmp)
+                  break
                 }
               }
             })

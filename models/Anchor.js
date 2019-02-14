@@ -4,6 +4,7 @@ var AnchorSchema = new mongoose.Schema({
   name: String,
   id_building: { type: mongoose.Schema.Types.ObjectId, ref: 'Building' },
   id_floor: { type: mongoose.Schema.Types.ObjectId, ref: 'Floor' },
+  location: [[Number]],
   /*location: {
    	type: {
       type: String, // Don't do { location: { type: String } }
@@ -19,4 +20,3 @@ var AnchorSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Anchor', AnchorSchema);
-

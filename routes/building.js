@@ -5,7 +5,7 @@ var Building = require('../models/Building.js');
 
 /* GET ALL BUILDINGS */
 router.get('/', function(req, res, next) {
-  Building.find(function (err, products) {
+  Building.find({}, null, {sort: 'title'}, function(err, products) {
     if (err) return next(err);
     res.json(products);
   });

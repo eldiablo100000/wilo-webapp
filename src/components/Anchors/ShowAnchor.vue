@@ -32,7 +32,7 @@ export default {
   data () {
     return {
       anchor: [],
-      floor: [],
+      floor: {},
       errors: []
     }
   },

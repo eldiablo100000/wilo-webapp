@@ -29,8 +29,11 @@ export default {
     return {
       fields: {
         title: { label: 'Title', sortable: true, 'class': 'text-center' },
-        address: { label: 'Address', sortable: true },
         city: { label: 'City', sortable: true, 'class': 'text-center' },
+        country: { label: 'Country', sortable: true, 'class': 'text-center' },
+        road: { label: 'Road', sortable: true, 'class': 'text-center' },
+        number: { label: 'Number', sortable: true, 'class': 'text-center' },
+        postcode: { label: 'Postcode', sortable: true, 'class': 'text-center' },
         actions: { label: 'Action', 'class': 'text-center' }
       },
       buildings: [],

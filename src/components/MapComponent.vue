@@ -156,6 +156,7 @@ export default {
       // console.log(this.$refs.map.$map.getControls())
       this.geocoder.on('addresschosen', function (evt) {
         // it's up to you
+        console.log(this)
         console.info(evt)
         alert('hello')
       })
@@ -163,7 +164,7 @@ export default {
   },
   watch: {
     geocoder: function (val) {
-      console.log(val)
+      // console.log(val)
     }
   }
 }
