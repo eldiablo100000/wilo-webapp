@@ -85,8 +85,7 @@ export default {
       floorList: '',
       geocoder: undefined,
       // maxResolution: 5,
-      zoom: 5,
-      // maxZoom: 8,
+      zoom: 19,
       center: [0, 0],
       rotation: 0,
       features,
@@ -106,6 +105,7 @@ export default {
     }
   },
   created () {
+    this.features = []
     axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
       .then(response => {
         if (response.data != null) {
@@ -120,6 +120,7 @@ export default {
               coordinates: response.data.coordinates
             }
           }
+          this.center = response.data.coordinates
           this.features.push(tmp)
           for (var el in response.data.floors) {
             axios.get(`http://localhost:3000/floor/` + response.data.floors[el])

@@ -72,7 +72,7 @@ export default {
       scaleX: undefined,
       scaleY: undefined,
       // maxResolution: 5,
-      zoom: 5,
+      zoom: 19,
       // maxZoom: 8,
       center: [0, 0],
       rotation: 0,
@@ -112,6 +112,7 @@ export default {
             this.coordinates = response.data.location[t]
             break
           }
+          this.center = this.coordinates
           this.floor = response.data
           this.imgRotation = response.data.angleImage * Math.PI / 180
           this.imgScaleValue = [response.data.widthImage * response.data.scaleX, response.data.heightImage * response.data.scaleY]

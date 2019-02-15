@@ -160,6 +160,7 @@ export default {
     }
   },
   created () {
+    this.features = []
     this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
     axios.get(`http://localhost:3000/user/` + this.$cookies.get('user')._id)
       .then(response => {

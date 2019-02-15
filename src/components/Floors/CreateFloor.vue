@@ -200,7 +200,7 @@ export default {
             .then((response) => {
               if (response.data != null) {
                 // console.log(response.data.location)
-                this.floor = response.data
+                // this.floor = response.data
                 for (var t in response.data.location) {
                   var tmp = {
                     id: response.data._id + t,
@@ -304,8 +304,9 @@ export default {
       axios.post('http://localhost:3000/image', formData)
         .then(response => {
           console.log(response)
-          this.floor.image = response.data
+          this.floor.image = response.data._id
           this.floor.id_building = this.$route.params.id_building
+          console.log(this.floor)
           axios.post(`http://localhost:3000/floor`, this.floor)
             .then(response => {
               this.floorId = response.data._id
@@ -327,11 +328,12 @@ export default {
                 })
                 .catch(e => {
                   this.errors.push(e)
+                  console.log(e)
                 })
             })
             .catch(e => {
               this.errors.push(e)
-              // console.log(e)
+              console.log(e)
             })
         })
         .catch(e => {

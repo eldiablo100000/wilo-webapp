@@ -41,6 +41,7 @@ export default {
     }
   },
   created () {
+    this.features = []
     axios.get(`http://localhost:3000/user/` + this.$cookies.get('user')._id)
       .then(response => {
         for (var el in response.data.buildings) {
