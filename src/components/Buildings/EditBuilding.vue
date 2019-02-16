@@ -100,38 +100,53 @@ import Geocoder from 'ol-geocoder'
 
 const features = [
 ]
+
 export default {
   name: 'EditBuilding',
 
   data () {
     return {
       building: {},
-      errors: [],
-      user: {},
-      userId: '',
       buildingId: '',
+      center: [0, 0],
       checked: false,
-      state: 'required',
+      coordinates: [],
+      errors: [],
+      features,
       floorList: '',
       geocoder: undefined,
-      // maxResolution: 5,
-      zoom: 19,
-      center: [0, 0],
-      rotation: 0,
-      features,
       image: false,
-      showMap: true,
-      scaleX: undefined,
-      scaleY: undefined,
-      imgSize: [],
-      imgExtent: [],
+      imgAnchor: [0, 0],
       imgCenter: undefined,
+      imgExtent: [],
       imgRotation: 0,
       imgScaleValue: 0.4,
-      imgAnchor: [0, 0],
+      imgSize: [],
+      imgSrc: '',
       imgStatic: true,
-      coordinates: [],
-      imgSrc: ''
+      rotation: 0,
+      scaleX: undefined,
+      scaleY: undefined,
+      showMap: true,
+      state: 'required',
+      user: {},
+      userId: '',
+      zoom: 19
+    }
+  },
+  methods: {
+    onSubmit (evt) {
+      evt.preventDefault()
+      axios.put(`http://localhost:3000/building/` + this.$route.params.id_building, this.building)
+        .then(response => {
+          this.$router.push({
+            name: 'ShowBuilding',
+            params: { id_building: this.$route.params.id_building }
+          })
+        })
+        .catch(e => {
+          this.errors.push(e)
+        })
     }
   },
   created () {
@@ -190,21 +205,6 @@ export default {
         console.log(that.building)
       })
     })
-  },
-  methods: {
-    onSubmit (evt) {
-      evt.preventDefault()
-      axios.put(`http://localhost:3000/building/` + this.$route.params.id_building, this.building)
-        .then(response => {
-          this.$router.push({
-            name: 'ShowBuilding',
-            params: { id_building: this.$route.params.id_building }
-          })
-        })
-        .catch(e => {
-          this.errors.push(e)
-        })
-    }
   }
 }
 </script>

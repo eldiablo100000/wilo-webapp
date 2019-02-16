@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var FloorSchema = new mongoose.Schema({
   number: String,
   id_building: { type: mongoose.Schema.Types.ObjectId, ref: 'Building' },
-  anchors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Anchor' }], 
+  anchors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Anchor' }],
   // pathImage: String,
   // server: String,
   angleImage: Number,
@@ -13,8 +13,9 @@ var FloorSchema = new mongoose.Schema({
   yImage: Number,
   scaleX: Number,
   scaleY: Number,
-  location: [[Number]], 
+  location: [[Number]],
   image: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Image' }],
+  zoom: Number,
   /* location: {
    	type: {
       type: String, // Don't do { location: { type: String } }
@@ -30,4 +31,3 @@ var FloorSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Floor', FloorSchema);
-

@@ -40,12 +40,6 @@
                         <vl-layer-tile>
                            <vl-source-osm />
                         </vl-layer-tile>
-                        <vl-feature v-if="imgStatic && image" id="static-image">
-                           <vl-geom-point :coordinates="coordinates" :z-index="3"></vl-geom-point>
-                           <vl-style-box>
-                              <vl-style-icon :src="imgSrc" :size="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
-                           </vl-style-box>
-                        </vl-feature>
                         <vl-layer-vector id="features" >
                            <vl-source-vector :features.sync="features" />
                         </vl-layer-vector>
@@ -80,44 +74,35 @@
 </template>
 
 <script>
+
 import axios from 'axios'
 import * as eventCondition from 'ol/events/condition'
 import Geocoder from 'ol-geocoder'
+
 const features = [
 ]
+
 export default {
   name: 'CreateBuilding',
 
   data () {
     return {
-      errors: [],
       building: {},
-      user: {},
-      userId: '',
       buildingId: '',
-      checked: false,
-      state: 'required',
+      center: [0, 0],
+      coordinates: [],
+      errors: [],
+      features,
       floorList: '',
       geocoder: undefined,
-      // maxResolution: 5,
-      zoom: 5,
-      // maxZoom: 8,
-      center: [0, 0],
       rotation: 0,
-      features,
-      image: false,
-      showMap: true,
       scaleX: undefined,
       scaleY: undefined,
-      imgSize: [],
-      imgExtent: [],
-      imgCenter: undefined,
-      imgRotation: 0,
-      imgScaleValue: 0.4,
-      imgAnchor: [0, 0],
-      imgStatic: true,
-      coordinates: [],
-      imgSrc: ''
+      showMap: true,
+      state: 'required',
+      user: {},
+      userId: '',
+      zoom: 19
     }
   },
   methods: {
@@ -177,6 +162,7 @@ export default {
                   coordinates: response.data.coordinates
                 }
               }
+              this.center = response.data.coordinates
               this.features.push(tmp)
             })
             .catch(e => {

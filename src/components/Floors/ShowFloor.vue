@@ -26,7 +26,7 @@
   </b-row>
   <!-- start map -->
   <div style="height: 100%; width: 100%;  ">
-     <vl-map ref="map" v-if="showMap" data-projection="EPSG:4326" renderer="webgl">
+     <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
         <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
         <vl-layer-tile>
            <vl-source-osm />
@@ -64,30 +64,28 @@ export default {
   name: 'ShowFloor',
   data () {
     return {
-      floor: {},
-      building: [],
+      building: {},
+      center: [0, 0],
+      coordinates: [],
       errors: [],
+      features,
+      floor: {},
       floorList: '',
       geocoder: undefined,
-      scaleX: undefined,
-      scaleY: undefined,
-      // maxResolution: 5,
-      zoom: 19,
-      // maxZoom: 8,
-      center: [0, 0],
-      rotation: 0,
-      features,
-      showMap: true,
       image: false,
-      imgSize: [],
-      imgExtent: [],
+      imgAnchor: [0, 0],
       imgCenter: undefined,
+      imgExtent: [],
       imgRotation: 0,
       imgScaleValue: 0.4,
-      imgAnchor: [0, 0],
+      imgSize: [],
+      imgSrc: '',
       imgStatic: true,
-      coordinates: [],
-      imgSrc: ''
+      rotation: 0,
+      scaleX: undefined,
+      scaleY: undefined,
+      showMap: true,
+      zoom: 19
     }
   },
   created () {
@@ -96,7 +94,7 @@ export default {
     axios.get(`http://localhost:3000/floor/` + this.floorId)
       .then((response) => {
         if (response.data != null) {
-          // console.log(response.data.location)
+          console.log(response.data)
           for (var t in response.data.location) {
             // var tmp = {
             //   id: response.data._id + t,
@@ -114,6 +112,7 @@ export default {
           }
           this.center = this.coordinates
           this.floor = response.data
+          this.zoom = response.data.zoom
           this.imgRotation = response.data.angleImage * Math.PI / 180
           this.imgScaleValue = [response.data.widthImage * response.data.scaleX, response.data.heightImage * response.data.scaleY]
           console.log('ciao')

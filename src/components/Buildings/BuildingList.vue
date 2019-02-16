@@ -40,6 +40,19 @@ export default {
       errors: []
     }
   },
+  methods: {
+    GoToCreateBuilding () {
+      this.$router.push({
+        name: 'CreateBuilding'
+      })
+    },
+    details (building) {
+      this.$router.push({
+        name: 'ShowBuilding',
+        params: { id_building: building._id }
+      })
+    }
+  },
   created () {
     this.features = []
     axios.get(`http://localhost:3000/user/` + this.$cookies.get('user')._id)
@@ -57,19 +70,6 @@ export default {
       .catch(e => {
         this.errors.push(e)
       })
-  },
-  methods: {
-    GoToCreateBuilding () {
-      this.$router.push({
-        name: 'CreateBuilding'
-      })
-    },
-    details (building) {
-      this.$router.push({
-        name: 'ShowBuilding',
-        params: { id_building: building._id }
-      })
-    }
   }
 }
 </script>

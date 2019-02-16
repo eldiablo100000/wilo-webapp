@@ -27,12 +27,6 @@
                 <vl-layer-tile>
                    <vl-source-osm />
                 </vl-layer-tile>
-                <vl-feature v-if="imgStatic && image" id="static-image">
-                   <vl-geom-point :coordinates="coordinates" :z-index="3"></vl-geom-point>
-                   <vl-style-box>
-                      <vl-style-icon :src="imgSrc" :size="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
-                   </vl-style-box>
-                </vl-feature>
                 <vl-layer-vector id="features" >
                    <vl-source-vector :features.sync="features" />
                 </vl-layer-vector>
@@ -65,6 +59,7 @@
 <script>
 
 import axios from 'axios'
+
 const features = [
 ]
 
@@ -73,70 +68,23 @@ export default {
 
   data () {
     return {
-      building: [],
-      floors: [],
-      numbers: [],
+      building: {},
+      buildingId: '',
+      center: [0, 0],
+      coordinates: [],
       errors: [],
+      features,
+      floorList: '',
+      floors: [],
+      geocoder: undefined,
+      numbers: [],
+      rotation: 0,
+      showMap: true,
+      state: 'required',
       user: {},
       userId: '',
-      buildingId: '',
-      checked: false,
-      state: 'required',
-      floorList: '',
-      geocoder: undefined,
-      // maxResolution: 5,
-      zoom: 19,
-      center: [0, 0],
-      rotation: 0,
-      features,
-      image: false,
-      showMap: true,
-      scaleX: undefined,
-      scaleY: undefined,
-      imgSize: [],
-      imgExtent: [],
-      imgCenter: undefined,
-      imgRotation: 0,
-      imgScaleValue: 0.4,
-      imgAnchor: [0, 0],
-      imgStatic: true,
-      coordinates: [],
-      imgSrc: ''
+      zoom: 19
     }
-  },
-  created () {
-    this.features = []
-    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
-      .then(response => {
-        if (response.data != null) {
-          this.building = response.data
-          console.log(response.data)
-          var tmp = {
-            id: response.data.title,
-            type: 'Feature',
-            properties: null,
-            geometry: {
-              type: 'Point',
-              coordinates: response.data.coordinates
-            }
-          }
-          this.center = response.data.coordinates
-          this.features.push(tmp)
-          for (var el in response.data.floors) {
-            axios.get(`http://localhost:3000/floor/` + response.data.floors[el])
-              .then(response => {
-                this.floors.push(response.data)
-                this.numbers.push(response.data.number)
-              })
-              .catch(e => {
-                this.errors.push(e)
-              })
-          }
-        }
-      })
-      .catch(e => {
-        this.errors.push(e)
-      })
   },
   methods: {
     GoToBuildingList () {
@@ -190,6 +138,40 @@ export default {
           this.errors.push(e)
         })
     }
+  },
+  created () {
+    this.features = []
+    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
+      .then(response => {
+        if (response.data != null) {
+          this.building = response.data
+          console.log(response.data)
+          var tmp = {
+            id: response.data.title,
+            type: 'Feature',
+            properties: null,
+            geometry: {
+              type: 'Point',
+              coordinates: response.data.coordinates
+            }
+          }
+          this.center = response.data.coordinates
+          this.features.push(tmp)
+          for (var el in response.data.floors) {
+            axios.get(`http://localhost:3000/floor/` + response.data.floors[el])
+              .then(response => {
+                this.floors.push(response.data)
+                this.numbers.push(response.data.number)
+              })
+              .catch(e => {
+                this.errors.push(e)
+              })
+          }
+        }
+      })
+      .catch(e => {
+        this.errors.push(e)
+      })
   }
 }
 </script>
