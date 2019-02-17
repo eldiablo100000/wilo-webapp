@@ -55,10 +55,10 @@ export default {
   },
   created () {
     this.features = []
-    axios.get(`http://localhost:3000/user/` + this.$cookies.get('user')._id)
+    axios.get(`http://localhost:3000/user/` + JSON.parse(localStorage.getItem('user'))._id)
       .then(response => {
-        for (var el in response.data.buildings) {
-          axios.get('http://localhost:3000/building/' + response.data.buildings[el])
+        for (var el in response.data.user.buildings) {
+          axios.get('http://localhost:3000/building/' + response.data.user.buildings[el])
             .then(response => {
               this.buildings.push(response.data)
             })

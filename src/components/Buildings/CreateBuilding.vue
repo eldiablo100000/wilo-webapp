@@ -116,11 +116,11 @@ export default {
       evt.preventDefault()
       axios.post(`http://localhost:3000/building`, this.building)
         .then(response => {
-          this.userId = this.$cookies.get('user')._id
+          this.userId = JSON.parse(localStorage.getItem('user'))._id
           this.buildingId = response.data._id
           axios.get(`http://localhost:3000/user/` + this.userId)
             .then(response => {
-              this.user = response.data
+              this.user = response.data.user
               this.user.buildings.push(this.buildingId)
               axios.put(`http://localhost:3000/user/` + this.userId, this.user)
                 .then(response => {
@@ -147,10 +147,10 @@ export default {
   created () {
     this.features = []
     this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
-    axios.get(`http://localhost:3000/user/` + this.$cookies.get('user')._id)
+    axios.get(`http://localhost:3000/user/` + JSON.parse(localStorage.getItem('user'))._id)
       .then(response => {
-        for (var el in response.data.buildings) {
-          axios.get('http://localhost:3000/building/' + response.data.buildings[el])
+        for (var el in response.data.user.buildings) {
+          axios.get('http://localhost:3000/building/' + response.data.user.buildings[el])
             .then((response) => {
               console.log(response.data)
               var tmp = {

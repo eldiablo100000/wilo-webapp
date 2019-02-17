@@ -18,9 +18,28 @@
 const separator = {
   template: `<hr style="border-color: rgba(0, 0, 0, 0.1); margin: 20px;">`
 }
-
 export default {
   name: 'App',
+  created () {
+    if (localStorage.getItem('auth') != null) {
+      console.log(this.menu)
+      for (var i in this.menu) {
+        console.log(this.menu[i])
+        if (this.menu[i].title === 'Pages') {
+          for (var j in this.menu[i].child) {
+            if (this.menu[i].child[j].title === 'Login Page') {
+              this.menu[i].child[j].title = 'Logout Page'
+              this.menu[i].child[j].href = '/auth/logout'
+            } else if (this.menu[i].child[j].title === 'Registration Page') {
+              this.menu[i].child[j].disabled = true
+            }
+          }
+        }
+      }
+    } else {
+      this.$router.push('/auth/login')
+    }
+  },
   data () {
     return {
       myclass: 'demo extended',
@@ -31,7 +50,7 @@ export default {
         },
         {
           href: '/',
-          title: 'Map',
+          title: 'Add a building',
           icon: 'fa fa-map'
         },
         /* {
@@ -105,13 +124,12 @@ export default {
             }
           ]
         },
-        /* {
+        {
           title: 'Pages',
           icon: 'fa fa-file',
-          href: '/auth',
-          badge: {
-            text: 'new'
-          },
+          // badge: {
+          //   text: 'new'
+          // },
           child: [
             {
               href: '/auth/login',
@@ -122,15 +140,9 @@ export default {
               href: '/auth/registration',
               title: 'Registration Page',
               icon: 'fa fa-lock'
-            },
-            {
-              href: '/auth/disabled',
-              title: 'Disabled',
-              icon: 'fa fa-unlock',
-              disabled: true
             }
           ]
-        }, */
+        },
         {
           href: '#',
           title: 'Mailbox',

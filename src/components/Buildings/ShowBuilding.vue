@@ -113,14 +113,14 @@ export default {
     deletebuilding (buildingid) {
       axios.delete('http://localhost:3000/building/' + buildingid)
         .then((result) => {
-          axios.get('http://localhost:3000/user/' + this.$cookies.get('user')._id)
+          axios.get('http://localhost:3000/user/' + JSON.parse(localStorage.getItem('user'))._id)
             .then(result => {
-              var index = result.data.buildings.indexOf(buildingid)
+              var index = result.data.user.buildings.indexOf(buildingid)
               if (index > -1) {
-                result.data.buildings.splice(index, 1)
-                this.user = result.data
+                result.data.user.buildings.splice(index, 1)
+                this.user = result.data.user
               }
-              axios.put('http://localhost:3000/user/' + this.$cookies.get('user')._id, this.user)
+              axios.put('http://localhost:3000/user/' + JSON.parse(localStorage.getItem('user'))._id, this.user)
                 .then(result => {
                   this.$router.push({
                     name: 'BuildingList'

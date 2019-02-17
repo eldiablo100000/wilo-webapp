@@ -18,7 +18,7 @@ var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 mongoose.connect('mongodb://localhost/mean', { promiseLibrary: require('bluebird') })
   .then(function() {
-    
+
         console.log('connection succesful')
         if(drop) mongoose.connection.db.dropDatabase()
         }

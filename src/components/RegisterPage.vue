@@ -83,7 +83,7 @@ export default{
                   console.log(response.data)
                   this.$router.push({
                     name: 'BuildingList',
-                    params: { id_user: response.data._id }
+                    params: { id_user: response.data.user._id }
                   })
                 })
                 .catch(e => {
