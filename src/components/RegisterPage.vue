@@ -30,7 +30,7 @@
         :label-cols="4"
         breakpoint="md"
         label="Password">
-        <b-form-input id="password" type="password" :state="state" v-model.trim="user.password" style="width: 50%"></b-form-input>
+        <b-form-input id="password" type="password" :state="state" v-model.trim="password" style="width: 50%"></b-form-input>
       </b-form-group>
       <b-form-group id="fieldsetHorizontal"
         horizontal
@@ -56,6 +56,7 @@ export default{
       errors: [],
       user: {},
       RepeatPassword: '',
+      password: '',
       usernameOk: true
     }
   },
@@ -64,9 +65,9 @@ export default{
   },
   methods: {
     register () {
-      if (this.user.password !== this.RepeatPassword) alert('password errata')
+      if (this.password !== this.RepeatPassword) alert('password errata')
       else {
-        this.user.password = md5(this.user.password)
+        this.user.password = md5(this.password)
         this.usernameOk = true
         axios.get(`http://localhost:3000/user`)
           .then(response => {
