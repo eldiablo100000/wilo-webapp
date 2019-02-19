@@ -14,52 +14,61 @@
                     label="Enter Name">
             <b-form-input id="name" :state="state" v-model.trim="anchor.name"></b-form-input>
           </b-form-group>
+          <b-form-group id="fieldsetHorizontal"
+                  horizontal
+                  :label-cols="4"
+                  breakpoint="md"
+                  label="Enter Description">
+                  <b-form-textarea id="description"
+                  v-model="anchor.descryption"
+                  placeholder="Enter something"
+                  :rows="2"
+                  :max-rows="6">{{anchor.descryption}}</b-form-textarea>
+          </b-form-group>
           <b-button type="submit" variant="primary">Save</b-button>
         </b-form>
       </b-col>
     </b-row>
     <!-- start map -->
-    <button @click="drawType = 'Point'">Draw point</button>
-    <div v-if="drawType != null && drawAnchor.length > 0" style="background-color: rgba(18, 169, 10, 0.5);">
-      <p><b>Type</b>: {{ drawAnchor[drawAnchor.length - 1].type }}</p>
-      <p><b>Id</b>: {{ drawAnchor[drawAnchor.length - 1].id }}</p>
-      <p><b>Geom-Type</b>: {{ drawAnchor[drawAnchor.length - 1].geometry.type }}</p>
-      <p><b>Geom-Coords</b>: {{ drawAnchor[drawAnchor.length - 1].geometry.coordinates }}</p>
-      <p><b>Geom-Props</b>: {{ drawAnchor[drawAnchor.length - 1].geometry.properties }}</p>
-    </div>
+    <button @click="reset">Disegna Ancora</button>
     <div style="height: 100%; width: 100%;  ">
        <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
           <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
           <vl-layer-tile>
              <vl-source-osm />
           </vl-layer-tile>
-          <vl-layer-vector id="draw-pane" :z-index="0">
-          <vl-source-vector :features.sync="drawAnchor" ident="draw-target" />
-        </vl-layer-vector>
-          <vl-feature v-if="selectedFeatures.length == 1" :properties="{ start: Date.now(), duration: 2500 }">
-            <vl-geom-point :coordinates="selectedFeatures[0].geometry.coordinates" :z-index="3"></vl-geom-point>
+          <vl-feature v-if="imgStatic && image" id="static-image">
+            <vl-geom-point :coordinates="coordinates" :z-index="3"></vl-geom-point>
+            <vl-style-box>
+              <vl-style-icon :src="imgSrc" :size="imgSize" :scale="imgScale" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
+            </vl-style-box>
           </vl-feature>
-          <!-- <vl-geoloc @update:position="geolocPosition = $event">
-            <template slot-scope="geoloc">
-              <vl-feature v-if="geoloc.position" id="position-feature">
-                <vl-geom-point :coordinates="geoloc.position"></vl-geom-point>
-                <vl-style-box>
-                  <vl-style-icon src="static/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
-                </vl-style-box>
-              </vl-feature>
-            </template>
-          </vl-geoloc> -->
           <vl-layer-vector id="features" >
             <vl-source-vector :features.sync="features" />
           </vl-layer-vector>
           <template v-for="(item, index) in features">
-            <vl-feature :key="index">
+            <vl-feature :key="index" >
               <vl-geom-point :coordinates="item.geometry.coordinates" :z-index="3"></vl-geom-point>
               <vl-style-box>
                 <vl-style-icon src="static/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
               </vl-style-box>
             </vl-feature>
           </template>
+          <vl-layer-vector id="newFeatures" >
+            <vl-source-vector :features.sync="newFeatures" />
+          </vl-layer-vector>
+          <template v-for="(item, index) in newFeatures">
+            <vl-feature :key="index" >
+              <vl-geom-point :coordinates="item.geometry.coordinates" :z-index="3"></vl-geom-point>
+              <vl-style-box>
+                <vl-style-icon src="static/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
+              </vl-style-box>
+            </vl-feature>
+          </template>
+          <vl-layer-vector id="draw-pane" :z-index="0">
+          <vl-source-vector :features.sync="drawnFeatures" ident="draw-target" />
+        </vl-layer-vector>
+          <vl-interaction-draw :type="drawType" source="draw-target" v-if="interactionType == 'draw'" />
        </vl-map>
     </div>
     <!-- end map -->
@@ -70,8 +79,7 @@
 
 import axios from 'axios'
 
-const features = [
-]
+// const features = []
 export default {
   name: 'CreateAnchor',
 
@@ -84,17 +92,22 @@ export default {
       anchorList: '',
       errors: [],
       floorList: '',
+      currentZoom: undefined,
       geocoder: undefined,
       scaleX: undefined,
       scaleY: undefined,
       selectedFeatures: [],
-      drawAnchor: [],
+      drawnFeatures: [],
+      newFeatures: [],
+      drawType: 'Point',
+      interactionType: null,
       // maxResolution: 5,
-      zoom: 20,
+      zoom: undefined,
+      precedentZoom: null,
       // maxZoom: 8,
       center: [0, 0],
       rotation: 0,
-      features,
+      features: [],
       showMap: true,
       image: false,
       imgSize: [],
@@ -104,6 +117,7 @@ export default {
       imgScaleValue: 0.4,
       imgAnchor: [0, 0],
       imgStatic: true,
+      imgScale: undefined,
       coordinates: [0, 0],
       imgSrc: ''
     }
@@ -133,14 +147,39 @@ export default {
                 // // console.log(tmp)
                 // this.features.push(tmp)
                 this.coordinates = response.data.location[t]
-                // break
+                break
               }
+              console.log(response.data)
               this.imgRotation = response.data.angleImage * Math.PI / 180
-              this.imgScaleValue = [response.data.widthImage * response.data.scaleX, response.data.heightImage * response.data.scaleY]
-              console.log('ciao')
-              this.scaleX = response.data.scaleX
-              this.scaleY = response.data.scaleY
+              this.imgScale = response.data.scaleX
               this.image = true
+              this.zoom = response.data.zoom
+              this.imgSize = [response.data.widthImage, response.data.heightImage]
+              console.log(this.imgSize)
+
+              for (var i in response.data.anchors) {
+                axios.get(`http://localhost:3000/anchor/` + response.data.anchors[i])
+                  .then(response => {
+                    var type = 'Point'
+                    var coord = null
+                    var marker =
+                    {
+                      type: 'Feature',
+                      id: 'feature-' + type + '-' + response.data._id,
+                      properties: {},
+                      geometry: {
+                        type: type
+                      }
+                    }
+                    coord = response.data.location
+                    marker.geometry.coordinates = coord
+                    this.features.push(marker)
+                  })
+                  .catch(e => {
+                    this.errors.push(e)
+                  })
+              }
+
               axios.get(`http://localhost:3000/image/` + response.data.image[0])
                 .then((response) => {
                   console.log(response)
@@ -150,22 +189,25 @@ export default {
                   }
                 })
                 .catch(e => {
-                  console.log('catch 1')
                   this.errors.push(e)
                 })
             }
           })
           .catch(e => {
-            console.log('catch 2')
             this.errors.push(e)
           })
       })
       .catch(e => {
-        console.log('catch 3')
         this.errors.push(e)
       })
   },
   methods: {
+    reset () {
+      console.log(this.drawnFeatures)
+      this.newFeatures = []
+      this.drawnFeatures = []
+      this.interactionType = 'draw'
+    },
     onSubmit (evt) {
       evt.preventDefault()
       this.anchor.id_building = this.$route.params.id_building
@@ -196,12 +238,13 @@ export default {
         .catch(e => {
           this.errors.push(e)
         })
-    },
-    watch: {
-      drawAnchor: function (val) {
+    }
+  },
+  watch: {
+    drawnFeatures: function (val) {
+      if (val.length > 0) {
         var index = val.length - 1
-        console.log(val[index])
-        var type = val[index].geometry.type
+        var type = val[0].geometry.type
         var coord = null
         var marker =
         {
@@ -213,9 +256,22 @@ export default {
           }
         }
         coord = val[index].geometry.coordinates
+        this.anchor.location = coord
         marker.geometry.coordinates = coord
-        this.features.push(marker)
+        this.newFeatures.push(marker)
+        this.interactionType = null
       }
+    },
+    zoom: function (val) {
+      // console.log('currentZoom') Per ridimensionare l'immagine in caso di zoom. Non funziona!!
+      // console.log(this.zoom)
+      // console.log(this.imgSize)
+      if (this.precedentZoom !== null) {
+        this.imgSize[0] = this.imgSize[0] + 10
+        this.imgSize[1] = this.imgSize[1] + 10
+      }
+      this.precedentZoom = this.zoom
+      // this.imgSize = this.imgSize * this.zoom
     }
   }
 }

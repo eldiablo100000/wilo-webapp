@@ -517,6 +517,7 @@ export default {
     }
     .tr-transform__content {
         user-select: none;
+        z-index: 3;
     }
     .tr-transform__rotator {
         top: -45px;

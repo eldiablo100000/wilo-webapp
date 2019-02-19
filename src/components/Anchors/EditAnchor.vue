@@ -13,6 +13,17 @@
                   label="Enter Name">
           <b-form-input id="name" :state="state" v-model.trim="anchor.name"></b-form-input>
         </b-form-group>
+        <b-form-group id="fieldsetHorizontal"
+                  horizontal
+                  :label-cols="4"
+                  breakpoint="md"
+                  label="Enter Description">
+                  <b-form-textarea id="description"
+                  v-model="anchor.descryption"
+                  placeholder="Enter something"
+                  :rows="2"
+                  :max-rows="6">{{anchor.descryption}}</b-form-textarea>
+          </b-form-group>
         <b-button type="submit" variant="primary">Update</b-button>
       </b-form>
     </b-col>

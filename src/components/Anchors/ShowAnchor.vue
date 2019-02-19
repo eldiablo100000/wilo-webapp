@@ -12,6 +12,9 @@
         <template slot="lead">
           name: {{anchor.name}}<br>
         </template>
+        <template slot="lead">
+          descryption: {{anchor.descryption}}<br>
+        </template>
         <hr class="my-4">
         <p>
           Updated Date: {{anchor.updated_date}}

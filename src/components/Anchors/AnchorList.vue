@@ -29,6 +29,7 @@ export default {
     return {
       fields: {
         name: { label: 'Name', sortable: true, 'class': 'text-center' },
+        descryption: { label: 'descryption', 'class': 'text-center' },
         actions: { label: 'Action', 'class': 'text-center' },
         id_building: { label: 'Id building', sortable: true, 'class': 'text-center' },
         id_floor: { label: 'Id floor', sortable: true, 'class': 'text-center' }
