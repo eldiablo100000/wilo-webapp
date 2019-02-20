@@ -4,7 +4,7 @@ var AnchorSchema = new mongoose.Schema({
   name: String,
   id_building: { type: mongoose.Schema.Types.ObjectId, ref: 'Building' },
   id_floor: { type: mongoose.Schema.Types.ObjectId, ref: 'Floor' },
-  descryption: String,
+  description: String,
   location: [Number],
   /*location: {
    	type: {

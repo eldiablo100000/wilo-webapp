@@ -345,8 +345,8 @@ export default {
       this.resetElement(path)
     },
     save () {
-      alert(this.elements[0].x)
-      alert(this.elements[0].y)
+      // alert(this.elements[0].x)
+      // alert(this.elements[0].y)
       this.floor.angleImage = this.elements[0].angle
       this.floor.widthImage = this.elements[0].width
       this.floor.heightImage = this.elements[0].height
@@ -355,21 +355,21 @@ export default {
       this.floor.scaleX = this.elements[0].scaleX
       this.floor.scaleY = this.elements[0].scaleY
       this.floor.zoom = this.zoom
-      // var x = this.elements[0].x - this.elements[0].width * (1 - this.elements[0].scaleX)
-      // var y = this.elements[0].y - this.elements[0].height * (1 - this.elements[0].scaleY)
+      var x = (this.elements[0].x + this.elements[0].width) - (this.elements[0].width * this.elements[0].scaleX)
+      var y = (this.elements[0].y + this.elements[0].height) - (this.elements[0].height * this.elements[0].scaleY)
 
-      // this.location[0] = this.$refs.map.getCoordinateFromPixel([x, y])
-      // this.location[1] = this.$refs.map.getCoordinateFromPixel([(x + (this.elements[0].width * this.elements[0].scaleX)), y])
-      // this.location[2] = this.$refs.map.getCoordinateFromPixel([(x + (this.elements[0].width * this.elements[0].scaleX)), (y + (this.elements[0].height * this.elements[0].scaleX))])
-      // this.location[3] = this.$refs.map.getCoordinateFromPixel([x, (y + (this.elements[0].height * this.elements[0].scaleX))])
-      var br = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--br')[0].getBoundingClientRect()
+      this.location[0] = this.$refs.map.getCoordinateFromPixel([x, y])
+      this.location[1] = this.$refs.map.getCoordinateFromPixel([(x + (this.elements[0].width * this.elements[0].scaleX)), y])
+      this.location[2] = this.$refs.map.getCoordinateFromPixel([(x + (this.elements[0].width * this.elements[0].scaleX)), (y + (this.elements[0].height * this.elements[0].scaleX))])
+      this.location[3] = this.$refs.map.getCoordinateFromPixel([x, (y + (this.elements[0].height * this.elements[0].scaleX))])
+      /* var br = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--br')[0].getBoundingClientRect()
       var bl = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--bl')[0].getBoundingClientRect()
       var tr = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--tr')[0].getBoundingClientRect()
       var tl = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--tl')[0].getBoundingClientRect()
       this.location[0] = this.$refs.map.getCoordinateFromPixel([br.x - this.offsetX, br.y - this.offsetY])
       this.location[1] = this.$refs.map.getCoordinateFromPixel([bl.x - this.offsetX, bl.y - this.offsetY])
       this.location[2] = this.$refs.map.getCoordinateFromPixel([tr.x - this.offsetX, tr.y - this.offsetY])
-      this.location[3] = this.$refs.map.getCoordinateFromPixel([tl.x - this.offsetX, tl.y - this.offsetY])
+      this.location[3] = this.$refs.map.getCoordinateFromPixel([tl.x - this.offsetX, tl.y - this.offsetY]) */
       // this.location[4] = this.location[0]
       for (var t in this.location) {
         var tmp = {
@@ -381,7 +381,7 @@ export default {
             coordinates: this.location[t]
           }
         }
-        this.center = this.location[t]
+        // this.center = this.location[t]
         // console.log(tmp)
         this.features.push(tmp)
       }

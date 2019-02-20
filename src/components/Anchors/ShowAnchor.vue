@@ -13,7 +13,7 @@
           name: {{anchor.name}}<br>
         </template>
         <template slot="lead">
-          descryption: {{anchor.descryption}}<br>
+          description: {{anchor.description}}<br>
         </template>
         <hr class="my-4">
         <p>

@@ -20,10 +20,10 @@
                   breakpoint="md"
                   label="Enter Description">
                   <b-form-textarea id="description"
-                  v-model="anchor.descryption"
+                  v-model="anchor.description"
                   placeholder="Enter something"
                   :rows="2"
-                  :max-rows="6">{{anchor.descryption}}</b-form-textarea>
+                  :max-rows="6">{{anchor.description}}</b-form-textarea>
           </b-form-group>
           <b-button type="submit" variant="primary">Save</b-button>
         </b-form>
@@ -40,7 +40,7 @@
           <vl-feature v-if="imgStatic && image" id="static-image">
             <vl-geom-point :coordinates="coordinates" :z-index="3"></vl-geom-point>
             <vl-style-box>
-              <vl-style-icon :src="imgSrc" :size="imgSize" :scale="imgScale" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
+              <vl-style-icon id="image" :opacity="0.6" :src="imgSrc" :size="imgSize" :scale.sync="imgScale" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
             </vl-style-box>
           </vl-feature>
           <vl-layer-vector id="features" >
@@ -63,13 +63,17 @@
               <vl-style-box>
                 <vl-style-icon src="static/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
               </vl-style-box>
+              <vl-overlay v-if="clickCoord" :key="index" :position="clickCoord" style="background: white; padding: 10px">
+                {{ clickCoord }}
+                <button @click="clickCoord = undefined">close</button>
+              </vl-overlay>
             </vl-feature>
           </template>
           <vl-layer-vector id="draw-pane" :z-index="0">
           <vl-source-vector :features.sync="drawnFeatures" ident="draw-target" />
         </vl-layer-vector>
-          <vl-interaction-draw :type="drawType" source="draw-target" v-if="interactionType == 'draw'" />
-       </vl-map>
+        <vl-interaction-draw :type="drawType" source="draw-target" v-if="interactionType == 'draw'" />
+      </vl-map>
     </div>
     <!-- end map -->
   </div>
@@ -118,8 +122,12 @@ export default {
       imgAnchor: [0, 0],
       imgStatic: true,
       imgScale: undefined,
+      realImgScale: undefined,
       coordinates: [0, 0],
-      imgSrc: ''
+      imgSrc: '',
+      clickCoord: undefined,
+      continuePost: undefined,
+      anchorsName: []
     }
   },
   created () {
@@ -134,7 +142,8 @@ export default {
             if (response.data != null) {
               console.log(response.data.location)
               this.floor = response.data
-              for (var t in response.data.location) {
+              this.coordinates = response.data.location[0]
+              /* for (var t in response.data.location) {
                 // var tmp = {
                 //   id: response.data._id + t,
                 //   type: 'Feature',
@@ -148,10 +157,11 @@ export default {
                 // this.features.push(tmp)
                 this.coordinates = response.data.location[t]
                 break
-              }
+              } */
               console.log(response.data)
               this.imgRotation = response.data.angleImage * Math.PI / 180
               this.imgScale = response.data.scaleX
+              this.realImgScale = response.data.scaleX
               this.image = true
               this.zoom = response.data.zoom
               this.imgSize = [response.data.widthImage, response.data.heightImage]
@@ -160,6 +170,7 @@ export default {
               for (var i in response.data.anchors) {
                 axios.get(`http://localhost:3000/anchor/` + response.data.anchors[i])
                   .then(response => {
+                    this.anchorsName.push(response.data.name)
                     var type = 'Point'
                     var coord = null
                     var marker =
@@ -210,34 +221,52 @@ export default {
     },
     onSubmit (evt) {
       evt.preventDefault()
+      this.continuePost = true
+      if (this.anchor.location == null) {
+        this.continuePost = false
+        alert('insert an anchor')
+      }
+      if (this.anchor.name == null || this.anchor.name === '') {
+        this.continuePost = false
+        alert('insert an anchor name')
+      }
       this.anchor.id_building = this.$route.params.id_building
       this.anchor.id_floor = this.$route.params.id_floor
-      axios.post(`http://localhost:3000/anchor/`, this.anchor)
-        .then(response => {
-          this.anchorId = response.data._id
-          this.floorId = this.$route.params.id_floor
-          axios.get(`http://localhost:3000/floor/` + this.floorId)
-            .then(response => {
-              this.floor = response.data
-              this.floor.anchors.push(this.anchorId)
-              axios.put(`http://localhost:3000/floor/` + this.floorId, this.floor)
-                .then(response => {
-                  this.$router.push({
-                    name: 'ShowAnchor',
-                    params: { id_building: this.$route.params.id_building, id_floor: this.$route.params.id_floor, id_anchor: this.anchorId }
+      this.floorId = this.$route.params.id_floor
+      for (var i in this.anchorsName) {
+        if (this.anchor.name === this.anchorsName[i]) {
+          this.continuePost = false
+          alert('anchor\'s name already insert')
+          break
+        }
+      }
+      if (this.continuePost) {
+        axios.post(`http://localhost:3000/anchor/`, this.anchor)
+          .then(response => {
+            this.anchorId = response.data._id
+            axios.get(`http://localhost:3000/floor/` + this.floorId)
+              .then(response => {
+                this.floor = response.data
+                this.floor.anchors.push(this.anchorId)
+                axios.put(`http://localhost:3000/floor/` + this.floorId, this.floor)
+                  .then(response => {
+                    this.$router.push({
+                      name: 'ShowAnchor',
+                      params: { id_building: this.$route.params.id_building, id_floor: this.$route.params.id_floor, id_anchor: this.anchorId }
+                    })
                   })
-                })
-                .catch(e => {
-                  this.errors.push(e)
-                })
-            })
-            .catch(e => {
-              this.errors.push(e)
-            })
-        })
-        .catch(e => {
-          this.errors.push(e)
-        })
+                  .catch(e => {
+                    this.errors.push(e)
+                  })
+              })
+              .catch(e => {
+                this.errors.push(e)
+              })
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
+      }
     }
   },
   watch: {
@@ -260,15 +289,23 @@ export default {
         marker.geometry.coordinates = coord
         this.newFeatures.push(marker)
         this.interactionType = null
+        this.clickCoord = coord
       }
     },
     zoom: function (val) {
       // console.log('currentZoom') Per ridimensionare l'immagine in caso di zoom. Non funziona!!
       // console.log(this.zoom)
-      // console.log(this.imgSize)
+      this.imgScale = this.realImgScale
       if (this.precedentZoom !== null) {
-        this.imgSize[0] = this.imgSize[0] + 10
-        this.imgSize[1] = this.imgSize[1] + 10
+        if (this.precedentZoom < this.zoom) {
+          this.realImgScale = this.realImgScale + 0.4
+          this.imgScale = this.imgScale + 0.4
+        } else {
+          this.imgScale = this.imgScale - 0.4
+          this.realImgScale = this.realImgScale - 0.4
+        }
+        if (this.realImgScale < 0.1) this.imgScale = 0.03
+        console.log(this.imgScale)
       }
       this.precedentZoom = this.zoom
       // this.imgSize = this.imgSize * this.zoom
