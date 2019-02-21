@@ -33,14 +33,14 @@
     <button @click="reset">Disegna Ancora</button>
     <div style="height: 100%; width: 100%;  ">
        <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
-          <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
+          <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"   />
           <vl-layer-tile>
              <vl-source-osm />
           </vl-layer-tile>
           <vl-feature v-if="imgStatic && image" id="static-image">
             <vl-geom-point :coordinates="coordinates" :z-index="3"></vl-geom-point>
             <vl-style-box>
-              <vl-style-icon id="image" :opacity="0.6" :src="imgSrc" :size="imgSize" :scale.sync="imgScale" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
+              <vl-style-icon id="image" :src="imgSrc" :opacity="0.6" :scale.sync="imgScale" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
             </vl-style-box>
           </vl-feature>
           <vl-layer-vector id="features" >
@@ -143,29 +143,14 @@ export default {
               console.log(response.data.location)
               this.floor = response.data
               this.coordinates = response.data.location[0]
-              /* for (var t in response.data.location) {
-                // var tmp = {
-                //   id: response.data._id + t,
-                //   type: 'Feature',
-                //   properties: null,
-                //   geometry: {
-                //     type: 'Point',
-                //     coordinates: response.data.location[t]
-                //   }
-                // }
-                // // console.log(tmp)
-                // this.features.push(tmp)
-                this.coordinates = response.data.location[t]
-                break
-              } */
-              console.log(response.data)
+              // console.log(response.data)
               this.imgRotation = response.data.angleImage * Math.PI / 180
               this.imgScale = response.data.scaleX
               this.realImgScale = response.data.scaleX
               this.image = true
               this.zoom = response.data.zoom
               this.imgSize = [response.data.widthImage, response.data.heightImage]
-              console.log(this.imgSize)
+              // console.log(this.imgSize)
 
               for (var i in response.data.anchors) {
                 axios.get(`http://localhost:3000/anchor/` + response.data.anchors[i])
@@ -293,22 +278,18 @@ export default {
       }
     },
     zoom: function (val) {
-      // console.log('currentZoom') Per ridimensionare l'immagine in caso di zoom. Non funziona!!
-      // console.log(this.zoom)
       this.imgScale = this.realImgScale
       if (this.precedentZoom !== null) {
         if (this.precedentZoom < this.zoom) {
-          this.realImgScale = this.realImgScale + 0.4
-          this.imgScale = this.imgScale + 0.4
+          this.realImgScale = this.realImgScale * 2
+          this.imgScale = this.imgScale * 2
         } else {
-          this.imgScale = this.imgScale - 0.4
-          this.realImgScale = this.realImgScale - 0.4
+          this.imgScale = this.imgScale / 2
+          this.realImgScale = this.realImgScale / 2
         }
-        if (this.realImgScale < 0.1) this.imgScale = 0.03
-        console.log(this.imgScale)
+        if (this.realImgScale < 0.00000000001) this.imgScale = 0.03
       }
       this.precedentZoom = this.zoom
-      // this.imgSize = this.imgSize * this.zoom
     }
   }
 }

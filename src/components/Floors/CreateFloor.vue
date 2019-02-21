@@ -222,7 +222,9 @@ export default {
       selectedImage: null,
       showMap: true,
       step: 1000000,
-      zoom: 19
+      zoom: 19,
+      floorName: [],
+      continuePost: undefined
     }
   },
   mounted () {
@@ -239,8 +241,8 @@ export default {
           axios.get(`http://localhost:3000/floor/` + this.floorsId[el])
             .then((response) => {
               if (response.data != null) {
-                // console.log(response.data.location)
-                // this.floor = response.data
+                console.log(response.data)
+                this.floorName.push(response.data.number)
                 for (var t in response.data.location) {
                   var tmp = {
                     id: response.data._id + t,
@@ -283,14 +285,15 @@ export default {
       console.log(val)
     },
     elements: function (val) {
-      var br = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--br')[0].getBoundingClientRect()
+      /* var br = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--br')[0].getBoundingClientRect()
       var bl = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--bl')[0].getBoundingClientRect()
       var tr = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--tr')[0].getBoundingClientRect()
       var tl = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--tl')[0].getBoundingClientRect()
       console.log(tl)
       console.log(tr)
       console.log(bl)
-      console.log(br)
+      console.log(br) */
+      console.log(val[0].angle)
     },
     center: function (val) {
       console.log('%c ' + val[0] + ' ' + val[1], 'background: #222; color: white')
@@ -347,90 +350,107 @@ export default {
     save () {
       // alert(this.elements[0].x)
       // alert(this.elements[0].y)
-      this.floor.angleImage = this.elements[0].angle
-      this.floor.widthImage = this.elements[0].width
-      this.floor.heightImage = this.elements[0].height
-      this.floor.xImage = this.elements[0].x
-      this.floor.yImage = this.elements[0].y
-      this.floor.scaleX = this.elements[0].scaleX
-      this.floor.scaleY = this.elements[0].scaleY
-      this.floor.zoom = this.zoom
-      var x = (this.elements[0].x + this.elements[0].width) - (this.elements[0].width * this.elements[0].scaleX)
-      var y = (this.elements[0].y + this.elements[0].height) - (this.elements[0].height * this.elements[0].scaleY)
-
-      this.location[0] = this.$refs.map.getCoordinateFromPixel([x, y])
-      this.location[1] = this.$refs.map.getCoordinateFromPixel([(x + (this.elements[0].width * this.elements[0].scaleX)), y])
-      this.location[2] = this.$refs.map.getCoordinateFromPixel([(x + (this.elements[0].width * this.elements[0].scaleX)), (y + (this.elements[0].height * this.elements[0].scaleX))])
-      this.location[3] = this.$refs.map.getCoordinateFromPixel([x, (y + (this.elements[0].height * this.elements[0].scaleX))])
-      /* var br = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--br')[0].getBoundingClientRect()
-      var bl = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--bl')[0].getBoundingClientRect()
-      var tr = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--tr')[0].getBoundingClientRect()
-      var tl = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--tl')[0].getBoundingClientRect()
-      this.location[0] = this.$refs.map.getCoordinateFromPixel([br.x - this.offsetX, br.y - this.offsetY])
-      this.location[1] = this.$refs.map.getCoordinateFromPixel([bl.x - this.offsetX, bl.y - this.offsetY])
-      this.location[2] = this.$refs.map.getCoordinateFromPixel([tr.x - this.offsetX, tr.y - this.offsetY])
-      this.location[3] = this.$refs.map.getCoordinateFromPixel([tl.x - this.offsetX, tl.y - this.offsetY]) */
-      // this.location[4] = this.location[0]
-      for (var t in this.location) {
-        var tmp = {
-          id: this.floor.number + t,
-          type: 'Feature',
-          properties: null,
-          geometry: {
-            type: 'Point',
-            coordinates: this.location[t]
-          }
-        }
-        // this.center = this.location[t]
-        // console.log(tmp)
-        this.features.push(tmp)
+      this.continuePost = true
+      if (this.floor.number == null || this.floor.number === '') {
+        alert('insert a floor number')
+        this.continuePost = false
       }
-      console.log(this.location)
-      this.floor.location = this.location
-      console.log(this.floor)
-      const formData = new FormData()
-      formData.append('myFile', this.selectedImage, this.selectedImage.name)
-      console.log(formData.getAll('myFile'))
-      axios.post('http://localhost:3000/image', formData)
-        .then(response => {
-          console.log(response)
-          this.floor.image = response.data._id
-          this.floor.id_building = this.$route.params.id_building
-          console.log(this.floor)
-          axios.post(`http://localhost:3000/floor`, this.floor)
-            .then(response => {
-              this.floorId = response.data._id
-              this.buildingId = this.$route.params.id_building
-              axios.get(`http://localhost:3000/building/` + this.buildingId)
-                .then(response => {
-                  this.building = response.data
-                  this.building.floors.push(this.floorId)
-                  axios.put(`http://localhost:3000/building/` + this.buildingId, this.building)
-                    .then(response => {
-                      // this.$router.push({
-                      //   name: 'FloorList',
-                      //   params: { id_building: this.$route.params.id_building }
-                      // })
-                    })
-                    .catch(e => {
-                      this.errors.push(e)
-                    })
-                })
-                .catch(e => {
-                  this.errors.push(e)
-                  console.log(e)
-                })
-            })
-            .catch(e => {
-              this.errors.push(e)
-              console.log(e)
-            })
-        })
-        .catch(e => {
-          this.errors.push(e)
-        })
+      for (var i in this.floorName) {
+        if (this.floor.number === this.floorName[i]) {
+          alert('floor number already insert')
+          this.continuePost = false
+        }
+        if (!this.continuePost) break
+      }
+      if (this.selectedImage == null) {
+        alert('insert an image')
+        this.continuePost = false
+      }
+      if (this.continuePost) {
+        if (this.elements[0].angle < 0) this.floor.angleImage = 360 - Math.abs(this.elements[0].angle)
+        else this.floor.angleImage = this.elements[0].angle
+        this.floor.widthImage = this.elements[0].width
+        this.floor.heightImage = this.elements[0].height
+        this.floor.xImage = this.elements[0].x
+        this.floor.yImage = this.elements[0].y
+        this.floor.scaleX = this.elements[0].scaleX
+        this.floor.scaleY = this.elements[0].scaleY
+        this.floor.zoom = this.zoom
+        var x = (this.elements[0].x + this.elements[0].width) - (this.elements[0].width * this.elements[0].scaleX)
+        var y = (this.elements[0].y + this.elements[0].height) - (this.elements[0].height * this.elements[0].scaleY)
 
-      // upload file
+        this.location[0] = this.$refs.map.getCoordinateFromPixel([x, y])
+        this.location[1] = this.$refs.map.getCoordinateFromPixel([(x + (this.elements[0].width * this.elements[0].scaleX)), y])
+        this.location[2] = this.$refs.map.getCoordinateFromPixel([(x + (this.elements[0].width * this.elements[0].scaleX)), (y + (this.elements[0].height * this.elements[0].scaleX))])
+        this.location[3] = this.$refs.map.getCoordinateFromPixel([x, (y + (this.elements[0].height * this.elements[0].scaleX))])
+        /* var br = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--br')[0].getBoundingClientRect()
+        var bl = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--bl')[0].getBoundingClientRect()
+        var tr = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--tr')[0].getBoundingClientRect()
+        var tl = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--tl')[0].getBoundingClientRect()
+        this.location[0] = this.$refs.map.getCoordinateFromPixel([br.x - this.offsetX, br.y - this.offsetY])
+        this.location[1] = this.$refs.map.getCoordinateFromPixel([bl.x - this.offsetX, bl.y - this.offsetY])
+        this.location[2] = this.$refs.map.getCoordinateFromPixel([tr.x - this.offsetX, tr.y - this.offsetY])
+        this.location[3] = this.$refs.map.getCoordinateFromPixel([tl.x - this.offsetX, tl.y - this.offsetY]) */
+        // this.location[4] = this.location[0]
+        for (var t in this.location) {
+          var tmp = {
+            id: this.floor.number + t,
+            type: 'Feature',
+            properties: null,
+            geometry: {
+              type: 'Point',
+              coordinates: this.location[t]
+            }
+          }
+          // this.center = this.location[t]
+          // console.log(tmp)
+          this.features.push(tmp)
+        }
+        console.log(this.location)
+        this.floor.location = this.location
+        console.log(this.floor)
+        const formData = new FormData()
+        formData.append('myFile', this.selectedImage, this.selectedImage.name)
+        console.log(formData.getAll('myFile'))
+        axios.post('http://localhost:3000/image', formData)
+          .then(response => {
+            console.log(response)
+            this.floor.image = response.data._id
+            this.floor.id_building = this.$route.params.id_building
+            console.log(this.floor)
+            axios.post(`http://localhost:3000/floor`, this.floor)
+              .then(response => {
+                this.floorId = response.data._id
+                this.buildingId = this.$route.params.id_building
+                axios.get(`http://localhost:3000/building/` + this.buildingId)
+                  .then(response => {
+                    this.building = response.data
+                    this.building.floors.push(this.floorId)
+                    axios.put(`http://localhost:3000/building/` + this.buildingId, this.building)
+                      .then(response => {
+                        // this.$router.push({
+                        //   name: 'FloorList',
+                        //   params: { id_building: this.$route.params.id_building }
+                        // })
+                      })
+                      .catch(e => {
+                        this.errors.push(e)
+                      })
+                  })
+                  .catch(e => {
+                    this.errors.push(e)
+                    console.log(e)
+                  })
+              })
+              .catch(e => {
+                this.errors.push(e)
+                console.log(e)
+              })
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
+      }
     },
     resetElement: async function (path) {
       var img = new Image()

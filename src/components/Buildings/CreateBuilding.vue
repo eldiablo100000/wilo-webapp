@@ -102,7 +102,9 @@ export default {
       state: 'required',
       user: {},
       userId: '',
-      zoom: 19
+      zoom: 19,
+      continuePost: undefined,
+      buildingName: []
     }
   },
   methods: {
@@ -114,34 +116,52 @@ export default {
 
     onSubmit (evt) {
       evt.preventDefault()
-      axios.post(`http://localhost:3000/building`, this.building)
-        .then(response => {
-          this.userId = JSON.parse(localStorage.getItem('user'))._id
-          this.buildingId = response.data._id
-          axios.get(`http://localhost:3000/user/` + this.userId)
-            .then(response => {
-              this.user = response.data.user
-              this.user.buildings.push(this.buildingId)
-              axios.put(`http://localhost:3000/user/` + this.userId, this.user)
-                .then(response => {
-                  this.$router.push({
-                    name: 'ShowBuilding',
-                    params: { id_building: this.buildingId }
+      this.continuePost = true
+      if (this.building.title == null || this.building.title === '') {
+        alert('insert a building\'s name')
+        this.continuePost = false
+      }
+      if (this.building.coordinates == null) {
+        alert('insert an valid address')
+        this.continuePost = false
+      }
+      for (var i in this.buildingName) {
+        if (this.building.title === this.buildingName[i]) {
+          alert('name building already insert')
+          this.continuePost = false
+        }
+        if (!this.continuePost) break
+      }
+      if (this.continuePost) {
+        axios.post(`http://localhost:3000/building`, this.building)
+          .then(response => {
+            this.userId = JSON.parse(localStorage.getItem('user'))._id
+            this.buildingId = response.data._id
+            axios.get(`http://localhost:3000/user/` + this.userId)
+              .then(response => {
+                this.user = response.data.user
+                this.user.buildings.push(this.buildingId)
+                axios.put(`http://localhost:3000/user/` + this.userId, this.user)
+                  .then(response => {
+                    this.$router.push({
+                      name: 'ShowBuilding',
+                      params: { id_building: this.buildingId }
+                    })
                   })
-                })
-                .catch(e => {
-                  this.errors.push(e)
-                  console.log(e)
-                })
-            })
-            .catch(e => {
-              this.errors.push(e)
-              console.log(e)
-            })
-        })
-        .catch(e => {
-          this.errors.push(e)
-        })
+                  .catch(e => {
+                    this.errors.push(e)
+                    console.log(e)
+                  })
+              })
+              .catch(e => {
+                this.errors.push(e)
+                console.log(e)
+              })
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
+      }
     }
   },
   created () {
@@ -153,6 +173,7 @@ export default {
           axios.get('http://localhost:3000/building/' + response.data.user.buildings[el])
             .then((response) => {
               console.log(response.data)
+              this.buildingName.push(response.data.title)
               var tmp = {
                 id: response.data.title,
                 type: 'Feature',

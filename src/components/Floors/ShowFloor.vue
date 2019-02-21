@@ -34,7 +34,7 @@
         <vl-feature v-if="imgStatic && image" id="static-image">
            <vl-geom-point :coordinates="coordinates" :z-index="3"></vl-geom-point>
            <vl-style-box>
-              <vl-style-icon :src="imgSrc" :size="imgScaleValue" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
+              <vl-style-icon id="image" :src="imgSrc" :opacity="0.6" :scale.sync="imgScale" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
            </vl-style-box>
         </vl-feature>
         <vl-layer-vector id="features" >
@@ -77,15 +77,15 @@ export default {
       imgCenter: undefined,
       imgExtent: [],
       imgRotation: 0,
-      imgScaleValue: 0.4,
       imgSize: [],
       imgSrc: '',
+      imgScale: undefined,
+      realImgScale: undefined,
       imgStatic: true,
       rotation: 0,
-      scaleX: undefined,
-      scaleY: undefined,
       showMap: true,
-      zoom: 19
+      zoom: 19,
+      precedentZoom: null
     }
   },
   created () {
@@ -95,29 +95,25 @@ export default {
       .then((response) => {
         if (response.data != null) {
           console.log(response.data)
-          for (var t in response.data.location) {
-            // var tmp = {
-            //   id: response.data._id + t,
-            //   type: 'Feature',
-            //   properties: null,
-            //   geometry: {
-            //     type: 'Point',
-            //     coordinates: response.data.location[t]
-            //   }
-            // }
-            // // console.log(tmp)
-            // this.features.push(tmp)
-            this.coordinates = response.data.location[t]
-            break
+          if (response.data.angleImage >= 0 && response.data.angleImage < 90) {
+            this.coordinates = response.data.location[0]
+          } else if (response.data.angleImage >= 90 && response.data.angleImage < 180) {
+            this.coordinates = response.data.location[3]
+          } else if (response.data.angleImage >= 180 && response.data.angleImage < 270) {
+            this.coordinates = response.data.location[1]
+          } else {
+            this.coordinates = response.data.location[2]
           }
           this.center = this.coordinates
           this.floor = response.data
           this.zoom = response.data.zoom
           this.imgRotation = response.data.angleImage * Math.PI / 180
-          this.imgScaleValue = [response.data.widthImage * response.data.scaleX, response.data.heightImage * response.data.scaleY]
+          this.imgSize = [response.data.widthImage, response.data.heightImage]
           console.log('ciao')
-          this.scaleX = response.data.scaleX
-          this.scaleY = response.data.scaleY
+          console.log(this.imgRotation)
+          console.log(response.data.angleImage)
+          this.imgScale = response.data.scaleX
+          this.realImgScale = response.data.scaleX
           this.image = true
           axios.get(`http://localhost:3000/image/` + response.data.image[0])
             .then((response) => {
@@ -183,6 +179,23 @@ export default {
         .catch(e => {
           this.errors.push(e)
         })
+    }
+  },
+  watch: {
+    zoom: function (val) {
+      console.log('1')
+      this.imgScale = this.realImgScale
+      if (this.precedentZoom !== null) {
+        if (this.precedentZoom < this.zoom) {
+          this.realImgScale = this.realImgScale * 2
+          this.imgScale = this.imgScale * 2
+        } else {
+          this.imgScale = this.imgScale / 2
+          this.realImgScale = this.realImgScale / 2
+        }
+        if (this.realImgScale < 0.00000000001) this.imgScale = 0.03
+      }
+      this.precedentZoom = this.zoom
     }
   }
 }
