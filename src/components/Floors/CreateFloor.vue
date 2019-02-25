@@ -285,15 +285,20 @@ export default {
       console.log(val)
     },
     elements: function (val) {
-      /* var br = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--br')[0].getBoundingClientRect()
-      var bl = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--bl')[0].getBoundingClientRect()
-      var tr = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--tr')[0].getBoundingClientRect()
-      var tl = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--tl')[0].getBoundingClientRect()
-      console.log(tl)
-      console.log(tr)
+      // var br = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--br')[0].getBoundingClientRect()
+      var bl = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--bl')[0] // .getBoundingClientRect()
+      // var tr = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--tr')[0].getBoundingClientRect()
+      // var tl = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--tl')[0].getBoundingClientRect()
+      // console.log(tl)
+      // console.log(tr)
       console.log(bl)
-      console.log(br) */
-      console.log(val[0].angle)
+      var rad = val[0].angle * Math.PI / 180
+      var pos = [Math.cos(rad) * val[0].x - Math.sin(rad) * val[0].y, Math.sin(rad) * val[0].x + Math.cos(rad) * val[0].y]
+      console.log(pos)
+      // console.log(br)
+      console.log(val[0].x)
+      console.log(val[0].y)
+      console.log(rad)
     },
     center: function (val) {
       console.log('%c ' + val[0] + ' ' + val[1], 'background: #222; color: white')
@@ -379,19 +384,19 @@ export default {
         var x = (this.elements[0].x + this.elements[0].width) - (this.elements[0].width * this.elements[0].scaleX)
         var y = (this.elements[0].y + this.elements[0].height) - (this.elements[0].height * this.elements[0].scaleY)
 
-        this.location[0] = this.$refs.map.getCoordinateFromPixel([x, y])
-        this.location[1] = this.$refs.map.getCoordinateFromPixel([(x + (this.elements[0].width * this.elements[0].scaleX)), y])
-        this.location[2] = this.$refs.map.getCoordinateFromPixel([(x + (this.elements[0].width * this.elements[0].scaleX)), (y + (this.elements[0].height * this.elements[0].scaleX))])
-        this.location[3] = this.$refs.map.getCoordinateFromPixel([x, (y + (this.elements[0].height * this.elements[0].scaleX))])
-        /* var br = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--br')[0].getBoundingClientRect()
-        var bl = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--bl')[0].getBoundingClientRect()
-        var tr = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--tr')[0].getBoundingClientRect()
-        var tl = document.getElementsByClassName('tr-transform__scale-point tr-transform__scale-point--tl')[0].getBoundingClientRect()
-        this.location[0] = this.$refs.map.getCoordinateFromPixel([br.x - this.offsetX, br.y - this.offsetY])
-        this.location[1] = this.$refs.map.getCoordinateFromPixel([bl.x - this.offsetX, bl.y - this.offsetY])
-        this.location[2] = this.$refs.map.getCoordinateFromPixel([tr.x - this.offsetX, tr.y - this.offsetY])
-        this.location[3] = this.$refs.map.getCoordinateFromPixel([tl.x - this.offsetX, tl.y - this.offsetY]) */
-        // this.location[4] = this.location[0]
+        var a = (this.elements[0].x + (this.elements[0].width - (this.elements[0].width * this.elements[0].scaleX) / 2))
+        var b = (this.elements[0].y + (this.elements[0].height - (this.elements[0].height * this.elements[0].scaleY) / 2))
+
+        var centro = [a, b]
+
+        var rad = this.floor.angleImage * Math.PI / 180
+        var pos = [Math.cos(rad) * (x - centro[0]) - Math.sin(rad) * (y - centro[1]), Math.sin(rad) * (x - centro[0]) + Math.cos(rad) * (y - centro[1])]
+        console.log('??')
+        console.log(this.$refs.map.getCoordinateFromPixel(centro))
+        console.log(pos)
+        console.log(this.elements[0].scaleY)
+        this.location[0] = this.$refs.map.getCoordinateFromPixel([(pos[0] + centro[0]), (pos[1] + centro[1])])
+        
         for (var t in this.location) {
           var tmp = {
             id: this.floor.number + t,
@@ -406,18 +411,18 @@ export default {
           // console.log(tmp)
           this.features.push(tmp)
         }
-        console.log(this.location)
+        // console.log(this.location)
         this.floor.location = this.location
-        console.log(this.floor)
+        // console.log(this.floor)
         const formData = new FormData()
         formData.append('myFile', this.selectedImage, this.selectedImage.name)
-        console.log(formData.getAll('myFile'))
+        // console.log(formData.getAll('myFile'))
         axios.post('http://localhost:3000/image', formData)
           .then(response => {
-            console.log(response)
+            // console.log(response)
             this.floor.image = response.data._id
             this.floor.id_building = this.$route.params.id_building
-            console.log(this.floor)
+            // console.log(this.floor)
             axios.post(`http://localhost:3000/floor`, this.floor)
               .then(response => {
                 this.floorId = response.data._id

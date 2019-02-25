@@ -95,19 +95,12 @@ export default {
       .then((response) => {
         if (response.data != null) {
           console.log(response.data)
-          if (response.data.angleImage >= 0 && response.data.angleImage < 90) {
-            this.coordinates = response.data.location[0]
-          } else if (response.data.angleImage >= 90 && response.data.angleImage < 180) {
-            this.coordinates = response.data.location[3]
-          } else if (response.data.angleImage >= 180 && response.data.angleImage < 270) {
-            this.coordinates = response.data.location[1]
-          } else {
-            this.coordinates = response.data.location[2]
-          }
+          this.imgRotation = response.data.angleImage * Math.PI / 180
+          this.coordinates = response.data.location[0]
+          console.log(this.coordinates)
           this.center = this.coordinates
           this.floor = response.data
           this.zoom = response.data.zoom
-          this.imgRotation = response.data.angleImage * Math.PI / 180
           this.imgSize = [response.data.widthImage, response.data.heightImage]
           console.log('ciao')
           console.log(this.imgRotation)
