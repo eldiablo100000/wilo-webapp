@@ -1,16 +1,27 @@
 <template>
-  <div id="app" :class="[{'collapsed' : collapsed}]">
+  <div id="app" :class="[{'collapsed' : collapsed}, selectedTheme]">
     <div v-bind:class="myclass">
+      <div v-bind:class="mytopnav">
+       <a class="active" href="#home">Home</a>
+       <a href="#news">News</a>
+       <a href="#contact">Contact</a>
+       <a href="#about">About</a>
+       <a v-if="!authenticated" href="#/auth/login">Login</a>
+       <a v-else href="#/auth/logout">Logout</a>
+       <!-- <select id="theme-selector" v-model="selectedTheme">
+         <option v-for="(theme, index) in themes" :key="index" selected="dark-theme">{{theme == 'dark-theme' ? 'dark-theme' : theme}}</option>
+       </select> -->
+      </div>
+      <label class="switch">
+        <input type="checkbox" v-model="test">
+        <span class="slider round"></span>
+      </label>
       <h1>IndLoc</h1>
-      <!--<div id="theme-selector">Mode:
-        <select v-model="selectedTheme">
-          <option v-for="(theme, index) in themes" :key="index" selected="dark-theme">{{theme == 'dark-theme' ? 'dark-theme' : theme}}</option>
-        </select>
-      </div>-->
+
       <hr style="margin: 50px 0px;border: 1px solid #e3e3e3;">
       <router-view/>
     </div>
-  <sidebar-menu :menu="menu" :collapsed="collapsed" @collapse="onCollapse" :theme="selectedTheme" />
+  <sidebar-menu v-if="authenticated" :menu="menu" :collapsed="collapsed" @collapse="onCollapse" :theme="selectedTheme" />
   </div>
 </template>
 
@@ -21,7 +32,8 @@ const separator = {
 export default {
   name: 'App',
   created () {
-    if (localStorage.getItem('auth') != null) {
+    this.authenticated = localStorage.getItem('auth') != null
+    if (this.authenticated) {
       console.log(this.menu)
       for (var i in this.menu) {
         console.log(this.menu[i])
@@ -38,11 +50,16 @@ export default {
       }
     } else {
       this.$router.push('/auth/login')
+      this.myclass = 'demo'
+      this.authenticated = false
     }
   },
   data () {
     return {
+      authenticated: null,
       myclass: 'demo extended',
+      mytopnav: 'topnav dark-theme',
+      test: false,
       menu: [
         {
           header: true,
@@ -200,6 +217,11 @@ export default {
       selectedTheme: 'dark-theme'
     }
   },
+  watch: {
+    selectedTheme: function (val) {
+      this.mytopnav = 'topnav ' + val
+    }
+  },
   methods: {
     onCollapse (val) {
       console.log(`collapsed ${val}`)
@@ -226,7 +248,7 @@ html {
 
 body {
   font-family: 'Source Sans Pro', sans-serif;
-  background-color: #99ebff; //#f2f4f7;
+  background-color: #f2f4f7; //#99ebff;
 }
 
 .badge-danger {
@@ -243,7 +265,7 @@ body {
 }
 
 #theme-selector {
-  float: top right;
+  float: right;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -251,7 +273,62 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  // margin-top: 10px;
+  height: 100%;
   overflow: scroll !important;
+}
+#app.dark-theme {
+  background-color: dimgrey;
+  color: cornsilk!important;
+}
+#app.white-theme {
+  background-color: floralwhite;
+  color: black;
+}
+/* Add a black background color to the top navigation */
+.topnav {
+  overflow: hidden;
+}
+.topnav.dark-theme {
+  background-color: black;
+}
+.topnav.white-theme {
+  background-color: cornsilk;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: cornsilk;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+.topnav.dark-theme a {
+  color: cornsilk;
+}
+.topnav.white-theme a {
+  color: black;
+}
+/* Change the color of links on hover */
+
+.topnav.dark-theme a:hover {
+  background-color: cornsilk;
+  color: black;
+}
+.topnav.white-theme a:hover {
+  background-color: black;
+  color: cornsilk;
+}
+/* Add a color to the active/current link */
+
+.topnav.dark-theme a.active {
+  background-color: darkslategray;
+  color: cornsilk;
+}
+.topnav.white-theme a.active {
+  background-color: darksalmon;
+  color: black;
 }
 </style>

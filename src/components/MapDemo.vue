@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div >
     <div style="height: 100%">
       <div id="click">
             <input type="file" @change="onFileChanged">
@@ -140,7 +140,7 @@
 </template>
 <!--
 <template>
-  <div id="app">
+  <div >
     <vl-map :load-tiles-while-animating="true" :load-tiles-while-interacting="true" style="height: 400px">
       <vl-view :projection="projection" :zoom.sync="zoom" :center.sync="center" :rotation.sync="rotation"></vl-view>
 

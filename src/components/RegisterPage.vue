@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div >
     <h2>
       Registration
     </h2>

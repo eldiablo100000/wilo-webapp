@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div >
     <div id="click">
         <input type="file" @change="onFileChanged">
         <button @click="onUpload">Upload!</button>

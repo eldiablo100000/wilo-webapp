@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div >
     <h2>
       Add Floor
       <b-link :href="floorList">(Floor List)</b-link>
@@ -24,7 +24,7 @@
       </div>
       <button @click="save">Save!</button>
     </div>
-    <h3>Interaction type</h3>
+    <!-- <h3>Interaction type</h3>
     <select v-model="interactionType">
       <option disabled value="null">Please select one</option>
       <option value="draw">Draw</option>
@@ -38,7 +38,7 @@
       <option value="Polygon">Polygon</option>
       <option value="Point">Point</option>
     </select>
-    <span v-if="drawType == 'draw'">Selected: {{ drawType }}</span>
+    <span v-if="drawType == 'draw'">Selected: {{ drawType }}</span> -->
       <!-- <div class="wrapper" position="absolute">
         <div class="workspace" ref="workspace">
           <FreeTransform
@@ -93,7 +93,7 @@
                                   :attributions="imgCopyright"></vl-source-image-static>
       </vl-layer-image>
 
-      <vl-geoloc @update:position="geolocPosition = $event">
+      <!-- <vl-geoloc @update:position="geolocPosition = $event">
         <template slot-scope="geoloc">
           <vl-feature v-if="geoloc.position" id="position-feature">
             <vl-geom-point :coordinates="geoloc.position"></vl-geom-point>
@@ -111,7 +111,7 @@
         <vl-style-text slot="lat" text-align="end">
           <vl-style-stroke color="black" />
         </vl-style-text>
-      </vl-graticule>
+      </vl-graticule> -->
 
       <vl-layer-tile>
         <vl-source-osm />
@@ -396,7 +396,7 @@ export default {
         console.log(pos)
         console.log(this.elements[0].scaleY)
         this.location[0] = this.$refs.map.getCoordinateFromPixel([(pos[0] + centro[0]), (pos[1] + centro[1])])
-        
+
         for (var t in this.location) {
           var tmp = {
             id: this.floor.number + t,

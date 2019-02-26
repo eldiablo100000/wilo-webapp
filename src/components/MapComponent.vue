@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div >
     <!--<div style="height: 100%; width: 40%; float:right; padding: 10px; ">-->
     <div style="height: 100%; width: 100%;  ">
       <vl-map ref="map" v-if="showMap" data-projection="EPSG:4326" renderer="webgl">
