@@ -1,22 +1,51 @@
 <template>
   <div id="app" :class="[{'collapsed' : collapsed}, selectedTheme]">
     <div v-bind:class="myclass">
-      <div v-bind:class="mytopnav">
-       <a class="active" href="#home">Home</a>
-       <a href="#news">News</a>
-       <a href="#contact">Contact</a>
-       <a href="#about">About</a>
-       <a v-if="!authenticated" href="#/auth/login">Login</a>
-       <a v-else href="#/auth/logout">Logout</a>
-       <!-- <select id="theme-selector" v-model="selectedTheme">
-         <option v-for="(theme, index) in themes" :key="index" selected="dark-theme">{{theme == 'dark-theme' ? 'dark-theme' : theme}}</option>
-       </select> -->
+      <div>
+        <b-navbar toggleable="lg" type="dark" :class="selectedTheme">
+          <b-navbar-brand href="#">Wilo</b-navbar-brand>
+
+          <b-navbar-toggle target="nav_collapse" />
+
+          <b-collapse is-nav id="nav_collapse">
+            <b-navbar-nav>
+              <b-nav-item :class="selectedTheme" href="#">About Wilo</b-nav-item>
+              <!-- <b-nav-item :class="selectedTheme" href="#">Link</b-nav-item>
+              <b-nav-item :class="selectedTheme" href="#" disabled>Disabled</b-nav-item> -->
+            </b-navbar-nav>
+
+            <!-- Right aligned nav items -->
+            <b-navbar-nav class="ml-auto">
+              <!-- <b-form-select :class="selectedTheme" v-model="selectedTheme" :options="themes" /> -->
+              <b-form-checkbox switch v-model="checked" name="check-button">
+                Dark theme <b>(Enabled: {{ checked }})</b>
+              </b-form-checkbox>
+              <!-- <b-nav-form>
+                <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search" />
+                <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+              </b-nav-form> -->
+
+              <!-- <b-nav-item-dropdown text="Lang" right>
+                <b-dropdown-item href="#">EN</b-dropdown-item>
+                <b-dropdown-item href="#">ES</b-dropdown-item>
+                <b-dropdown-item href="#">RU</b-dropdown-item>
+                <b-dropdown-item href="#">FA</b-dropdown-item>
+              </b-nav-item-dropdown> -->
+
+              <b-nav-item-dropdown right>
+                <!-- Using button-content slot -->
+                <template :class="selectedTheme" slot="button-content" v-if="!authenticated"><em>Not authenticated</em></template>
+                <template :class="selectedTheme" slot="button-content" v-else><em>{{user.username}}</em></template>
+                <b-dropdown-item :class="selectedTheme" href="#">Profile</b-dropdown-item>
+                <b-dropdown-item :class="selectedTheme" v-if="!authenticated" href="#/auth/login">Signin</b-dropdown-item>
+                <b-dropdown-item :class="selectedTheme" v-else href="#/auth/logout">Signout</b-dropdown-item>
+              </b-nav-item-dropdown>
+            </b-navbar-nav>
+          </b-collapse>
+        </b-navbar>
       </div>
-      <label class="switch">
-        <input type="checkbox" v-model="test">
-        <span class="slider round"></span>
-      </label>
-      <h1>IndLoc</h1>
+
+      <h1>WiLo</h1>
 
       <hr style="margin: 50px 0px;border: 1px solid #e3e3e3;">
       <router-view/>
@@ -32,7 +61,10 @@ const separator = {
 export default {
   name: 'App',
   created () {
-    this.authenticated = localStorage.getItem('auth') != null
+    if (localStorage.getItem('auth') != null) {
+      this.authenticated = true
+      this.user = JSON.parse(localStorage.getItem('user'))
+    }
     if (this.authenticated) {
       console.log(this.menu)
       for (var i in this.menu) {
@@ -56,10 +88,10 @@ export default {
   },
   data () {
     return {
+      user: {},
       authenticated: null,
       myclass: 'demo extended',
       mytopnav: 'topnav dark-theme',
-      test: false,
       menu: [
         {
           header: true,
@@ -212,14 +244,10 @@ export default {
           ]
         }
       ],
-      collapsed: false,
-      themes: ['dark-theme', 'white-theme'],
-      selectedTheme: 'dark-theme'
-    }
-  },
-  watch: {
-    selectedTheme: function (val) {
-      this.mytopnav = 'topnav ' + val
+      collapsed: true,
+      themes: ['white-theme', 'dark-theme'],
+      selectedTheme: 'dark-theme',
+      checked: true
     }
   },
   methods: {
@@ -230,6 +258,15 @@ export default {
         this.myclass = 'demo'
       } else {
         this.myclass = 'demo extended'
+      }
+    }
+  },
+  watch: {
+    checked: function (val) {
+      if (val) {
+        this.selectedTheme = this.themes[1]
+      } else {
+        this.selectedTheme = this.themes[0]
       }
     }
   }
@@ -277,58 +314,37 @@ body {
   height: 100%;
   overflow: scroll !important;
 }
-#app.dark-theme {
-  background-color: dimgrey;
-  color: cornsilk!important;
+.dark-theme {
+  background-color: black!important;
+  color: white!important;
 }
-#app.white-theme {
-  background-color: floralwhite;
-  color: black;
+.white-theme {
+  background-color: white!important;
+  color: black!important;
 }
-/* Add a black background color to the top navigation */
-.topnav {
-  overflow: hidden;
-}
-.topnav.dark-theme {
+.dark-theme a {
   background-color: black;
+  color: white!important;
 }
-.topnav.white-theme {
+.white-theme a {
+  background-color: white;
+  color: black!important;
+}
+.dark-theme a:hover {
+  background-color: grey;
+  color: black!important;
+}
+.white-theme a:hover {
   background-color: cornsilk;
+  color: black!important;
+}
+.dark-theme .vsm-link:hover {
+  background-color: grey!important;
+  color: black!important;
+}
+.white-theme .vsm-link:hover {
+  background-color: cornsilk!important;
+  color: black!important;
 }
 
-/* Style the links inside the navigation bar */
-.topnav a {
-  float: left;
-  color: cornsilk;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
-.topnav.dark-theme a {
-  color: cornsilk;
-}
-.topnav.white-theme a {
-  color: black;
-}
-/* Change the color of links on hover */
-
-.topnav.dark-theme a:hover {
-  background-color: cornsilk;
-  color: black;
-}
-.topnav.white-theme a:hover {
-  background-color: black;
-  color: cornsilk;
-}
-/* Add a color to the active/current link */
-
-.topnav.dark-theme a.active {
-  background-color: darkslategray;
-  color: cornsilk;
-}
-.topnav.white-theme a.active {
-  background-color: darksalmon;
-  color: black;
-}
 </style>
