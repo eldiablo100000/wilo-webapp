@@ -41,7 +41,7 @@ let router = new Router({
   routes: [
     {
       path: '/',
-      name: 'CreateBuilding',
+      name: 'Home',
       component: CreateBuilding,
       meta:
         {
@@ -93,29 +93,6 @@ let router = new Router({
           requiresAuth: true
         }
     },
-
-    // book
-    /* {
-      path: '/books/',
-      name: 'BookList',
-      component: BookList
-    },
-    {
-      path: '/show-book/:id',
-      name: 'ShowBook',
-      component: ShowBook
-    },
-    {
-      path: '/add-book',
-      name: 'CreateBook',
-      component: CreateBook
-    },
-    {
-      path: '/edit-book/:id',
-      name: 'EditBook',
-      component: EditBook
-    }, */
-
     // building
     {
       path: '/buildings/',
