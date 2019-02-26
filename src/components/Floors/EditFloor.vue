@@ -6,8 +6,7 @@
         <router-link :to="{ name: 'ShowFloor', params: { id: floor._id } }">(Show Floor)</router-link>
       </h2>
       <b-form @submit="onSubmit">
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
+        <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Number">

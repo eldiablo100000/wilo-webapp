@@ -244,7 +244,7 @@ export default {
           ]
         }
       ],
-      collapsed: true,
+      collapsed: false,
       themes: ['white-theme', 'dark-theme'],
       selectedTheme: 'dark-theme',
       checked: true
@@ -346,5 +346,16 @@ body {
   background-color: cornsilk!important;
   color: black!important;
 }
+// table {
+//   color: white!important;
+// }
+// .dark-theme a {
+//   background-color: black;
+//   color: white!important;
+// }
+// .white-theme a {
+//   background-color: white;
+//   color: black!important;
+// }
 
 </style>

@@ -5,7 +5,7 @@
         Book List
         <b-link href="#/add-book">(Add Book)</b-link>
       </h2>
-      <b-table striped hover :items="books" :fields="fields">
+      <b-table :class="$parent.selectedTheme" striped hover :items="books" :fields="fields">
         <template slot="actions" slot-scope="row">
           <b-btn size="sm" @click.stop="details(row.item)">Details</b-btn>
         </template>
