@@ -5,7 +5,7 @@
         Builds List
         <b-link href="#/add-build">(Add Build)</b-link>
       </h2>
-      <b-table striped hover :items="builds" :fields="fields">
+      <b-table :class="$parent.selectedTheme" striped hover :items="builds" :fields="fields">
         <template slot="actions" scope="row">
           <b-btn size="sm" @click.stop="details(row.item)">Details</b-btn>
         </template>

@@ -6,29 +6,25 @@
         <b-link href="#/books/">(Book List)</b-link>
       </h2>
       <b-form @submit="onSubmit">
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
+        <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter ISBN">
           <b-form-input id="isbn" :state="state" v-model.trim="book.isbn"></b-form-input>
         </b-form-group>
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
+        <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Title">
           <b-form-input id="title" :state="state" v-model.trim="book.title"></b-form-input>
         </b-form-group>
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
+        <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Author">
           <b-form-input id="author" :state="state" v-model.trim="book.author"></b-form-input>
         </b-form-group>
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
+        <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Description">
@@ -38,15 +34,13 @@
                        :rows="2"
                        :max-rows="6">{{book.description}}</b-form-textarea>
         </b-form-group>
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
+        <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Publisher Year">
           <b-form-input id="published_year" :state="state" v-model.trim="book.published_year"></b-form-input>
         </b-form-group>
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
+        <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Publisher">

@@ -5,8 +5,7 @@
       <b-link :href="floorList">(Floor List)</b-link>
     </h2>
     <b-form @submit="onSubmit">
-      <b-form-group id="fieldsetHorizontal"
-        horizontal
+      <b-form-group class="fieldsetHorizontal"
         :label-cols="4"
         breakpoint="md"
         label="Enter Number">

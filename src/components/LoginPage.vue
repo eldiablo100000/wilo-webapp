@@ -4,20 +4,16 @@
       Login
     </h2>
     <b-form>
-      <b-form-group id="fieldsetHorizontal"
-        horizontal
+      <b-form-group class="fieldsetHorizontal"
         :label-cols="4"
-        breakpoint="md"
         margin-right="20px"
         label="Username">
-        <b-form-input id="username" :state="state" v-model.trim="username" style="width: 50%"></b-form-input>
+        <b-form-input id="username" v-model.trim="username" autocomplete="username" style="width: 50%"></b-form-input>
       </b-form-group>
-      <b-form-group id="fieldsetHorizontal"
-        horizontal
+      <b-form-group class="fieldsetHorizontal"
         :label-cols="4"
-        breakpoint="md"
         label="Password">
-        <b-form-input id="password" type="password" :state="state" v-model.trim="password" style="width: 50%"></b-form-input>
+        <b-form-input id="password" type="password" v-model.trim="password" autocomplete="password" style="width: 50%"></b-form-input>
       </b-form-group>
     </b-form>
     <div id="click">
@@ -40,26 +36,18 @@ export default{
       notPresent: true
     }
   },
-  mounted () {
-    console.log(localStorage)
-  },
   methods: {
     login () {
       axios.get(`http://localhost:3000/user`)
         .then(response => {
-          // console.log(response.data)
           for (var el in response.data) {
-            // console.log(md5(this.password))
-            // console.log(response.data[el].password)
             if (this.username === response.data[el].username && md5(this.password) === response.data[el].password) {
               this.notPresent = false
               axios.get(`http://localhost:3000/user/` + response.data[el]._id)
                 .then(response => {
-                  console.log(response)
                   localStorage.setItem('user', JSON.stringify(response.data.user))
                   localStorage.setItem('token', response.data.token)
                   localStorage.setItem('auth', response.data.auth)
-                  console.log(localStorage)
                   this.$router.push({
                     name: 'BuildingList',
                     params: { id_user: response.data.user._id }

@@ -7,15 +7,13 @@
           <b-link :href="anchorList">(Anchor List)</b-link>
         </h2>
         <b-form @submit="onSubmit">
-          <b-form-group id="fieldsetHorizontal"
-                    horizontal
+          <b-form-group class="fieldsetHorizontal"
                     :label-cols="4"
                     breakpoint="md"
                     label="Enter Name">
             <b-form-input id="name" :state="state" v-model.trim="anchor.name"></b-form-input>
           </b-form-group>
-          <b-form-group id="fieldsetHorizontal"
-                  horizontal
+          <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Description">

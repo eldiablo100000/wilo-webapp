@@ -13,6 +13,7 @@ import 'vuelayers/lib/style.css' // needs css-loader
 import ImageUploader from 'vue-image-upload-resize'
 // import map from './components/map'
 import VueCookies from 'vue-cookies'
+
 Vue.use(VueCookies)
 
 // set default config

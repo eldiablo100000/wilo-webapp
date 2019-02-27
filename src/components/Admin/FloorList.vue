@@ -5,7 +5,7 @@
         Floor List
         <b-link :href="addFloor">(Add Floor)</b-link>
       </h2>
-      <b-table striped hover :items="floors" :fields="fields">
+      <b-table :class="$parent.selectedTheme" striped hover :items="floors" :fields="fields">
         <template slot="actions" slot-scope="row">
           <b-btn size="sm" @click.stop="details(row.item)">Details</b-btn>
         </template>

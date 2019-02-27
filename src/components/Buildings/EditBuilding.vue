@@ -6,43 +6,37 @@
         <router-link :to="{ name: 'ShowBuilding', params: { id: building._id } }">(Show Building)</router-link>
       </h2>
       <b-form @submit="onSubmit">
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
+        <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Title">
           <b-form-input id="title" :state="state" v-model.trim="building.title"></b-form-input>
         </b-form-group>
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
+        <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter City">
           <b-form-input id="city" :state="state" v-model.trim="building.city"></b-form-input>
         </b-form-group>
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
+        <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Country">
           <b-form-input id="city" :state="state" v-model.trim="building.country"></b-form-input>
         </b-form-group>
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
+        <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Road">
           <b-form-input id="city" :state="state" v-model.trim="building.road"></b-form-input>
         </b-form-group>
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
+        <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Number">
           <b-form-input id="city" :state="state" v-model.trim="building.number"></b-form-input>
         </b-form-group>
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
+        <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Postcode">
@@ -75,8 +69,7 @@
            </vl-map>
         </div>
         <!-- end map -->
-        <b-form-group id="fieldsetHorizontal"
-                  horizontal
+        <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Description">

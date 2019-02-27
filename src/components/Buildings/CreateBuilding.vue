@@ -7,29 +7,24 @@
                <b-link @click.stop="GoToBuildingList()">(Building List)</b-link>
             </h2>
             <b-form @submit="onSubmit">
-               <b-form-group id="fieldsetHorizontal"
-                  horizontal
+               <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
-                  breakpoint="md"
                   label="Enter Title">
                   <b-form-input id="title" :state="state" v-model.trim="building.title"></b-form-input>
                </b-form-group>
-               <!--<b-form-group id="fieldsetHorizontal"
-                  horizontal
+               <!--<b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Address">
                   <b-form-input id="address" :state="state" v-model.trim="building.address"></b-form-input>
                   </b-form-group>
-                  <b-form-group id="fieldsetHorizontal"
-                  horizontal
+                  <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter City">
                   <b-form-input  id="city" :state="state" v-model.trim="building.city"></b-form-input>
                   </b-form-group> -->
-               <b-form-group id="fieldsetHorizontal"
-                  horizontal
+               <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Address">
@@ -55,8 +50,7 @@
                   </div>
                   <!-- end map -->
                </b-form-group>
-               <b-form-group id="fieldsetHorizontal"
-                  horizontal
+               <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Description">
