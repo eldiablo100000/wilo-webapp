@@ -308,13 +308,6 @@ export default {
     update (id, payload) {
       this.elements = this.elements.map(item => {
         if (item.id === id) {
-          /* if (item.scaleX !== item.scaleY) {
-            item.scaleX = item.scaleY
-            this.elements[0].scaleX = this.elements[0].scaleY
-            var event = new CustomEvent('update')
-            console.log('call update')
-            this.update(id, event)
-          } */
           return {
             ...item,
             ...payload
@@ -391,10 +384,7 @@ export default {
 
         var rad = this.floor.angleImage * Math.PI / 180
         var pos = [Math.cos(rad) * (x - centro[0]) - Math.sin(rad) * (y - centro[1]), Math.sin(rad) * (x - centro[0]) + Math.cos(rad) * (y - centro[1])]
-        console.log('??')
-        console.log(this.$refs.map.getCoordinateFromPixel(centro))
-        console.log(pos)
-        console.log(this.elements[0].scaleY)
+
         this.location[0] = this.$refs.map.getCoordinateFromPixel([(pos[0] + centro[0]), (pos[1] + centro[1])])
 
         for (var t in this.location) {

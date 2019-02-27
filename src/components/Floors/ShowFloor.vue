@@ -37,17 +37,6 @@
               <vl-style-icon id="image" :src="imgSrc" :opacity="0.6" :scale.sync="imgScale" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
            </vl-style-box>
         </vl-feature>
-        <vl-layer-vector id="features" >
-           <vl-source-vector :features.sync="features" />
-        </vl-layer-vector>
-        <template v-for="(item, index) in features">
-           <vl-feature :key="index">
-              <vl-geom-point :coordinates="item.geometry.coordinates" :z-index="3"></vl-geom-point>
-              <vl-style-box>
-                 <vl-style-icon src="static/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
-              </vl-style-box>
-           </vl-feature>
-        </template>
      </vl-map>
   </div>
   <!-- end map -->
