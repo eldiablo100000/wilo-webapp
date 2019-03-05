@@ -49,7 +49,7 @@
             <vl-style-box>
               <vl-style-icon src="static/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
             </vl-style-box>
-            <vl-overlay v-if="clickCoord" :key="index" :position="clickCoord" style="background: black; padding: 10px">
+            <vl-overlay v-if="clickCoord" :key="index" :position="clickCoord">
                 {{ clickCoord }}
                 <button @click="clickCoord = undefined">close</button>
             </vl-overlay>

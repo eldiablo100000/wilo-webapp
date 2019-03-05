@@ -12,7 +12,7 @@
                     :label-cols="4"
                     breakpoint="md"
                     label="Enter Number">
-            <b-form-input id="number" :state="state" v-model.trim="floor.number"></b-form-input>
+            <b-form-input id="number" :state="state" v-model.trim="floorNumber"></b-form-input>
           </b-form-group>
           <b-button type="submit" variant="primary">Update</b-button>
         </b-form>
@@ -25,6 +25,7 @@
             <div class="wrapper" position="absolute">
               <div class="workspace" ref="workspace">
                 <FreeTransform
+                  v-if="!imgStatic"
                   v-for="element in elements"
                   :key="element.id"
                   :x="element.x"
@@ -89,6 +90,7 @@ export default {
         }
       ],
       floor: {},
+      floorNumber: undefined,
       showMap: true,
       center: [0, 0],
       rotation: 0,
@@ -103,7 +105,8 @@ export default {
       imgRotation: undefined,
       floorId: undefined,
       buildingId: undefined,
-      precedentZoom: null
+      precedentZoom: null,
+      errors: []
     }
   },
   mounted () {
@@ -130,6 +133,7 @@ export default {
               this.elements[0].height = response.data.heightImage
               this.elements[0].width = response.data.widthImage
 
+              this.floorNumber = response.data.number
               this.coordinates = response.data.location[0]
               this.floor = response.data
               this.zoom = response.data.zoom
@@ -137,7 +141,6 @@ export default {
               this.realImgScale = response.data.scaleX
               this.imgRotation = response.data.angleImage * Math.PI / 180
               this.image = true
-              alert('ciao')
               axios.get(`http://localhost:3000/image/` + response.data.image[0])
                 .then((response) => {
                   if (response.data != null) {
@@ -187,15 +190,48 @@ export default {
     },
     onSubmit (evt) {
       evt.preventDefault()
-      axios.put(`http://localhost:3000/floor/` + this.$route.params.id_floor, this.floor)
+      this.floorId = this.$route.params.id_floor
+      axios.get(`http://localhost:3000/floor/` + this.floorId)
         .then(response => {
-          this.$router.push({
-            name: 'ShowFloor',
-            params: { id_building: this.$route.params.id_building, id_floor: this.$route.params.id_floor }
-          })
+          this.floor = response.data
+          this.floor.number = this.floorNumber
+          if (this.elements[0].angle < 0) this.floor.angleImage = 360 - Math.abs(this.elements[0].angle)
+          else this.floor.angleImage = this.elements[0].angle
+          this.floor.widthImage = this.elements[0].width
+          this.floor.heightImage = this.elements[0].height
+          this.floor.xImage = this.elements[0].x
+          this.floor.yImage = this.elements[0].y
+          this.floor.scaleX = this.elements[0].scaleX
+          this.floor.scaleY = this.elements[0].scaleY
+          this.floor.zoom = this.zoom
+          var x = (this.elements[0].x + this.elements[0].width) - (this.elements[0].width * this.elements[0].scaleX)
+          var y = (this.elements[0].y + this.elements[0].height) - (this.elements[0].height * this.elements[0].scaleY)
+
+          var a = (this.elements[0].x + (this.elements[0].width - (this.elements[0].width * this.elements[0].scaleX) / 2))
+          var b = (this.elements[0].y + (this.elements[0].height - (this.elements[0].height * this.elements[0].scaleY) / 2))
+
+          var centro = [a, b]
+
+          var rad = this.floor.angleImage * Math.PI / 180
+          var pos = [Math.cos(rad) * (x - centro[0]) - Math.sin(rad) * (y - centro[1]), Math.sin(rad) * (x - centro[0]) + Math.cos(rad) * (y - centro[1])]
+
+          this.floor.location = [this.$refs.map.getCoordinateFromPixel([(pos[0] + centro[0]), (pos[1] + centro[1])])]
+
+          axios.put(`http://localhost:3000/floor/` + this.$route.params.id_floor, this.floor)
+            .then(response => {
+              this.$router.push({
+                name: 'ShowFloor',
+                params: { id_building: this.$route.params.id_building, id_floor: this.$route.params.id_floor }
+              })
+            })
+            .catch(e => {
+              this.errors.push(e)
+              console.log(e)
+            })
         })
         .catch(e => {
           this.errors.push(e)
+          console.log(e + '2')
         })
     }
   },
