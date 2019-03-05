@@ -46,7 +46,7 @@ export default {
         actions: { label: 'Action', 'class': 'text-center' }
       },
       errors: [],
-      floors:[]
+      floors: []
     }
   },
   created () {
