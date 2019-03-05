@@ -23,44 +23,6 @@
       </div>
       <button @click="save">Save!</button>
     </div>
-    <!-- <h3>Interaction type</h3>
-    <select v-model="interactionType">
-      <option disabled value="null">Please select one</option>
-      <option value="draw">Draw</option>
-      <option value="modify">Modify</option>
-      <option value="select">Select</option>
-    </select>
-    <span>Selected: {{ interactionType }}</span>
-    <h3 v-if="interactionType == 'draw'">Draw type</h3>
-    <select v-model="drawType" v-if="interactionType == 'draw'">
-      <option disabled value="null">Please select one</option>
-      <option value="Polygon">Polygon</option>
-      <option value="Point">Point</option>
-    </select>
-    <span v-if="drawType == 'draw'">Selected: {{ drawType }}</span> -->
-      <!-- <div class="wrapper" position="absolute">
-        <div class="workspace" ref="workspace">
-          <FreeTransform
-            v-for="element in elements"
-            :key="element.id"
-            :x="element.x"
-            :y="element.y"
-            :scale-x="element.scaleX"
-            :scale-y="element.scaleY"
-            :width="element.width"
-            :height="element.height"
-            :angle="element.angle"
-            :offset-x="offsetX"
-            :offset-y="offsetY"
-            :disable-scale="element.disableScale === false"
-            @update="update(element.id,$event)"
-            >
-            <div class="element" :style="getElementStyles(element)">
-              {{element.text}}
-            </div>
-          </FreeTransform>
-        </div>
-      </div> -->
     <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl" style="height: 500px;">
       <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
       <div class="wrapper" position="absolute">

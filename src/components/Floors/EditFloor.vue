@@ -22,7 +22,6 @@
     <div style="height: 100%; width: 100%;  ">
        <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
           <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
-          <vl-feture v-if="!imgStatic">
             <div class="wrapper" position="absolute">
               <div class="workspace" ref="workspace">
                 <FreeTransform
@@ -46,7 +45,6 @@
                 </FreeTransform>
               </div>
             </div>
-          </vl-feture>
           <vl-layer-tile>
              <vl-source-osm />
           </vl-layer-tile>
@@ -83,7 +81,7 @@ export default {
           width: 200,
           height: 200,
           angle: 0,
-          ClassPrefix: 'tr',
+          classPrefix: 'tr',
           styles: {
             backgroundImage: undefined,
             opacity: 0.7
@@ -107,6 +105,10 @@ export default {
       buildingId: undefined,
       precedentZoom: null
     }
+  },
+  mounted () {
+    this.offsetX = this.$refs.workspace.offsetLeft
+    this.offsetY = this.$refs.workspace.offsetTop
   },
   created () {
     this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
@@ -135,7 +137,7 @@ export default {
               this.realImgScale = response.data.scaleX
               this.imgRotation = response.data.angleImage * Math.PI / 180
               this.image = true
-
+              alert('ciao')
               axios.get(`http://localhost:3000/image/` + response.data.image[0])
                 .then((response) => {
                   if (response.data != null) {
