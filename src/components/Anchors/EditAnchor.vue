@@ -6,7 +6,7 @@
           Edit Anchor
           <b-link :href="anchorList">(Anchor List)</b-link>
         </h2>
-        <b-form @submit="onSubmit">
+        <b-form>
           <b-form-group class="fieldsetHorizontal"
                     :label-cols="4"
                     breakpoint="md"
@@ -23,12 +23,11 @@
                     :rows="2"
                     :max-rows="6">{{anchor.description}}</b-form-textarea>
             </b-form-group>
-          <b-button type="submit" variant="primary">Update</b-button>
         </b-form>
-        <button @click="reset">Modifica Ancora</button>
+        <button @click="reset" style="margin-top: 2%;">Modifica Ancora</button>
       </b-col>
     </b-row>
-    <div style="height: 100%; width: 100%;  ">
+    <div style="height: 70%; width: 70%; margin: 0 auto; margin-top: 2%; ">
       <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
         <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"   />
         <vl-layer-tile>
@@ -61,6 +60,7 @@
         <vl-interaction-draw :type="drawType" source="draw-target" v-if="interactionType == 'draw'" />
       </vl-map>
     </div>
+    <b-button @click="save" variant="primary" style="margin-top: 2%;">Update</b-button>
   </div>
 </template>
 
@@ -162,8 +162,7 @@ export default {
       this.drawnFeatures = []
       this.interactionType = 'draw'
     },
-    onSubmit (evt) {
-      evt.preventDefault()
+    save () {
       axios.put(`http://localhost:3000/anchor/` + this.$route.params.id_anchor, this.anchor)
         .then(response => {
           this.$router.push({

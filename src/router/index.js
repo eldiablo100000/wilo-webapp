@@ -11,7 +11,7 @@ import CreateBuilding from '@/components/Buildings/CreateBuilding'
 import EditBuilding from '@/components/Buildings/EditBuilding'
 
 import FloorList from '@/components/Floors/FloorList'
-import UserFloorList from '@/components/Floors/UserFloorList'
+// import UserFloorList from '@/components/Floors/UserFloorList'
 import ShowFloor from '@/components/Floors/ShowFloor'
 import CreateFloor from '@/components/Floors/CreateFloor'
 import EditFloor from '@/components/Floors/EditFloor'
@@ -106,7 +106,7 @@ let router = new Router({
         }
     },
     // building
-    {
+    /* {
       path: '/floors/',
       name: 'FloorList',
       component: UserFloorList,
@@ -114,7 +114,7 @@ let router = new Router({
         {
           requiresAuth: true
         }
-    },
+    }, */
     {
       path: '/show-building/:id_building',
       name: 'ShowBuilding',

@@ -6,7 +6,7 @@
           Add Anchor
           <b-link :href="anchorList">(Anchor List)</b-link>
         </h2>
-        <b-form @submit="onSubmit">
+        <b-form>
           <b-form-group class="fieldsetHorizontal"
                     :label-cols="4"
                     breakpoint="md"
@@ -23,13 +23,12 @@
                   :rows="2"
                   :max-rows="6">{{anchor.description}}</b-form-textarea>
           </b-form-group>
-          <b-button type="submit" variant="primary">Save</b-button>
         </b-form>
       </b-col>
     </b-row>
     <!-- start map -->
-    <button @click="reset">Disegna Ancora</button>
-    <div style="height: 100%; width: 100%;  ">
+    <button @click="reset" style="margin-top: 2%;">Disegna Ancora</button>
+    <div style="height: 80%; width: 80%; margin: 0 auto; margin-top: 2%;">
        <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
           <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"   />
           <vl-layer-tile>
@@ -72,6 +71,9 @@
         </vl-layer-vector>
         <vl-interaction-draw :type="drawType" source="draw-target" v-if="interactionType == 'draw'" />
       </vl-map>
+    </div>
+    <div>
+      <b-button @click="save" variant="primary" style="margin-top: 2%;">Save</b-button>
     </div>
     <!-- end map -->
   </div>
@@ -131,65 +133,58 @@ export default {
   created () {
     this.anchorList = '#/building/' + this.$route.params.id_building + '/floor/' + this.$route.params.id_floor + '/anchors'
     this.floorId = this.$route.params.id_floor
-    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
-      .then(response => {
-        this.center = response.data.coordinates
-        // console.log(this.center)
-        axios.get(`http://localhost:3000/floor/` + this.floorId)
-          .then((response) => {
-            if (response.data != null) {
-              console.log(response.data.location)
-              this.floor = response.data
-              this.coordinates = response.data.location[0]
-              // console.log(response.data)
-              this.imgRotation = response.data.angleImage * Math.PI / 180
-              this.imgScale = response.data.scaleX
-              this.realImgScale = response.data.scaleX
-              this.image = true
-              this.zoom = response.data.zoom
-              this.imgSize = [response.data.widthImage, response.data.heightImage]
-              // console.log(this.imgSize)
+    axios.get(`http://localhost:3000/floor/` + this.floorId)
+      .then((response) => {
+        if (response.data != null) {
+          console.log(response.data.location)
+          this.floor = response.data
+          this.coordinates = response.data.location[0]
+          this.center = this.coordinates
+          // console.log(response.data)
+          this.imgRotation = response.data.angleImage * Math.PI / 180
+          this.imgScale = response.data.scaleX
+          this.realImgScale = response.data.scaleX
+          this.image = true
+          this.zoom = response.data.zoom
+          this.imgSize = [response.data.widthImage, response.data.heightImage]
+          // console.log(this.imgSize)
 
-              for (var i in response.data.anchors) {
-                axios.get(`http://localhost:3000/anchor/` + response.data.anchors[i])
-                  .then(response => {
-                    this.anchorsName.push(response.data.name)
-                    var type = 'Point'
-                    var coord = null
-                    var marker =
-                    {
-                      type: 'Feature',
-                      id: 'feature-' + type + '-' + response.data._id,
-                      properties: {},
-                      geometry: {
-                        type: type
-                      }
-                    }
-                    coord = response.data.location
-                    marker.geometry.coordinates = coord
-                    this.features.push(marker)
-                  })
-                  .catch(e => {
-                    this.errors.push(e)
-                  })
-              }
-
-              axios.get(`http://localhost:3000/image/` + response.data.image[0])
-                .then((response) => {
-                  console.log(response)
-                  if (response.data != null) {
-                    var tmp = response.data.path.replace('dist/', '')
-                    this.imgSrc = 'http://localhost:3000/' + tmp
+          for (var i in response.data.anchors) {
+            axios.get(`http://localhost:3000/anchor/` + response.data.anchors[i])
+              .then(response => {
+                this.anchorsName.push(response.data.name)
+                var type = 'Point'
+                var coord = null
+                var marker =
+                {
+                  type: 'Feature',
+                  id: 'feature-' + type + '-' + response.data._id,
+                  properties: {},
+                  geometry: {
+                    type: type
                   }
-                })
-                .catch(e => {
-                  this.errors.push(e)
-                })
-            }
-          })
-          .catch(e => {
-            this.errors.push(e)
-          })
+                }
+                coord = response.data.location
+                marker.geometry.coordinates = coord
+                this.features.push(marker)
+              })
+              .catch(e => {
+                this.errors.push(e)
+              })
+          }
+
+          axios.get(`http://localhost:3000/image/` + response.data.image[0])
+            .then((response) => {
+              console.log(response)
+              if (response.data != null) {
+                var tmp = response.data.path.replace('dist/', '')
+                this.imgSrc = 'http://localhost:3000/' + tmp
+              }
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        }
       })
       .catch(e => {
         this.errors.push(e)
@@ -202,8 +197,7 @@ export default {
       this.drawnFeatures = []
       this.interactionType = 'draw'
     },
-    onSubmit (evt) {
-      evt.preventDefault()
+    save () {
       this.continuePost = true
       if (this.anchor.location == null) {
         this.continuePost = false

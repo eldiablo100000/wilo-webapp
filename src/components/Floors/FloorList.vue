@@ -3,7 +3,7 @@
     <b-col cols="12">
       <h2>
         Floor List
-        <b-link :href="addFloor">(Add Floor)</b-link>
+        <b-link @click.stop="GoToCreateFloor()">(Add Floor)</b-link>
       </h2>
       <b-table :class="$parent.selectedTheme" striped hover :items="floors" :fields="fields">
         <template slot="actions" slot-scope="row">
@@ -70,6 +70,12 @@ export default {
       })
   },
   methods: {
+    GoToCreateFloor () {
+      this.$router.push({
+        name: 'CreateFloor',
+        params: { id_building: this.$route.params.id_building }
+      })
+    },
     details (floor) {
       this.$router.push({
         name: 'ShowFloor',

@@ -1,31 +1,31 @@
 <template>
   <div>
-  <b-row>
-    <b-col cols="12">
-      <h2>
-        Show Floor
-        <b-link :href="floorList">(Floor List)</b-link>
-      </h2>
-      <b-jumbotron>
-        <template slot="header">
-          {{floor.number}}
-        </template>
-        <template slot="lead">
-          number: {{floor.number}}<br>
-        </template>
-        <hr class="my-4">
-        <p>
-          Updated Date: {{floor.updated_date}}
-        </p>
-        <b-btn variant="success" @click.stop="addanchor(floor._id)">Add Anchor</b-btn>
-        <b-btn variant="success" @click.stop="anchorlist(floor._id)">Anchor list</b-btn>
-        <b-btn variant="success" @click.stop="editfloor(floor._id)">Edit</b-btn>
-        <b-btn variant="danger" @click.stop="deletefloor(floor._id)">Delete</b-btn>
-      </b-jumbotron>
-    </b-col>
-  </b-row>
-  <!-- start map -->
-  <div style="height: 100%; width: 100%;  ">
+    <b-row>
+      <b-col cols="12">
+        <h2>
+          Show Floor
+          <b-link :href="floorList">(Floor List)</b-link>
+        </h2>
+        <b-jumbotron>
+          <template slot="header">
+            {{floor.number}}
+          </template>
+          <template slot="lead">
+            number: {{floor.number}}<br>
+          </template>
+          <hr class="my-4">
+          <p>
+            Updated Date: {{floor.updated_date}}
+          </p>
+          <b-btn variant="success" @click.stop="addanchor(floor._id)">Add Anchor</b-btn>
+          <b-btn variant="success" @click.stop="anchorlist(floor._id)">Anchor list</b-btn>
+          <b-btn variant="success" @click.stop="editfloor(floor._id)">Edit</b-btn>
+          <b-btn variant="danger" @click.stop="deletefloor(floor._id)">Delete</b-btn>
+        </b-jumbotron>
+      </b-col>
+    </b-row>
+    <!-- start map -->
+    <div style="height: 70%; width: 70%; margin: 0 auto;  ">
      <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
         <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
         <vl-layer-tile>
@@ -38,7 +38,14 @@
            </vl-style-box>
         </vl-feature>
      </vl-map>
-  </div>
+    </div>
+    <b-jumbotron>
+      <b-btn variant="success" @click.stop="addanchor(floor._id)">Add Anchor</b-btn>
+      <b-btn variant="success" @click.stop="anchorlist(floor._id)">Anchor list</b-btn>
+      <b-btn variant="success" @click.stop="editfloor(floor._id)">Edit</b-btn>
+      <b-btn variant="danger" @click.stop="deletefloor(floor._id)">Delete</b-btn>
+    </b-jumbotron>
+
   <!-- end map -->
   </div>
 </template>
@@ -86,20 +93,15 @@ export default {
           console.log(response.data)
           this.imgRotation = response.data.angleImage * Math.PI / 180
           this.coordinates = response.data.location[0]
-          console.log(this.coordinates)
           this.center = this.coordinates
           this.floor = response.data
           this.zoom = response.data.zoom
           this.imgSize = [response.data.widthImage, response.data.heightImage]
-          console.log('ciao')
-          console.log(this.imgRotation)
-          console.log(response.data.angleImage)
           this.imgScale = response.data.scaleX
           this.realImgScale = response.data.scaleX
           this.image = true
           axios.get(`http://localhost:3000/image/` + response.data.image[0])
             .then((response) => {
-              console.log(response)
               if (response.data != null) {
                 var tmp = response.data.path.replace('dist/', '')
                 this.imgSrc = 'http://localhost:3000/' + tmp
@@ -165,7 +167,6 @@ export default {
   },
   watch: {
     zoom: function (val) {
-      console.log('1')
       this.imgScale = this.realImgScale
       if (this.precedentZoom !== null) {
         if (this.precedentZoom < this.zoom) {
