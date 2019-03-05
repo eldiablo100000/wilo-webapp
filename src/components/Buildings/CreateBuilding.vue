@@ -127,9 +127,10 @@ export default {
         if (!this.continuePost) break
       }
       if (this.continuePost) {
+        this.userId = JSON.parse(localStorage.getItem('user'))._id
+        this.building.id_user = this.userId
         axios.post(`http://localhost:3000/building`, this.building)
           .then(response => {
-            this.userId = JSON.parse(localStorage.getItem('user'))._id
             this.buildingId = response.data._id
             axios.get(`http://localhost:3000/user/` + this.userId)
               .then(response => {

@@ -21,6 +21,7 @@ import EditAnchor from '@/components/Anchors/EditAnchor'
 import ShowAnchor from '@/components/Anchors/ShowAnchor'
 
 import AdminBuildingList from '@/components/Admin/BuildingList'
+import AdminUserList from '@/components/Admin/UserList'
 import AdminFloorList from '@/components/Admin/FloorList'
 import AdminAnchorList from '@/components/Admin/AnchorList'
 
@@ -208,6 +209,16 @@ let router = new Router({
       path: '/admin/buildings',
       name: 'AdminBuildingList',
       component: AdminBuildingList,
+      meta:
+        {
+          requiresAuth: true,
+          is_admin: true
+        }
+    },
+    {
+      path: '/admin/users',
+      name: 'AdminUserList',
+      component: AdminUserList,
       meta:
         {
           requiresAuth: true,

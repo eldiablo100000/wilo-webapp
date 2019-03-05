@@ -12,6 +12,7 @@ var BuildingSchema = new mongoose.Schema({
   map_image: String,
   coordinates: [Number, Number],
   floors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Floor' }],
+  id_user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   updated_date: { type: Date, default: Date.now },
 });
 

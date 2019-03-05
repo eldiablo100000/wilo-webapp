@@ -436,6 +436,7 @@ export default {
     onSubmit (evt) {
       evt.preventDefault()
       this.floor.id_building = this.$route.params.id_building
+      this.floor.id_user = JSON.parse(localStorage.getItem('user'))._id
       axios.post(`http://localhost:3000/floor`, this.floor)
         .then(response => {
           this.floorId = response.data._id

@@ -2,9 +2,10 @@
   <b-row>
     <b-col cols="12">
       <h2>
-        Anchor List
+        User List
+        <b-link href="#/add-user">(Add User)</b-link>
       </h2>
-      <b-table :class="$parent.selectedTheme" striped hover :items="anchors" :fields="fields">
+      <b-table :class="$parent.selectedTheme" striped hover :items="users" :fields="fields">
         <template slot="actions" slot-scope="row">
           <b-btn size="sm" @click.stop="details(row.item)">Details</b-btn>
         </template>
@@ -23,41 +24,35 @@
 import axios from 'axios'
 
 export default {
-  name: 'AnchorList',
+  name: 'UserList',
   data () {
     return {
       fields: {
         _id: { label: 'ID', sortable: true, 'class': 'text-center' },
         name: { label: 'Name', sortable: true, 'class': 'text-center' },
-        id_user: { label: 'ID user', sortable: true, 'class': 'text-center' },
-        id_building: { label: 'ID building', sortable: true, 'class': 'text-center' },
-        id_floor: { label: 'ID floor', sortable: true, 'class': 'text-center' },
-        description: { label: 'Name', sortable: true, 'class': 'text-center' },
-        location: { label: 'Location', 'class': 'text-center' },
+        surname: { label: 'Surname', sortable: true, 'class': 'text-center' },
+        username: { label: 'Username', sortable: true, 'class': 'text-center' },
         updated_date: { label: 'Updated at', sortable: true, 'class': 'text-center' },
         actions: { label: 'Action', 'class': 'text-center' }
       },
-      anchorsId: [],
-      anchors: [],
+      users: [],
       errors: []
     }
   },
   created () {
-    axios.get(`http://localhost:3000/anchor/`)
-      .then((response) => {
-        if (response.data != null) {
-          this.anchors = response.data
-        }
+    axios.get(`http://localhost:3000/user`)
+      .then(response => {
+        this.users = response.data
       })
       .catch(e => {
         this.errors.push(e)
       })
   },
   methods: {
-    details (anchor) {
+    details (building) {
       this.$router.push({
-        name: 'ShowAnchor',
-        params: { id_building: anchor.id_building, id_floor: anchor.id_floor, id_anchor: anchor._id }
+        name: 'ShowUser',
+        params: { id_building: building._id }
       })
     }
   }
