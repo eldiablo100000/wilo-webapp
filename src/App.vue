@@ -114,6 +114,11 @@ export default {
           title: 'My Buildings',
           icon: 'fa fa-building'
         },
+        {
+          href: '/floors',
+          title: 'My Floors',
+          icon: 'fa fa-building'
+        },
         // {
         //   href: '/upload',
         //   title: 'Upload',

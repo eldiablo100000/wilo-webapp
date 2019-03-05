@@ -24,7 +24,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'FloorList',
+  name: 'UserFloorList',
   data () {
     return {
       fields: {
@@ -50,14 +50,21 @@ export default {
     }
   },
   created () {
-    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
-      .then((response) => {
-        this.floorsId = response.data.floors
-        for (var el in this.floorsId) {
-          axios.get(`http://localhost:3000/floor/` + this.floorsId[el])
-            .then((response) => {
-              if (response.data != null) {
-                this.floors.push(response.data)
+    axios.get(`http://localhost:3000/user/` + JSON.parse(localStorage.getItem('user'))._id)
+      .then(response => {
+        for (var el in response.data.user.buildings) {
+          axios.get('http://localhost:3000/building/' + response.data.user.buildings[el])
+            .then(response => {
+              for (var el in response.data.floors) {
+                axios.get(`http://localhost:3000/floor/` + response.data.floors[el])
+                  .then((response) => {
+                    if (response.data != null) {
+                      this.floors.push(response.data)
+                    }
+                  })
+                  .catch(e => {
+                    this.errors.push(e)
+                  })
               }
             })
             .catch(e => {
@@ -73,7 +80,7 @@ export default {
     details (floor) {
       this.$router.push({
         name: 'ShowFloor',
-        params: { id_building: this.$route.params.id_building, id_floor: floor._id }
+        params: { id_building: floor.id_building, id_floor: floor._id }
       })
     }
   }

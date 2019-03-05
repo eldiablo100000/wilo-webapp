@@ -30,7 +30,7 @@ export default {
       fields: {
         _id: { label: 'ID', sortable: true, 'class': 'text-center' },
         name: { label: 'Name', sortable: true, 'class': 'text-center' },
-        id_user: { label: 'ID user', sortable: true, 'class': 'text-center' },
+        // id_user: { label: 'ID user', sortable: true, 'class': 'text-center' },
         id_building: { label: 'ID building', sortable: true, 'class': 'text-center' },
         id_floor: { label: 'ID floor', sortable: true, 'class': 'text-center' },
         description: { label: 'Name', sortable: true, 'class': 'text-center' },
