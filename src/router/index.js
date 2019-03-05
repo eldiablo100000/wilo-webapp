@@ -11,6 +11,7 @@ import CreateBuilding from '@/components/Buildings/CreateBuilding'
 import EditBuilding from '@/components/Buildings/EditBuilding'
 
 import FloorList from '@/components/Floors/FloorList'
+import UserFloorList from '@/components/Floors/UserFloorList'
 import ShowFloor from '@/components/Floors/ShowFloor'
 import CreateFloor from '@/components/Floors/CreateFloor'
 import EditFloor from '@/components/Floors/EditFloor'
@@ -99,6 +100,16 @@ let router = new Router({
       path: '/buildings/',
       name: 'BuildingList',
       component: BuildingList,
+      meta:
+        {
+          requiresAuth: true
+        }
+    },
+    // building
+    {
+      path: '/floors/',
+      name: 'FloorList',
+      component: UserFloorList,
       meta:
         {
           requiresAuth: true
