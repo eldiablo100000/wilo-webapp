@@ -66,9 +66,7 @@ export default {
       this.user = JSON.parse(localStorage.getItem('user'))
     }
     if (this.authenticated) {
-      console.log(this.menu)
       for (var i in this.menu) {
-        console.log(this.menu[i])
         if (this.menu[i].title === 'Pages') {
           for (var j in this.menu[i].child) {
             if (this.menu[i].child[j].title === 'Login Page') {
@@ -116,21 +114,21 @@ export default {
           title: 'My Buildings',
           icon: 'fa fa-building'
         },
-        {
-          href: '/upload',
-          title: 'Upload',
-          icon: 'fa fa-upload'
-        },
-        {
-          href: '/manipulate-img',
-          title: 'Manipulate Image',
-          icon: 'fa fa-file-image'
-        },
-        {
-          href: '/tables',
-          title: 'Tables',
-          icon: 'fa fa-table'
-        },
+        // {
+        //   href: '/upload',
+        //   title: 'Upload',
+        //   icon: 'fa fa-upload'
+        // },
+        // {
+        //   href: '/manipulate-img',
+        //   title: 'Manipulate Image',
+        //   icon: 'fa fa-file-image'
+        // },
+        // {
+        //   href: '/tables',
+        //   title: 'Tables',
+        //   icon: 'fa fa-table'
+        // },
         /* {
           href: '/disabled',
           title: 'Disabled',
@@ -144,18 +142,23 @@ export default {
           header: true,
           component: separator
         },
+        // {
+        //   header: true,
+        //   title: 'Options'
+        // },
         {
-          header: true,
-          title: 'Options'
-        },
-        {
-          title: 'APIs',
+          title: 'Admin',
           icon: 'fa fa-database',
           href: '/api',
           badge: {
             text: 'new'
           },
           child: [
+            {
+              href: '/admin/users',
+              title: 'Admin User List',
+              icon: 'fa fa-user'
+            },
             {
               href: '/admin/buildings',
               title: 'Admin Building List',
@@ -174,7 +177,7 @@ export default {
           ]
         },
         {
-          title: 'Pages',
+          title: 'Authentication',
           icon: 'fa fa-file',
           // badge: {
           //   text: 'new'
@@ -191,58 +194,58 @@ export default {
               icon: 'fa fa-lock'
             }
           ]
-        },
-        {
-          href: '#',
-          title: 'Mailbox',
-          icon: 'fa fa-envelope'
-        },
-        {
-          title: 'Multiple Level',
-          icon: 'fa fa-list-alt',
-          child: [
-            {
-              href: '#',
-              title: 'Page 01'
-            },
-            {
-              title: 'Page 02',
-              child: [
-                {
-                  href: '#',
-                  title: 'Page 04'
-                },
-                {
-                  href: '#',
-                  title: 'Page 05'
-                }
-              ]
-            },
-            {
-              href: '#',
-              title: 'Page 03'
-            },
-            {
-              title: 'Level 2',
-              child: [
-                {
-                  href: '#',
-                  title: 'Level 3',
-                  child: [
-                    {
-                      href: '#',
-                      title: 'Page'
-                    },
-                    {
-                      href: '#',
-                      title: 'Page'
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
         }
+        // {
+        //   href: '#',
+        //   title: 'Mailbox',
+        //   icon: 'fa fa-envelope'
+        // },
+        // {
+        //   title: 'Multiple Level',
+        //   icon: 'fa fa-list-alt',
+        //   child: [
+        //     {
+        //       href: '#',
+        //       title: 'Page 01'
+        //     },
+        //     {
+        //       title: 'Page 02',
+        //       child: [
+        //         {
+        //           href: '#',
+        //           title: 'Page 04'
+        //         },
+        //         {
+        //           href: '#',
+        //           title: 'Page 05'
+        //         }
+        //       ]
+        //     },
+        //     {
+        //       href: '#',
+        //       title: 'Page 03'
+        //     },
+        //     {
+        //       title: 'Level 2',
+        //       child: [
+        //         {
+        //           href: '#',
+        //           title: 'Level 3',
+        //           child: [
+        //             {
+        //               href: '#',
+        //               title: 'Page'
+        //             },
+        //             {
+        //               href: '#',
+        //               title: 'Page'
+        //             }
+        //           ]
+        //         }
+        //       ]
+        //     }
+        //   ]
+        // }
       ],
       collapsed: false,
       themes: ['white-theme', 'dark-theme'],

@@ -215,6 +215,7 @@ export default {
       }
       this.anchor.id_building = this.$route.params.id_building
       this.anchor.id_floor = this.$route.params.id_floor
+      this.anchor.id_user = JSON.parse(localStorage.getItem('user'))._id
       this.floorId = this.$route.params.id_floor
       for (var i in this.anchorsName) {
         if (this.anchor.name === this.anchorsName[i]) {

@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 
 var FloorSchema = new mongoose.Schema({
   number: String,
-  id_building: { type: mongoose.Schema.Types.ObjectId, ref: 'Building' },
   anchors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Anchor' }],
   // pathImage: String,
   // server: String,
@@ -27,6 +26,8 @@ var FloorSchema = new mongoose.Schema({
       required: true
     }
   },*/
+  id_user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  id_building: { type: mongoose.Schema.Types.ObjectId, ref: 'Building' },
   updated_date: { type: Date, default: Date.now },
 });
 

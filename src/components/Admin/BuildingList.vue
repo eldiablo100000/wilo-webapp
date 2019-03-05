@@ -3,7 +3,6 @@
     <b-col cols="12">
       <h2>
         Building List
-        <b-link href="#/add-building">(Add Building)</b-link>
       </h2>
       <b-table :class="$parent.selectedTheme" striped hover :items="buildings" :fields="fields">
         <template slot="actions" slot-scope="row">
@@ -24,13 +23,22 @@
 import axios from 'axios'
 
 export default {
-  name: 'BookList',
+  name: 'BuildingList',
   data () {
     return {
       fields: {
+        _id: { label: 'ID', sortable: true, 'class': 'text-center' },
+        id_user: { label: 'ID user', sortable: true, 'class': 'text-center' },
         title: { label: 'Title', sortable: true, 'class': 'text-center' },
-        address: { label: 'Address', sortable: true },
+        description: { label: 'Description', sortable: true, 'class': 'text-center' },
+        road: { label: 'Road', sortable: true, 'class': 'text-center' },
+        number: { label: 'Number', sortable: true, 'class': 'text-center' },
+        postcode: { label: 'Postcode', sortable: true, 'class': 'text-center' },
         city: { label: 'City', sortable: true, 'class': 'text-center' },
+        country: { label: 'Country', sortable: true, 'class': 'text-center' },
+        map_image: { label: 'Map image', sortable: true, 'class': 'text-center' },
+        coordinates: { label: 'Coordinates', sortable: true, 'class': 'text-center' },
+        updated_date: { label: 'Updated at', sortable: true, 'class': 'text-center' },
         actions: { label: 'Action', 'class': 'text-center' }
       },
       buildings: [],
