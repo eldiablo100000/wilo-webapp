@@ -29,7 +29,7 @@
                   breakpoint="md"
                   label="Enter Address">
                   <!-- start map -->
-                  <div style="height: 100%; width: 100%;  ">
+                  <div style="height: 50%; width: 50%; margin: 0 auto; ">
                      <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
                         <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
                         <vl-layer-tile>

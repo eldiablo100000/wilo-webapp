@@ -43,7 +43,7 @@
           <b-form-input id="city" :state="state" v-model.trim="building.postcode"></b-form-input>
         </b-form-group>
         <!-- start map -->
-        <div style="height: 100%; width: 100%;  ">
+        <div style="height: 70%; width: 70%; margin: 0 auto;  ">
            <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
               <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
               <vl-layer-tile>
