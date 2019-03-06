@@ -12,7 +12,8 @@ var FloorSchema = new mongoose.Schema({
   yImage: Number,
   scaleX: Number,
   scaleY: Number,
-  location: [[Number]],
+  location: [Number],
+  center: [Number],
   image: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Image' }],
   zoom: Number,
   /* location: {

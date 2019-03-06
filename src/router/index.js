@@ -1,9 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import BookList from '@/components/Books/BookList'
-// import ShowBook from '@/components/Books/ShowBook'
-// import CreateBook from '@/components/Books/CreateBook'
-// import EditBook from '@/components/Books/EditBook'
 
 import BuildingList from '@/components/Buildings/BuildingList'
 import ShowBuilding from '@/components/Buildings/ShowBuilding'
@@ -25,10 +21,6 @@ import AdminBuildingList from '@/components/Admin/BuildingList'
 import AdminUserList from '@/components/Admin/UserList'
 import AdminFloorList from '@/components/Admin/FloorList'
 import AdminAnchorList from '@/components/Admin/AnchorList'
-
-// import HelloWorld from '@/components/HelloWorld'
-// import MapDemo from '@/components/MapDemo'
-// import Image from '@/components/Image'
 
 import Upload from '@/components/Upload'
 

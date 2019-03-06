@@ -111,6 +111,26 @@ export default {
       })
     },
     deletebuilding (buildingid) {
+      for (var i in this.floors) {
+        for (var j in this.floors[i].anchors) {
+          axios.delete('http://localhost:3000/anchor/' + this.floors[i].anchors[j])
+            .then(response => {
+              console.log('eliminata ancora')
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        }
+      }
+      for (var k in this.building.floors) {
+        axios.delete('http://localhost:3000/floor/' + this.building.floors[k])
+          .then(response => {
+            console.log('eliminato piano')
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
+      }
       axios.delete('http://localhost:3000/building/' + buildingid)
         .then((result) => {
           axios.get('http://localhost:3000/user/' + JSON.parse(localStorage.getItem('user'))._id)
@@ -145,7 +165,6 @@ export default {
       .then(response => {
         if (response.data != null) {
           this.building = response.data
-          console.log(response.data)
           var tmp = {
             id: response.data.title,
             type: 'Feature',

@@ -48,7 +48,7 @@
             <vl-style-box>
               <vl-style-icon src="static/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
             </vl-style-box>
-            <vl-overlay v-if="clickCoord" :key="index" :position="clickCoord">
+            <vl-overlay class="overlay" v-if="clickCoord" :key="index" :position="clickCoord">
                 {{ clickCoord }}
                 <button @click="clickCoord = undefined">close</button>
             </vl-overlay>
@@ -102,50 +102,43 @@ export default {
     this.floorId = this.$route.params.id_floor
     this.buildingId = this.$route.params.id_building
 
-    axios.get(`http://localhost:3000/building/` + this.buildingId)
+    axios.get(`http://localhost:3000/floor/` + this.floorId)
       .then(response => {
-        this.center = response.data.coordinates
-        axios.get(`http://localhost:3000/floor/` + this.floorId)
+        this.coordinates = response.data.location
+        this.center = response.data.center
+        this.imgRotation = response.data.angleImage * Math.PI / 180
+        this.imgScale = response.data.scaleX
+        this.realImgScale = response.data.scaleX
+        this.image = true
+        this.zoom = response.data.zoom
+        axios.get(`http://localhost:3000/image/` + response.data.image[0])
+          .then((response) => {
+            if (response.data != null) {
+              var tmp = response.data.path.replace('dist/', '')
+              this.imgSrc = 'http://localhost:3000/' + tmp
+            }
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
+        axios.get('http://localhost:3000/anchor/' + this.$route.params.id_anchor)
           .then(response => {
-            this.coordinates = response.data.location[0]
-            this.imgRotation = response.data.angleImage * Math.PI / 180
-            this.imgScale = response.data.scaleX
-            this.realImgScale = response.data.scaleX
-            this.image = true
-            this.zoom = response.data.zoom
-            axios.get(`http://localhost:3000/image/` + response.data.image[0])
-              .then((response) => {
-                console.log(response)
-                if (response.data != null) {
-                  var tmp = response.data.path.replace('dist/', '')
-                  this.imgSrc = 'http://localhost:3000/' + tmp
-                }
-              })
-              .catch(e => {
-                this.errors.push(e)
-              })
-            axios.get('http://localhost:3000/anchor/' + this.$route.params.id_anchor)
-              .then(response => {
-                this.anchor = response.data
-                var type = 'Point'
-                var coord = null
-                var marker =
-                {
-                  type: 'Feature',
-                  id: 'feature-' + type + '-' + response.data._id,
-                  properties: {},
-                  geometry: {
-                    type: type
-                  }
-                }
-                coord = response.data.location
-                marker.geometry.coordinates = coord
-                this.clickCoord = coord
-                this.features.push(marker)
-              })
-              .catch(e => {
-                this.errors.push(e)
-              })
+            this.anchor = response.data
+            var type = 'Point'
+            var coord = null
+            var marker =
+            {
+              type: 'Feature',
+              id: 'feature-' + type + '-' + response.data._id,
+              properties: {},
+              geometry: {
+                type: type
+              }
+            }
+            coord = response.data.location
+            marker.geometry.coordinates = coord
+            this.clickCoord = coord
+            this.features.push(marker)
           })
           .catch(e => {
             this.errors.push(e)
@@ -157,7 +150,6 @@ export default {
   },
   methods: {
     reset () {
-      console.log(this.drawnFeatures)
       this.features = []
       this.drawnFeatures = []
       this.interactionType = 'draw'
@@ -215,3 +207,11 @@ export default {
   }
 }
 </script>
+
+<style>
+  .overlay {
+    color: #ff8533;
+    background-color: #000013;
+    opacity: 0.7;
+  }
+</style>

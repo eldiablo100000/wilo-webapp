@@ -117,45 +117,39 @@ export default {
     this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
     this.floorId = this.$route.params.id_floor
     this.buildingId = this.$route.params.id_building
-    axios.get(`http://localhost:3000/building/` + this.buildingId)
-      .then(response => {
-        this.center = response.data.coordinates
-        axios.get(`http://localhost:3000/floor/` + this.floorId)
-          .then((response) => {
-            if (response.data != null) {
-              console.log(response.data)
-              if (response.data.angleImage >= 270) this.elements[0].angle = response.data.angleImage - 360
-              else this.elements[0].angle = response.data.angleImage
-              this.elements[0].scaleX = response.data.scaleX
-              this.elements[0].scaleY = response.data.scaleX
-              this.elements[0].x = response.data.xImage
-              this.elements[0].y = response.data.yImage
-              this.elements[0].height = response.data.heightImage
-              this.elements[0].width = response.data.widthImage
 
-              this.floorNumber = response.data.number
-              this.coordinates = response.data.location[0]
-              this.floor = response.data
-              this.zoom = response.data.zoom
-              this.imgScale = response.data.scaleX
-              this.realImgScale = response.data.scaleX
-              this.imgRotation = response.data.angleImage * Math.PI / 180
-              this.image = true
-              axios.get(`http://localhost:3000/image/` + response.data.image[0])
-                .then((response) => {
-                  if (response.data != null) {
-                    var tmp = response.data.path.replace('dist/', '')
-                    this.imgSrc = 'http://localhost:3000/' + tmp
-                  }
-                })
-                .catch(e => {
-                  this.errors.push(e)
-                })
-            }
-          })
-          .catch(e => {
-            this.errors.push(e)
-          })
+    axios.get(`http://localhost:3000/floor/` + this.floorId)
+      .then((response) => {
+        if (response.data != null) {
+          this.center = response.data.center
+          if (response.data.angleImage >= 270) this.elements[0].angle = response.data.angleImage - 360
+          else this.elements[0].angle = response.data.angleImage
+          this.elements[0].scaleX = response.data.scaleX
+          this.elements[0].scaleY = response.data.scaleX
+          this.elements[0].x = response.data.xImage
+          this.elements[0].y = response.data.yImage
+          this.elements[0].height = response.data.heightImage
+          this.elements[0].width = response.data.widthImage
+
+          this.floorNumber = response.data.number
+          this.coordinates = response.data.location[0]
+          this.floor = response.data
+          this.zoom = response.data.zoom
+          this.imgScale = response.data.scaleX
+          this.realImgScale = response.data.scaleX
+          this.imgRotation = response.data.angleImage * Math.PI / 180
+          this.image = true
+          axios.get(`http://localhost:3000/image/` + response.data.image[0])
+            .then((response) => {
+              if (response.data != null) {
+                var tmp = response.data.path.replace('dist/', '')
+                this.imgSrc = 'http://localhost:3000/' + tmp
+              }
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        }
       })
       .catch(e => {
         this.errors.push(e)
@@ -164,8 +158,6 @@ export default {
   methods: {
     update (id, payload) {
       this.elements = this.elements.map(item => {
-        console.log(payload)
-        console.log(item.angle)
         if (item.id === id) {
           return {
             ...item,
@@ -186,7 +178,6 @@ export default {
     ModifyImage () {
       this.imgStatic = false
       this.elements[0].styles.backgroundImage = 'url(' + this.imgSrc + ')'
-      console.log(this.elements[0])
     },
     onSubmit (evt) {
       evt.preventDefault()
@@ -211,11 +202,12 @@ export default {
           var b = (this.elements[0].y + (this.elements[0].height - (this.elements[0].height * this.elements[0].scaleY) / 2))
 
           var centro = [a, b]
+          this.floor.center = this.$refs.map.getCoordinateFromPixel(centro)
 
           var rad = this.floor.angleImage * Math.PI / 180
           var pos = [Math.cos(rad) * (x - centro[0]) - Math.sin(rad) * (y - centro[1]), Math.sin(rad) * (x - centro[0]) + Math.cos(rad) * (y - centro[1])]
 
-          this.floor.location = [this.$refs.map.getCoordinateFromPixel([(pos[0] + centro[0]), (pos[1] + centro[1])])]
+          this.floor.location = this.$refs.map.getCoordinateFromPixel([(pos[0] + centro[0]), (pos[1] + centro[1])])
 
           axios.put(`http://localhost:3000/floor/` + this.$route.params.id_floor, this.floor)
             .then(response => {
@@ -237,7 +229,6 @@ export default {
   },
   watch: {
     zoom: function (val) {
-      console.log('1')
       this.imgScale = this.realImgScale
       if (this.precedentZoom !== null && this.imgStatic) {
         if (this.precedentZoom < this.zoom) {

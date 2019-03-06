@@ -10,7 +10,7 @@
                <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   label="Enter Title">
-                  <b-form-input id="title" :state="state" v-model.trim="building.title"></b-form-input>
+                  <b-form-input id="title" :state="state" v-model.trim="building.title" style="width: 50%; margin: 0 auto;"></b-form-input>
                </b-form-group>
                <!--<b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
@@ -58,7 +58,8 @@
                      v-model="building.description"
                      placeholder="Enter something"
                      :rows="2"
-                     :max-rows="6">{{building.description}}</b-form-textarea>
+                     :max-rows="6"
+                     style="width: 50%; margin: 0 auto;">{{building.description}}</b-form-textarea>
                </b-form-group>
                <b-button type="submit" variant="primary">Save</b-button>
             </b-form>
@@ -232,3 +233,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .gcd-road{
+    color: #ff6600;
+  }
+</style>

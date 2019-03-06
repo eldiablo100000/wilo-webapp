@@ -8,12 +8,12 @@
         :label-cols="4"
         margin-right="20px"
         label="Username">
-        <b-form-input id="username" v-model.trim="username" autocomplete="username" style="width: 50%"></b-form-input>
+        <b-form-input id="username" v-model.trim="username" autocomplete="username" style="width: 50%; margin: 0 auto; "></b-form-input>
       </b-form-group>
       <b-form-group class="fieldsetHorizontal"
         :label-cols="4"
         label="Password">
-        <b-form-input id="password" type="password" v-model.trim="password" autocomplete="password" style="width: 50%"></b-form-input>
+        <b-form-input id="password" type="password" v-model.trim="password" autocomplete="password" style="width: 50%; margin: 0 auto;"></b-form-input>
       </b-form-group>
     </b-form>
     <div id="click">

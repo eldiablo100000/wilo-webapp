@@ -11,7 +11,7 @@
                     :label-cols="4"
                     breakpoint="md"
                     label="Enter Name">
-            <b-form-input id="name" :state="state" v-model.trim="anchor.name"></b-form-input>
+            <b-form-input id="name" :state="state" v-model.trim="anchor.name" style="width: 50%; margin: 0 auto;"></b-form-input>
           </b-form-group>
           <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
@@ -21,13 +21,13 @@
                   v-model="anchor.description"
                   placeholder="Enter something"
                   :rows="2"
-                  :max-rows="6">{{anchor.description}}</b-form-textarea>
+                  :max-rows="6"
+                  style="width: 50%; margin: 0 auto;">{{anchor.description}}</b-form-textarea>
           </b-form-group>
         </b-form>
       </b-col>
     </b-row>
-    <!-- start map -->
-    <button @click="reset" style="margin-top: 2%;">Disegna Ancora</button>
+    <button @click="reset" style="margin-top: 2%;">Draw Anchor</button>
     <div style="height: 80%; width: 80%; margin: 0 auto; margin-top: 2%;">
        <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
           <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"   />
@@ -60,7 +60,7 @@
               <vl-style-box>
                 <vl-style-icon src="static/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
               </vl-style-box>
-              <vl-overlay v-if="clickCoord" :key="index" :position="clickCoord">
+              <vl-overlay class="overlay" v-if="clickCoord" :key="index" :position="clickCoord">
                 {{ clickCoord }}
                 <button @click="clickCoord = undefined">close</button>
               </vl-overlay>
@@ -75,7 +75,6 @@
     <div>
       <b-button @click="save" variant="primary" style="margin-top: 2%;">Save</b-button>
     </div>
-    <!-- end map -->
   </div>
 </template>
 
@@ -83,7 +82,6 @@
 
 import axios from 'axios'
 
-// const features = []
 export default {
   name: 'CreateAnchor',
 
@@ -105,10 +103,8 @@ export default {
       newFeatures: [],
       drawType: 'Point',
       interactionType: null,
-      // maxResolution: 5,
       zoom: undefined,
       precedentZoom: null,
-      // maxZoom: 8,
       center: [0, 0],
       rotation: 0,
       features: [],
@@ -136,18 +132,15 @@ export default {
     axios.get(`http://localhost:3000/floor/` + this.floorId)
       .then((response) => {
         if (response.data != null) {
-          console.log(response.data.location)
           this.floor = response.data
-          this.coordinates = response.data.location[0]
-          this.center = this.coordinates
-          // console.log(response.data)
+          this.coordinates = response.data.location
+          this.center = response.data.center
           this.imgRotation = response.data.angleImage * Math.PI / 180
           this.imgScale = response.data.scaleX
           this.realImgScale = response.data.scaleX
           this.image = true
           this.zoom = response.data.zoom
           this.imgSize = [response.data.widthImage, response.data.heightImage]
-          // console.log(this.imgSize)
 
           for (var i in response.data.anchors) {
             axios.get(`http://localhost:3000/anchor/` + response.data.anchors[i])
@@ -175,7 +168,6 @@ export default {
 
           axios.get(`http://localhost:3000/image/` + response.data.image[0])
             .then((response) => {
-              console.log(response)
               if (response.data != null) {
                 var tmp = response.data.path.replace('dist/', '')
                 this.imgSrc = 'http://localhost:3000/' + tmp
@@ -192,7 +184,6 @@ export default {
   },
   methods: {
     reset () {
-      console.log(this.drawnFeatures)
       this.newFeatures = []
       this.drawnFeatures = []
       this.interactionType = 'draw'
@@ -287,3 +278,11 @@ export default {
   }
 }
 </script>
+
+<style>
+  .overlay {
+    color: #ff8533;
+    background-color: #000013;
+    opacity: 0.7;
+  }
+</style>

@@ -323,7 +323,7 @@ body {
   overflow: scroll !important;
 }
 .dark-theme {
-  background-color: black!important;
+  background-color: #000013!important;
   color: white!important;
 }
 .white-theme {
@@ -331,7 +331,7 @@ body {
   color: black!important;
 }
 .dark-theme a {
-  background-color: black;
+  background-color: #000013;
   color: white!important;
 }
 .white-theme a {
@@ -361,6 +361,11 @@ body {
 .white-theme .jumbotron {
   background-color: darkgrey!important;
   color: black!important;
+}
+.v-sidebar-menu {
+  bborder-style: solid;
+  border-width: 3px;
+  border-color: #ff8533;
 }
 // table {
 //   color: white!important;

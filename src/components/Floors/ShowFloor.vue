@@ -24,8 +24,7 @@
         </b-jumbotron>
       </b-col>
     </b-row>
-    <!-- start map -->
-    <div style="height: 70%; width: 70%; margin: 0 auto;  ">
+    <div style="height: 80%; width: 80%; margin: 0 auto;  ">
      <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
         <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
         <vl-layer-tile>
@@ -37,24 +36,26 @@
               <vl-style-icon id="image" :src="imgSrc" :opacity="0.6" :scale.sync="imgScale" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
            </vl-style-box>
         </vl-feature>
+
+        <vl-layer-vector id="features" >
+            <vl-source-vector :features.sync="features" />
+          </vl-layer-vector>
+          <template v-for="(item, index) in features">
+            <vl-feature :key="index" >
+              <vl-geom-point :coordinates="item.geometry.coordinates" :z-index="3"></vl-geom-point>
+              <vl-style-box>
+                <vl-style-icon src="static/marker.png" :scale="0.4" :anchor="[0.5, 1]"></vl-style-icon>
+              </vl-style-box>
+            </vl-feature>
+          </template>
      </vl-map>
     </div>
-    <b-jumbotron>
-      <b-btn variant="success" @click.stop="addanchor(floor._id)">Add Anchor</b-btn>
-      <b-btn variant="success" @click.stop="anchorlist(floor._id)">Anchor list</b-btn>
-      <b-btn variant="success" @click.stop="editfloor(floor._id)">Edit</b-btn>
-      <b-btn variant="danger" @click.stop="deletefloor(floor._id)">Delete</b-btn>
-    </b-jumbotron>
-
-  <!-- end map -->
   </div>
 </template>
 
 <script>
 
 import axios from 'axios'
-const features = [
-]
 
 export default {
   name: 'ShowFloor',
@@ -64,7 +65,7 @@ export default {
       center: [0, 0],
       coordinates: [],
       errors: [],
-      features,
+      features: [],
       floor: {},
       floorList: '',
       geocoder: undefined,
@@ -80,7 +81,7 @@ export default {
       imgStatic: true,
       rotation: 0,
       showMap: true,
-      zoom: 19,
+      zoom: undefined,
       precedentZoom: null
     }
   },
@@ -90,16 +91,38 @@ export default {
     axios.get(`http://localhost:3000/floor/` + this.floorId)
       .then((response) => {
         if (response.data != null) {
-          console.log(response.data)
           this.imgRotation = response.data.angleImage * Math.PI / 180
-          this.coordinates = response.data.location[0]
-          this.center = this.coordinates
+          this.coordinates = response.data.location
+          this.center = response.data.center
           this.floor = response.data
           this.zoom = response.data.zoom
           this.imgSize = [response.data.widthImage, response.data.heightImage]
           this.imgScale = response.data.scaleX
           this.realImgScale = response.data.scaleX
           this.image = true
+
+          for (var i in response.data.anchors) {
+            axios.get(`http://localhost:3000/anchor/` + response.data.anchors[i])
+              .then(response => {
+                var type = 'Point'
+                var coord = null
+                var marker =
+                {
+                  type: 'Feature',
+                  id: 'feature-' + type + '-' + response.data._id,
+                  properties: {},
+                  geometry: {
+                    type: type
+                  }
+                }
+                coord = response.data.location
+                marker.geometry.coordinates = coord
+                this.features.push(marker)
+              })
+              .catch(e => {
+                this.errors.push(e)
+              })
+          }
           axios.get(`http://localhost:3000/image/` + response.data.image[0])
             .then((response) => {
               if (response.data != null) {
@@ -136,6 +159,14 @@ export default {
       })
     },
     deletefloor (floorid) {
+      for (var i in this.floor.anchors) {
+        axios.delete('http://localhost:3000/anchor/' + this.floor.anchors[i])
+          .then(response => {
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
+      }
       axios.delete('http://localhost:3000/floor/' + floorid)
         .then((result) => {
           axios.get('http://localhost:3000/building/' + this.$route.params.id_building)

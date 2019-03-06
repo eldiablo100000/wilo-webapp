@@ -33,7 +33,7 @@ export default {
         // id_user: { label: 'ID user', sortable: true, 'class': 'text-center' },
         // id_building: { label: 'ID building', sortable: true, 'class': 'text-center' },
         // id_floor: { label: 'ID floor', sortable: true, 'class': 'text-center' },
-        description: { label: 'Name', sortable: true, 'class': 'text-center' },
+        description: { label: 'Description', sortable: true, 'class': 'text-center' },
         location: { label: 'Location', 'class': 'text-center' },
         updated_date: { label: 'Updated at', sortable: true, 'class': 'text-center' },
         actions: { label: 'Action', 'class': 'text-center' }
