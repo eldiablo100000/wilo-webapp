@@ -28,10 +28,10 @@ export default {
   data () {
     return {
       fields: {
-        _id: { label: 'ID', sortable: true, 'class': 'text-center' },
+        // _id: { label: 'ID', sortable: true, 'class': 'text-center' },
         number: { label: 'Number', sortable: true, 'class': 'text-center' },
         // id_user: { label: 'ID user', sortable: true, 'class': 'text-center' },
-        id_building: { label: 'ID building', sortable: true, 'class': 'text-center' },
+        // id_building: { label: 'ID building', sortable: true, 'class': 'text-center' },
         // angleImage: { label: 'AngleImage', sortable: true, 'class': 'text-center' },
         // widthImage: { label: 'WidthImage', sortable: true, 'class': 'text-center' },
         // heightImage: { label: 'HeightImage', sortable: true, 'class': 'text-center' },
@@ -39,7 +39,7 @@ export default {
         // yImage: { label: 'YImage', sortable: true, 'class': 'text-center' },
         // scaleX: { label: 'ScaleX', sortable: true, 'class': 'text-center' },
         // scaleY: { label: 'ScaleY', sortable: true, 'class': 'text-center' },
-        location: { label: 'Location', sortable: true, 'class': 'text-center' },
+        // location: { label: 'Location', sortable: true, 'class': 'text-center' },
         // image: { label: 'Image', sortable: true, 'class': 'text-center' },
         zoom: { label: 'Zoom', sortable: true, 'class': 'text-center' },
         updated_date: { label: 'Updated at', sortable: true, 'class': 'text-center' },

@@ -28,7 +28,7 @@ export default {
   data () {
     return {
       fields: {
-        _id: { label: 'ID', sortable: true, 'class': 'text-center' },
+        // _id: { label: 'ID', sortable: true, 'class': 'text-center' },
         // id_user: { label: 'ID user', sortable: true, 'class': 'text-center' },
         title: { label: 'Title', sortable: true, 'class': 'text-center' },
         // description: { label: 'Description', sortable: true, 'class': 'text-center' },
@@ -38,7 +38,7 @@ export default {
         city: { label: 'City', sortable: true, 'class': 'text-center' },
         country: { label: 'Country', sortable: true, 'class': 'text-center' },
         // map_image: { label: 'Map image', sortable: true, 'class': 'text-center' },
-        coordinates: { label: 'Coordinates', sortable: true, 'class': 'text-center' },
+        // coordinates: { label: 'Coordinates', sortable: true, 'class': 'text-center' },
         updated_date: { label: 'Updated at', sortable: true, 'class': 'text-center' },
         actions: { label: 'Action', 'class': 'text-center' }
       },

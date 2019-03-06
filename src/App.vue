@@ -115,7 +115,7 @@ export default {
           icon: 'fa fa-building'
         },
         {
-          href: '/floors',
+          href: '/myfloors',
           title: 'My Floors',
           icon: 'fa fa-building'
         },
@@ -352,6 +352,14 @@ body {
 }
 .white-theme .vsm-link:hover {
   background-color: cornsilk!important;
+  color: black!important;
+}
+.dark-theme .jumbotron {
+  background-color: grey!important;
+  color: black!important;
+}
+.white-theme .jumbotron {
+  background-color: darkgrey!important;
   color: black!important;
 }
 // table {
