@@ -1,0 +1,19 @@
+version: '3' # specify docker-compose version
+
+# Define the services/containers to be run
+services:
+  database: # name of the third service
+    image: mongo # specify image to build container from
+    ports:
+      - "27017:27017" # specify port forewarding
+  webapp: # name of the first service
+    build: webapp # specify the directory of the Dockerfile
+    networks:
+      - wilo-app
+    ports:
+      - "8080:8080" # specify port forewarding
+
+
+networks:
+  wilo-app:
+    driver: bridge
