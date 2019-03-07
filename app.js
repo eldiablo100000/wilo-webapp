@@ -12,7 +12,7 @@ var user = require('./routes/user');
 var image = require('./routes/image')
 
 var app = express();
-var drop = true
+var drop = false
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 mongoose.connect('mongodb://localhost/mean', { promiseLibrary: require('bluebird'),  useNewUrlParser: true })
