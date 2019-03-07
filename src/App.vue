@@ -303,11 +303,11 @@ body {
 
 .demo {
   padding-left: 50px;
+  // height: 100vh;
 }
 
 .demo.extended {
   padding-left: 350px;
-  height: 100vh;
 }
 
 #theme-selector {
