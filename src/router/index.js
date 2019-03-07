@@ -22,16 +22,12 @@ import AdminUserList from '@/components/Admin/UserList'
 import AdminFloorList from '@/components/Admin/FloorList'
 import AdminAnchorList from '@/components/Admin/AnchorList'
 
-import Upload from '@/components/Upload'
-
-import ManipulateImage from '@/components/ManipulateImage'
 import LoginPage from '@/components/LoginPage'
 import LogoutPage from '@/components/LogoutPage'
 import RegisterPage from '@/components/RegisterPage'
 
 Vue.use(Router)
 let router = new Router({
-  // mode: 'history',
   routes: [
     {
       path: '/',
@@ -68,24 +64,6 @@ let router = new Router({
       {
         guest: true
       }
-    },
-    {
-      path: '/upload/',
-      name: 'Upload',
-      component: Upload,
-      meta:
-        {
-          requiresAuth: true
-        }
-    },
-    {
-      path: '/manipulate-img/',
-      name: 'ManipulateImage',
-      component: ManipulateImage,
-      meta:
-        {
-          requiresAuth: true
-        }
     },
     // building
     {

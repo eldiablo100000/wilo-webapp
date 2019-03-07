@@ -67,7 +67,7 @@ export default {
     }
     if (this.authenticated) {
       for (var i in this.menu) {
-        if (this.menu[i].title === 'Pages') {
+        if (this.menu[i].title === 'Authentication') {
           for (var j in this.menu[i].child) {
             if (this.menu[i].child[j].title === 'Login Page') {
               this.menu[i].child[j].title = 'Logout Page'
@@ -307,6 +307,7 @@ body {
 
 .demo.extended {
   padding-left: 350px;
+  height: 100vh;
 }
 
 #theme-selector {
