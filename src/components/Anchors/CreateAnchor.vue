@@ -27,7 +27,8 @@
         </b-form>
       </b-col>
     </b-row>
-    <button @click="reset" style="margin-top: 2%;">Draw Anchor</button>
+    <b-button @click="reset" style="margin-top: 2%;" variant="info">Draw Anchor</b-button>
+      <b-button @click="save" variant="primary" style="margin-top: 2%;">Save</b-button>
     <div style="height: 80%; width: 80%; margin: 0 auto; margin-top: 2%;">
        <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
           <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"   />
@@ -62,7 +63,7 @@
               </vl-style-box>
               <vl-overlay class="overlay" v-if="clickCoord" :key="index" :position="clickCoord">
                 {{ clickCoord }}
-                <button @click="clickCoord = undefined">close</button>
+                <b-button @click="clickCoord = undefined" variant="primary">Close</b-button>
               </vl-overlay>
             </vl-feature>
           </template>
@@ -73,7 +74,6 @@
       </vl-map>
     </div>
     <div>
-      <b-button @click="save" variant="primary" style="margin-top: 2%;">Save</b-button>
     </div>
   </div>
 </template>

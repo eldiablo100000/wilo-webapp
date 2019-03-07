@@ -24,7 +24,8 @@
                     :max-rows="6">{{anchor.description}}</b-form-textarea>
             </b-form-group>
         </b-form>
-        <button @click="reset" style="margin-top: 2%;">Modifica Ancora</button>
+        <b-button @click="reset" style="margin-top: 2%;" variant="warning">Modifica Ancora</b-button>
+        <b-button @click="save" variant="primary" style="margin-top: 2%;">Update</b-button>
       </b-col>
     </b-row>
     <div style="height: 70%; width: 70%; margin: 0 auto; margin-top: 2%; ">
@@ -50,7 +51,7 @@
             </vl-style-box>
             <vl-overlay class="overlay" v-if="clickCoord" :key="index" :position="clickCoord">
                 {{ clickCoord }}
-                <button @click="clickCoord = undefined">close</button>
+                <b-button @click="clickCoord = undefined" variant="primary">Close</b-button>
             </vl-overlay>
           </vl-feature>
         </template>
@@ -60,7 +61,6 @@
         <vl-interaction-draw :type="drawType" source="draw-target" v-if="interactionType == 'draw'" />
       </vl-map>
     </div>
-    <b-button @click="save" variant="primary" style="margin-top: 2%;">Update</b-button>
   </div>
 </template>
 

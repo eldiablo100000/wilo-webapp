@@ -18,9 +18,9 @@
         <input type="file" @change="onFileChange">
       </div>
       <div v-else>
-        <button @click="removeImage">Remove image</button>
+        <b-button @click="removeImage" variant="danger">Remove image</b-button>
       </div>
-      <button @click="save">Save!</button>
+      <b-button @click="save" variant="primary">Save!</b-button>
     </div>
     <div class="wrapper" position="absolute">
       <div class="workspace" ref="workspace">
@@ -260,6 +260,8 @@ export default {
           .then(response => {
             this.floor.image = response.data._id
             this.floor.id_building = this.$route.params.id_building
+            this.userId = JSON.parse(localStorage.getItem('user'))._id
+            this.floor.id_user = this.userId
             axios.post(`http://localhost:3000/floor`, this.floor)
               .then(response => {
                 this.floorId = response.data._id

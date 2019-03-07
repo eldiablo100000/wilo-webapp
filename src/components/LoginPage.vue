@@ -17,7 +17,7 @@
       </b-form-group>
     </b-form>
     <div id="click">
-        <button @click="login">login</button>
+        <b-button @click="login" variant="primary">Login</b-button>
         <router-link to="/auth/registration" class="btn btn-link">Register</router-link>
     </div>
   </div>

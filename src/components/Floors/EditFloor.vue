@@ -16,7 +16,7 @@
           </b-form-group>
           <b-button type="submit" variant="primary">Update</b-button>
         </b-form>
-        <button @click="ModifyImage"> Riposiziona Immagine </button>
+        <b-button @click="ModifyImage" variant="warning"> Riposiziona Immagine </b-button>
       </b-col>
     </b-row>
     <div style="height: 100%; width: 100%;  ">

@@ -48,7 +48,7 @@
               </vl-style-box>
               <vl-overlay class="overlay" v-if="clickCoord" :key="index" :position="clickCoord">
                 {{ clickCoord }}
-                <button @click="clickCoord = undefined">close</button>
+                <b-button @click="clickCoord = undefined" variant="primary">Close</b-button>
               </vl-overlay>
             </vl-feature>
           </template>

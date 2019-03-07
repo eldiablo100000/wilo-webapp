@@ -5,7 +5,7 @@
     </h2>
     Are you sure to log out?
     <div id="click">
-        <button @click="logout">Yes</button>
+        <b-button @click="logout" variant="primary">Yes</b-button>
     </div>
   </div>
 </template>

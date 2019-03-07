@@ -36,7 +36,7 @@
       </b-form-group>
     </b-form>
     <div id="click">
-        <button @click="register">Register</button>
+        <b-button @click="register" variant="info">Register</b-button>
     </div>
   </div>
 </template>
