@@ -205,6 +205,7 @@ export default {
     },
     removeImage: function (e) {
       this.image = ''
+      this.elements[0].styles.backgroundImage = ''
     },
     onFileChanged (event) {
       var path = 'static/' + event.target.files[0].name

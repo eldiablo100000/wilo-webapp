@@ -12,24 +12,12 @@
                   label="Enter Title">
                   <b-form-input id="title" :state="state" v-model.trim="building.title" style="width: 50%; margin: 0 auto;"></b-form-input>
                </b-form-group>
-               <!--<b-form-group class="fieldsetHorizontal"
-                  :label-cols="4"
-                  breakpoint="md"
-                  label="Enter Address">
-                  <b-form-input id="address" :state="state" v-model.trim="building.address"></b-form-input>
-                  </b-form-group>
-                  <b-form-group class="fieldsetHorizontal"
-                  :label-cols="4"
-                  breakpoint="md"
-                  label="Enter City">
-                  <b-form-input  id="city" :state="state" v-model.trim="building.city"></b-form-input>
-                  </b-form-group> -->
                <b-form-group class="fieldsetHorizontal"
                   :label-cols="4"
                   breakpoint="md"
                   label="Enter Address">
                   <!-- start map -->
-                  <div style="margin: 0 auto; ">
+                  <div style="width: 50%; height: 50%; margin: 0 auto; ">
                      <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
                         <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
                         <vl-layer-tile>
@@ -207,29 +195,19 @@ export default {
       autoComplete: true,
       keepOpen: true
     })
-    // this.$refs.map.$map.addControl(geocoder)
-    // console.log(this.$refs.map.$map.getControls())
+
     this.$refs.map.$createPromise.then(() => {
       this.$refs.map.$map.addControl(this.geocoder)
-      // console.log(this.$refs.map.$map.getControls())
       var that = this
       this.geocoder.on('addresschosen', function (evt) {
-        // it's up to you
-        console.log(evt)
         that.building.coordinates = evt.coordinate
         that.building.road = evt.address.details.road
         that.building.city = evt.address.details.city
         that.building.country = evt.address.details.country
         that.building.number = evt.address.details.houseNumber
         that.building.postcode = evt.address.details.postcode
-        console.log(that.building)
       })
     })
-  },
-  watch: {
-    features: function (val) {
-      console.log(val)
-    }
   }
 }
 </script>

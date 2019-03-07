@@ -10,30 +10,12 @@
           <b-collapse is-nav id="nav_collapse">
             <b-navbar-nav>
               <b-nav-item :class="selectedTheme" href="#">About Wilo</b-nav-item>
-              <!-- <b-nav-item :class="selectedTheme" href="#">Link</b-nav-item>
-              <b-nav-item :class="selectedTheme" href="#" disabled>Disabled</b-nav-item> -->
             </b-navbar-nav>
-
-            <!-- Right aligned nav items -->
             <b-navbar-nav class="ml-auto">
-              <!-- <b-form-select :class="selectedTheme" v-model="selectedTheme" :options="themes" /> -->
               <b-form-checkbox switch v-model="checked" name="check-button">
                 Dark theme <b>(Enabled: {{ checked }})</b>
               </b-form-checkbox>
-              <!-- <b-nav-form>
-                <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search" />
-                <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
-              </b-nav-form> -->
-
-              <!-- <b-nav-item-dropdown text="Lang" right>
-                <b-dropdown-item href="#">EN</b-dropdown-item>
-                <b-dropdown-item href="#">ES</b-dropdown-item>
-                <b-dropdown-item href="#">RU</b-dropdown-item>
-                <b-dropdown-item href="#">FA</b-dropdown-item>
-              </b-nav-item-dropdown> -->
-
               <b-nav-item-dropdown right>
-                <!-- Using button-content slot -->
                 <template :class="selectedTheme" slot="button-content" v-if="!authenticated"><em>Not authenticated</em></template>
                 <template :class="selectedTheme" slot="button-content" v-else><em>{{user.username}}</em></template>
                 <b-dropdown-item :class="selectedTheme" href="#">Profile</b-dropdown-item>
@@ -100,15 +82,6 @@ export default {
           title: 'Add a building',
           icon: 'fa fa-map'
         },
-        /* {
-          href: '/charts',
-          title: 'Charts',
-          icon: 'fa fa-chart-area',
-          badge: {
-            text: 'pro',
-            class: 'badge-danger'
-          }
-        }, */
         {
           href: '/buildings',
           title: 'My Buildings',
@@ -119,38 +92,10 @@ export default {
           title: 'My Floors',
           icon: 'fa fa-building'
         },
-        // {
-        //   href: '/upload',
-        //   title: 'Upload',
-        //   icon: 'fa fa-upload'
-        // },
-        // {
-        //   href: '/manipulate-img',
-        //   title: 'Manipulate Image',
-        //   icon: 'fa fa-file-image'
-        // },
-        // {
-        //   href: '/tables',
-        //   title: 'Tables',
-        //   icon: 'fa fa-table'
-        // },
-        /* {
-          href: '/disabled',
-          title: 'Disabled',
-          icon: 'fa fa-cog',
-          disabled: true,
-          badge: {
-            text: '20'
-          }
-        }, */
         {
           header: true,
           component: separator
         },
-        // {
-        //   header: true,
-        //   title: 'Options'
-        // },
         {
           title: 'Admin',
           icon: 'fa fa-database',
@@ -184,9 +129,6 @@ export default {
         {
           title: 'Authentication',
           icon: 'fa fa-file',
-          // badge: {
-          //   text: 'new'
-          // },
           child: [
             {
               href: '/auth/login',
@@ -200,57 +142,6 @@ export default {
             }
           ]
         }
-        // {
-        //   href: '#',
-        //   title: 'Mailbox',
-        //   icon: 'fa fa-envelope'
-        // },
-        // {
-        //   title: 'Multiple Level',
-        //   icon: 'fa fa-list-alt',
-        //   child: [
-        //     {
-        //       href: '#',
-        //       title: 'Page 01'
-        //     },
-        //     {
-        //       title: 'Page 02',
-        //       child: [
-        //         {
-        //           href: '#',
-        //           title: 'Page 04'
-        //         },
-        //         {
-        //           href: '#',
-        //           title: 'Page 05'
-        //         }
-        //       ]
-        //     },
-        //     {
-        //       href: '#',
-        //       title: 'Page 03'
-        //     },
-        //     {
-        //       title: 'Level 2',
-        //       child: [
-        //         {
-        //           href: '#',
-        //           title: 'Level 3',
-        //           child: [
-        //             {
-        //               href: '#',
-        //               title: 'Page'
-        //             },
-        //             {
-        //               href: '#',
-        //               title: 'Page'
-        //             }
-        //           ]
-        //         }
-        //       ]
-        //     }
-        //   ]
-        // }
       ],
       collapsed: false,
       themes: ['white-theme', 'dark-theme'],
@@ -303,7 +194,6 @@ body {
 
 .demo {
   padding-left: 50px;
-  // height: 100vh;
 }
 
 .demo.extended {
