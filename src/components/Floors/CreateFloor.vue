@@ -22,10 +22,10 @@
       </div>
       <button @click="save">Save!</button>
     </div>
+    <div class="wrapper" position="absolute">
+      <div class="workspace" ref="workspace">
     <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl" style="height: 500px;">
       <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
-      <div class="wrapper" position="absolute">
-        <div class="workspace" ref="workspace">
           <FreeTransform
             v-for="element in elements"
             :key="element.id"
@@ -45,8 +45,6 @@
               {{element.text}}
             </div>
           </FreeTransform>
-        </div>
-      </div>
       <vl-layer-tile>
         <vl-source-osm />
       </vl-layer-tile>
@@ -62,6 +60,8 @@
         </vl-feature>
       </template>
     </vl-map>
+  </div>
+</div>
   </div>
 </template>
 
