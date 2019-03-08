@@ -1,21 +1,23 @@
 <template>
-  <b-row>
-    <b-col cols="12">
-      <h2>
-        Floor List
-      </h2>
-      <b-table :class="$parent.selectedTheme" striped hover :items="floors" :fields="fields">
-        <template slot="actions" slot-scope="row">
-          <b-btn size="sm" @click.stop="details(row.item)">Details</b-btn>
-        </template>
-      </b-table>
-      <ul v-if="errors && errors.length">
-        <li v-for="error of errors" :key="error">
-          {{error.message}}
-        </li>
-      </ul>
-    </b-col>
-  </b-row>
+  <div style="height:100vh;">
+    <b-row>
+      <b-col cols="12">
+        <h2>
+          Floor List
+        </h2>
+        <b-table :class="$parent.selectedTheme" striped hover :items="floors" :fields="fields">
+          <template slot="actions" slot-scope="row">
+            <b-btn size="sm" @click.stop="details(row.item)">Details</b-btn>
+          </template>
+        </b-table>
+        <ul v-if="errors && errors.length">
+          <li v-for="error of errors" :key="error">
+            {{error.message}}
+          </li>
+        </ul>
+      </b-col>
+    </b-row>
+  </div>
 </template>
 
 <script>
