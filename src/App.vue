@@ -15,7 +15,7 @@
               <b-form-checkbox switch v-model="checked" name="check-button">
                 Dark theme <b>(Enabled: {{ checked }})</b>
               </b-form-checkbox>
-              <b-nav-item-dropdown right :class="selectedTheme">
+              <b-nav-item-dropdown right>
                 <template :class="selectedTheme" slot="button-content" v-if="!authenticated"><em>Not authenticated</em></template>
                 <template :class="selectedTheme" slot="button-content" v-else><em>{{user.username}}</em></template>
                 <b-dropdown-item :class="selectedTheme" href="#">Profile</b-dropdown-item>
@@ -230,8 +230,8 @@ body {
   color: black!important;
 }
 .dark-theme a:hover {
-  background-color: grey;
-  color: black!important;
+  background-color: #565d5d;
+  color: #ff8533!important;
 }
 .white-theme a:hover {
   background-color: cornsilk;
@@ -257,6 +257,28 @@ body {
   bborder-style: solid;
   border-width: 3px;
   border-color: #ff8533;
+}
+.b-dropdown-item{
+  background-color: black;
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  padding: 0!important;
+  min-width: 10rem;
+  margin: 0.125rem 0 0;
+  font-size: 1rem;
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 2px solid!important;
+  border-color: #ff8533!important;
 }
 // table {
 //   color: white!important;
