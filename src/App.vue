@@ -15,7 +15,7 @@
               <b-form-checkbox switch v-model="checked" name="check-button">
                 Dark theme <b>(Enabled: {{ checked }})</b>
               </b-form-checkbox>
-              <b-nav-item-dropdown right>
+              <b-nav-item-dropdown right :class="selectedTheme">
                 <template :class="selectedTheme" slot="button-content" v-if="!authenticated"><em>Not authenticated</em></template>
                 <template :class="selectedTheme" slot="button-content" v-else><em>{{user.username}}</em></template>
                 <b-dropdown-item :class="selectedTheme" href="#">Profile</b-dropdown-item>
@@ -99,7 +99,7 @@ export default {
         {
           title: 'Admin',
           icon: 'fa fa-database',
-          href: '/api',
+          href: '/admin/users',
           badge: {
             text: 'new'
           },
