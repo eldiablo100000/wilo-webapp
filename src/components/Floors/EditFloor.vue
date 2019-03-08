@@ -12,7 +12,7 @@
                     :label-cols="4"
                     breakpoint="md"
                     label="Enter Number">
-            <b-form-input id="number" :state="state" v-model.trim="floorNumber"></b-form-input>
+            <b-form-input id="number" :state="state" v-model.trim="floorNumber" style="width:50%; margin: 0 auto;"></b-form-input>
           </b-form-group>
           <b-button type="submit" variant="primary">Update</b-button>
         </b-form>
@@ -20,42 +20,42 @@
       </b-col>
     </b-row>
     <div style="height: 100%; width: 100%;  ">
-       <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
-          <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
-            <div class="wrapper" position="absolute">
-              <div class="workspace" ref="workspace">
-                <FreeTransform
-                  v-if="!imgStatic"
-                  v-for="element in elements"
-                  :key="element.id"
-                  :x="element.x"
-                  :y="element.y"
-                  :scale-x="element.scaleX"
-                  :scale-y="element.scaleY"
-                  :width="element.width"
-                  :height="element.height"
-                  :angle="element.angle"
-                  :offset-x="offsetX"
-                  :offset-y="offsetY"
-                  :disable-scale="element.disableScale === false"
-                  @update="update(element.id,$event)"
-                  >
-                  <div class="element" :style="getElementStyles(element)">
-                    {{element.text}}
-                  </div>
-                </FreeTransform>
-              </div>
-            </div>
-          <vl-layer-tile>
-             <vl-source-osm />
-          </vl-layer-tile>
-          <vl-feature v-if="imgStatic && image" id="static-image">
-             <vl-geom-point :coordinates="coordinates" :z-index="3"></vl-geom-point>
-             <vl-style-box>
-                <vl-style-icon id="image" :src="imgSrc" :opacity="0.6" :scale.sync="imgScale" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
-             </vl-style-box>
-          </vl-feature>
-      </vl-map>
+      <div class="wrapper" position="absolute">
+        <div class="workspace" ref="workspace">
+          <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
+            <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
+              <FreeTransform
+                    v-if="!imgStatic"
+                    v-for="element in elements"
+                    :key="element.id"
+                    :x="element.x"
+                    :y="element.y"
+                    :scale-x="element.scaleX"
+                    :scale-y="element.scaleY"
+                    :width="element.width"
+                    :height="element.height"
+                    :angle="element.angle"
+                    :offset-x="offsetX"
+                    :offset-y="offsetY"
+                    :disable-scale="element.disableScale === false"
+                    @update="update(element.id,$event)"
+                    >
+                    <div class="element" :style="getElementStyles(element)">
+                      {{element.text}}
+                    </div>
+              </FreeTransform>
+              <vl-layer-tile>
+                <vl-source-osm />
+              </vl-layer-tile>
+              <vl-feature v-if="imgStatic && image" id="static-image">
+                <vl-geom-point :coordinates="coordinates" :z-index="3"></vl-geom-point>
+                <vl-style-box>
+                  <vl-style-icon id="image" :src="imgSrc" :opacity="0.6" :scale.sync="imgScale" :anchor="imgAnchor" :rotation.sync="imgRotation"></vl-style-icon>
+               </vl-style-box>
+            </vl-feature>
+          </vl-map>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -85,14 +85,14 @@ export default {
           classPrefix: 'tr',
           styles: {
             backgroundImage: undefined,
-            opacity: 0.7
+            opacity: 0.6
           }
         }
       ],
       floor: {},
       floorNumber: undefined,
       showMap: true,
-      center: [0, 0],
+      center: [],
       rotation: 0,
       zoom: undefined,
       imgStatic: true,
@@ -132,7 +132,7 @@ export default {
           this.elements[0].width = response.data.widthImage
 
           this.floorNumber = response.data.number
-          this.coordinates = response.data.location[0]
+          this.coordinates = response.data.location
           this.floor = response.data
           this.zoom = response.data.zoom
           this.imgScale = response.data.scaleX
