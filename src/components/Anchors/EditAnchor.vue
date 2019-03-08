@@ -11,7 +11,7 @@
                     :label-cols="4"
                     breakpoint="md"
                     label="Enter Name">
-            <b-form-input id="name" :state="state" v-model.trim="anchor.name"></b-form-input>
+            <b-form-input id="name" :state="state" v-model.trim="anchor.name" style="width: 50%;"></b-form-input>
           </b-form-group>
           <b-form-group class="fieldsetHorizontal"
                     :label-cols="4"
@@ -21,10 +21,11 @@
                     v-model="anchor.description"
                     placeholder="Enter something"
                     :rows="2"
-                    :max-rows="6">{{anchor.description}}</b-form-textarea>
+                    :max-rows="6"
+                    style="width: 50%;">{{anchor.description}}</b-form-textarea>
             </b-form-group>
         </b-form>
-        <b-button @click="reset" style="margin-top: 2%;" variant="warning">Modifica Ancora</b-button>
+        <b-button @click="reset" style="margin-top: 2%;" variant="warning">Change Anchor</b-button>
         <b-button @click="save" variant="primary" style="margin-top: 2%;">Update</b-button>
       </b-col>
     </b-row>
