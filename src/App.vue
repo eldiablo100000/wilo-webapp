@@ -61,7 +61,7 @@ export default {
         }
       }
     } else {
-      this.$router.push('/auth/login')
+      this.$router.push({ name: 'LoginPage' })
       this.myclass = 'demo'
       this.authenticated = false
     }
