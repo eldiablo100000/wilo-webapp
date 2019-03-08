@@ -66,9 +66,6 @@
 </template>
 
 <script>
-
-import axios from 'axios'
-
 export default {
   name: 'EditAnchor',
   data () {
@@ -103,7 +100,7 @@ export default {
     this.floorId = this.$route.params.id_floor
     this.buildingId = this.$route.params.id_building
 
-    axios.get(`http://localhost:3000/floor/` + this.floorId)
+    this.$http.get(`http://localhost:3000/api/floor/` + this.floorId)
       .then(response => {
         this.coordinates = response.data.location
         this.center = response.data.center
@@ -112,7 +109,7 @@ export default {
         this.realImgScale = response.data.scaleX
         this.image = true
         this.zoom = response.data.zoom
-        axios.get(`http://localhost:3000/image/` + response.data.image[0])
+        this.$http.get(`http://localhost:3000/api/image/` + response.data.image[0])
           .then((response) => {
             if (response.data != null) {
               var tmp = response.data.path.replace('dist/', '')
@@ -122,7 +119,7 @@ export default {
           .catch(e => {
             this.errors.push(e)
           })
-        axios.get('http://localhost:3000/anchor/' + this.$route.params.id_anchor)
+        this.$http.get('http://localhost:3000/api/anchor/' + this.$route.params.id_anchor)
           .then(response => {
             this.anchor = response.data
             var type = 'Point'
@@ -156,7 +153,7 @@ export default {
       this.interactionType = 'draw'
     },
     save () {
-      axios.put(`http://localhost:3000/anchor/` + this.$route.params.id_anchor, this.anchor)
+      this.$http.put(`http://localhost:3000/api/anchor/` + this.$route.params.id_anchor, this.anchor)
         .then(response => {
           this.$router.push({
             name: 'ShowAnchor',

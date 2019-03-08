@@ -21,9 +21,6 @@
 </template>
 
 <script>
-
-import axios from 'axios'
-
 export default {
   name: 'UserFloorList',
   data () {
@@ -40,13 +37,13 @@ export default {
     }
   },
   created () {
-    axios.get(`http://localhost:3000/user/` + JSON.parse(localStorage.getItem('user'))._id)
+    this.$http.get(`http://localhost:3000/auth/user/` + JSON.parse(localStorage.getItem('user'))._id)
       .then(response => {
         for (var el in response.data.user.buildings) {
-          axios.get('http://localhost:3000/building/' + response.data.user.buildings[el])
+          this.$http.get('http://localhost:3000/api/building/' + response.data.user.buildings[el])
             .then(response => {
               for (var el in response.data.floors) {
-                axios.get(`http://localhost:3000/floor/` + response.data.floors[el])
+                this.$http.get(`http://localhost:3000/api/floor/` + response.data.floors[el])
                   .then((response) => {
                     if (response.data != null) {
                       this.floors.push(response.data)

@@ -21,9 +21,6 @@
 </template>
 
 <script>
-
-import axios from 'axios'
-
 export default {
   name: 'BuildingList',
   data () {
@@ -48,7 +45,7 @@ export default {
     }
   },
   created () {
-    axios.get(`http://localhost:3000/building`)
+    this.$http.get(`http://localhost:3000/api/building`)
       .then(response => {
         this.buildings = response.data
       })

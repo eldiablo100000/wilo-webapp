@@ -21,9 +21,6 @@
 </template>
 
 <script>
-
-import axios from 'axios'
-
 export default {
   name: 'FloorList',
   data () {
@@ -52,7 +49,7 @@ export default {
     }
   },
   created () {
-    axios.get(`http://localhost:3000/floor/`)
+    this.$http.get(`http://localhost:3000/api/floor/`)
       .then((response) => {
         if (response.data != null) {
           this.floors = response.data

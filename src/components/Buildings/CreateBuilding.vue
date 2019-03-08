@@ -57,8 +57,6 @@
 </template>
 
 <script>
-
-import axios from 'axios'
 import * as eventCondition from 'ol/events/condition'
 import Geocoder from 'ol-geocoder'
 
@@ -118,14 +116,14 @@ export default {
       if (this.continuePost) {
         this.userId = JSON.parse(localStorage.getItem('user'))._id
         this.building.id_user = this.userId
-        axios.post(`http://localhost:3000/building`, this.building)
+        this.$http.post(`http://localhost:3000/api/building`, this.building)
           .then(response => {
             this.buildingId = response.data._id
-            axios.get(`http://localhost:3000/user/` + this.userId)
+            this.$http.get(`http://localhost:3000/auth/user/` + this.userId)
               .then(response => {
                 this.user = response.data.user
                 this.user.buildings.push(this.buildingId)
-                axios.put(`http://localhost:3000/user/` + this.userId, this.user)
+                this.$http.put(`http://localhost:3000/auth/user/` + this.userId, this.user)
                   .then(response => {
                     this.$router.push({
                       name: 'ShowBuilding',
@@ -151,10 +149,10 @@ export default {
   created () {
     this.features = []
     this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
-    axios.get(`http://localhost:3000/user/` + JSON.parse(localStorage.getItem('user'))._id)
+    this.$http.get(`http://localhost:3000/auth/user/` + JSON.parse(localStorage.getItem('user'))._id)
       .then(response => {
         for (var el in response.data.user.buildings) {
-          axios.get('http://localhost:3000/building/' + response.data.user.buildings[el])
+          this.$http.get('http://localhost:3000/api/building/' + response.data.user.buildings[el])
             .then((response) => {
               console.log(response.data)
               this.buildingName.push(response.data.title)

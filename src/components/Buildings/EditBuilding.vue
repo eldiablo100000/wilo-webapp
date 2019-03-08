@@ -86,8 +86,6 @@
 </template>
 
 <script>
-
-import axios from 'axios'
 import * as eventCondition from 'ol/events/condition'
 import Geocoder from 'ol-geocoder'
 
@@ -130,7 +128,7 @@ export default {
   methods: {
     onSubmit (evt) {
       evt.preventDefault()
-      axios.put(`http://localhost:3000/building/` + this.$route.params.id_building, this.building)
+      this.$http.put(`http://localhost:3000/api/building/` + this.$route.params.id_building, this.building)
         .then(response => {
           this.$router.push({
             name: 'ShowBuilding',
@@ -144,7 +142,7 @@ export default {
   },
   created () {
     this.features = []
-    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
+    this.$http.get(`http://localhost:3000/api/building/` + this.$route.params.id_building)
       .then(response => {
         this.building = response.data
         console.log(response.data)

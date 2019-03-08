@@ -230,7 +230,7 @@ let router = new Router({
 })
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (localStorage.getItem('token') == null) {
+    if (localStorage.getItem('auth') == null) {
       next({
         name: 'LoginPage',
         params: { nextUrl: to.fullPath }
@@ -248,7 +248,7 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else if (to.matched.some(record => record.meta.guest)) {
-    if (localStorage.getItem('token') == null) {
+    if (localStorage.getItem('auth') == null) {
       next()
     } else {
       next({ name: 'LogoutPage' })

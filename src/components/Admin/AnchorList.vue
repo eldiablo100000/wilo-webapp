@@ -21,9 +21,6 @@
 </template>
 
 <script>
-
-import axios from 'axios'
-
 export default {
   name: 'AnchorList',
   data () {
@@ -45,7 +42,7 @@ export default {
     }
   },
   created () {
-    axios.get(`http://localhost:3000/anchor/`)
+    this.$http.get(`http://localhost:3000/api/anchor/`)
       .then((response) => {
         if (response.data != null) {
           this.anchors = response.data

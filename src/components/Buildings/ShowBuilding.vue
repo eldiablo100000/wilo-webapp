@@ -57,9 +57,6 @@
 </template>
 
 <script>
-
-import axios from 'axios'
-
 const features = [
 ]
 
@@ -113,7 +110,7 @@ export default {
     deletebuilding (buildingid) {
       for (var i in this.floors) {
         for (var j in this.floors[i].anchors) {
-          axios.delete('http://localhost:3000/anchor/' + this.floors[i].anchors[j])
+          this.$http.delete('http://localhost:3000/api/anchor/' + this.floors[i].anchors[j])
             .then(response => {
               console.log('eliminata ancora')
             })
@@ -123,7 +120,7 @@ export default {
         }
       }
       for (var k in this.building.floors) {
-        axios.delete('http://localhost:3000/floor/' + this.building.floors[k])
+        this.$http.delete('http://localhost:3000/api/floor/' + this.building.floors[k])
           .then(response => {
             console.log('eliminato piano')
           })
@@ -131,16 +128,16 @@ export default {
             this.errors.push(e)
           })
       }
-      axios.delete('http://localhost:3000/building/' + buildingid)
+      this.$http.delete('http://localhost:3000/api/building/' + buildingid)
         .then((result) => {
-          axios.get('http://localhost:3000/user/' + JSON.parse(localStorage.getItem('user'))._id)
+          this.$http.get('http://localhost:3000/auth/user/' + JSON.parse(localStorage.getItem('user'))._id)
             .then(result => {
               var index = result.data.user.buildings.indexOf(buildingid)
               if (index > -1) {
                 result.data.user.buildings.splice(index, 1)
                 this.user = result.data.user
               }
-              axios.put('http://localhost:3000/user/' + JSON.parse(localStorage.getItem('user'))._id, this.user)
+              this.$http.put('http://localhost:3000/auth/user/' + JSON.parse(localStorage.getItem('user'))._id, this.user)
                 .then(result => {
                   this.$router.push({
                     name: 'BuildingList'
@@ -161,7 +158,7 @@ export default {
   },
   created () {
     this.features = []
-    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
+    this.$http.get(`http://localhost:3000/api/building/` + this.$route.params.id_building)
       .then(response => {
         if (response.data != null) {
           this.building = response.data
@@ -177,7 +174,7 @@ export default {
           this.center = response.data.coordinates
           this.features.push(tmp)
           for (var el in response.data.floors) {
-            axios.get(`http://localhost:3000/floor/` + response.data.floors[el])
+            this.$http.get(`http://localhost:3000/api/floor/` + response.data.floors[el])
               .then(response => {
                 this.floors.push(response.data)
                 this.numbers.push(response.data.number)

@@ -22,9 +22,6 @@
 </template>
 
 <script>
-
-import axios from 'axios'
-
 export default {
   name: 'UserList',
   data () {
@@ -42,7 +39,7 @@ export default {
     }
   },
   created () {
-    axios.get(`http://localhost:3000/user`)
+    this.$http.get(`http://localhost:3000/auth/user`)
       .then(response => {
         this.users = response.data
       })

@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import md5 from 'js-md5'
 export default{
   name: 'LoginPage',
@@ -38,16 +37,17 @@ export default{
   },
   methods: {
     login () {
-      axios.get(`http://localhost:3000/user`)
+      this.$http.get(`http://localhost:3000/auth/user`)
         .then(response => {
           for (var el in response.data) {
             if (this.username === response.data[el].username && md5(this.password) === response.data[el].password) {
               this.notPresent = false
-              axios.get(`http://localhost:3000/user/` + response.data[el]._id)
+              this.$http.get(`http://localhost:3000/auth/user/` + response.data[el]._id)
                 .then(response => {
                   localStorage.setItem('user', JSON.stringify(response.data.user))
                   localStorage.setItem('token', response.data.token)
                   localStorage.setItem('auth', response.data.auth)
+                  // this.$http.defaults.headers.common['Authorization'] = `Header ` + response.data.token
                   this.$router.push({
                     name: 'BuildingList',
                     params: { id_user: response.data.user._id }

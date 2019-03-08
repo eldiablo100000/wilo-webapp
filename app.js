@@ -5,12 +5,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var fs = require('fs');
-var building = require('./routes/building');
-var floor = require('./routes/floor');
-var anchor = require('./routes/anchor');
+// var building = require('./routes/building');
+// var floor = require('./routes/floor');
+// var anchor = require('./routes/anchor');
+var api = require('./routes/api');
 var user = require('./routes/user');
-var image = require('./routes/image')
-
+// var image = require('./routes/image')
+const config = require('./routes/config');
 var app = express();
 var drop = false
 var mongoose = require('mongoose');
@@ -24,16 +25,19 @@ mongoose.connect('mongodb://localhost/mean', { promiseLibrary: require('bluebird
   )
   .catch((err) => console.error(err));
 
+
+// apiRoutes.use('/building', building)
+// apiRoutes.use('/floor', floor)
+// apiRoutes.use('/anchor', anchor)
+// apiRoutes.use('/image', image)
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended':'false'}));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/myapp', express.static(path.join(__dirname, 'dist')));
-app.use('/building', building);
-app.use('/floor', floor);
-app.use('/anchor', anchor);
-app.use('/user', user);
-app.use('/image', image);
+app.use('/api', api)
+
+app.use('/auth/user', user);
 app.set('view engine', 'html')
 
 // catch 404 and forward to error handler

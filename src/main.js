@@ -13,7 +13,13 @@ import 'vuelayers/lib/style.css' // needs css-loader
 import ImageUploader from 'vue-image-upload-resize'
 // import map from './components/map'
 import VueCookies from 'vue-cookies'
+import axios from 'axios'
 
+Vue.prototype.$http = axios
+var accessToken = localStorage.getItem('token')
+if (accessToken) {
+  Vue.prototype.$http.defaults.headers.common['Authorization'] = `Bearer ` + accessToken
+}
 Vue.use(VueCookies)
 
 // set default config

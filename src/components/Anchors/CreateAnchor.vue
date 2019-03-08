@@ -79,9 +79,6 @@
 </template>
 
 <script>
-
-import axios from 'axios'
-
 export default {
   name: 'CreateAnchor',
 
@@ -129,7 +126,7 @@ export default {
   created () {
     this.anchorList = '#/building/' + this.$route.params.id_building + '/floor/' + this.$route.params.id_floor + '/anchors'
     this.floorId = this.$route.params.id_floor
-    axios.get(`http://localhost:3000/floor/` + this.floorId)
+    this.$http.get(`http://localhost:3000/api/floor/` + this.floorId)
       .then((response) => {
         if (response.data != null) {
           this.floor = response.data
@@ -143,7 +140,7 @@ export default {
           this.imgSize = [response.data.widthImage, response.data.heightImage]
 
           for (var i in response.data.anchors) {
-            axios.get(`http://localhost:3000/anchor/` + response.data.anchors[i])
+            this.$http.get(`http://localhost:3000/api/anchor/` + response.data.anchors[i])
               .then(response => {
                 this.anchorsName.push(response.data.name)
                 var type = 'Point'
@@ -166,7 +163,7 @@ export default {
               })
           }
 
-          axios.get(`http://localhost:3000/image/` + response.data.image[0])
+          this.$http.get(`http://localhost:3000/api/image/` + response.data.image[0])
             .then((response) => {
               if (response.data != null) {
                 var tmp = response.data.path.replace('dist/', '')
@@ -210,14 +207,14 @@ export default {
         }
       }
       if (this.continuePost) {
-        axios.post(`http://localhost:3000/anchor/`, this.anchor)
+        this.$http.post(`http://localhost:3000/api/anchor/`, this.anchor)
           .then(response => {
             this.anchorId = response.data._id
-            axios.get(`http://localhost:3000/floor/` + this.floorId)
+            this.$http.get(`http://localhost:3000/api/floor/` + this.floorId)
               .then(response => {
                 this.floor = response.data
                 this.floor.anchors.push(this.anchorId)
-                axios.put(`http://localhost:3000/floor/` + this.floorId, this.floor)
+                this.$http.put(`http://localhost:3000/api/floor/` + this.floorId, this.floor)
                   .then(response => {
                     this.$router.push({
                       name: 'ShowAnchor',

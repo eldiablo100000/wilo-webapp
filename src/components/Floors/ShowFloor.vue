@@ -54,9 +54,6 @@
 </template>
 
 <script>
-
-import axios from 'axios'
-
 export default {
   name: 'ShowFloor',
   data () {
@@ -88,7 +85,7 @@ export default {
   created () {
     this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
     this.floorId = this.$route.params.id_floor
-    axios.get(`http://localhost:3000/floor/` + this.floorId)
+    this.$http.get(`http://localhost:3000/api/floor/` + this.floorId)
       .then((response) => {
         if (response.data != null) {
           this.imgRotation = response.data.angleImage * Math.PI / 180
@@ -102,7 +99,7 @@ export default {
           this.image = true
 
           for (var i in response.data.anchors) {
-            axios.get(`http://localhost:3000/anchor/` + response.data.anchors[i])
+            this.$http.get(`http://localhost:3000/api/anchor/` + response.data.anchors[i])
               .then(response => {
                 var type = 'Point'
                 var coord = null
@@ -123,7 +120,7 @@ export default {
                 this.errors.push(e)
               })
           }
-          axios.get(`http://localhost:3000/image/` + response.data.image[0])
+          this.$http.get(`http://localhost:3000/api/image/` + response.data.image[0])
             .then((response) => {
               if (response.data != null) {
                 var tmp = response.data.path.replace('dist/', '')
@@ -160,23 +157,23 @@ export default {
     },
     deletefloor (floorid) {
       for (var i in this.floor.anchors) {
-        axios.delete('http://localhost:3000/anchor/' + this.floor.anchors[i])
+        this.$http.delete('http://localhost:3000/api/anchor/' + this.floor.anchors[i])
           .then(response => {
           })
           .catch(e => {
             this.errors.push(e)
           })
       }
-      axios.delete('http://localhost:3000/floor/' + floorid)
+      this.$http.delete('http://localhost:3000/api/floor/' + floorid)
         .then((result) => {
-          axios.get('http://localhost:3000/building/' + this.$route.params.id_building)
+          this.$http.get('http://localhost:3000/api/building/' + this.$route.params.id_building)
             .then((result) => {
               var index = result.data.floors.indexOf(floorid)
               if (index > -1) {
                 result.data.floors.splice(index, 1)
                 this.building = result.data
               }
-              axios.put('http://localhost:3000/building/' + this.$route.params.id_building, this.building)
+              this.$http.put('http://localhost:3000/api/building/' + this.$route.params.id_building, this.building)
                 .then((result) => {
                   this.$router.push({
                     name: 'FloorList'

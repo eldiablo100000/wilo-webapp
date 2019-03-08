@@ -67,8 +67,6 @@
 
 <script>
 import FreeTransform from 'vue-free-transform'
-import axios from 'axios'
-
 export default {
   name: 'ManipulateImage',
   components: {
@@ -141,7 +139,7 @@ export default {
   },
   created () {
     this.floorList = '#/building/' + this.$route.params.id_building + '/floors'
-    axios.get(`http://localhost:3000/building/` + this.$route.params.id_building)
+    this.$http.get(`http://localhost:3000/api/building/` + this.$route.params.id_building)
       .then((response) => {
         this.center = response.data.coordinates
         this.floorsId = response.data.floors
@@ -157,7 +155,7 @@ export default {
         this.features.push(tmp)
 
         for (var el in this.floorsId) {
-          axios.get(`http://localhost:3000/floor/` + this.floorsId[el])
+          this.$http.get(`http://localhost:3000/api/floor/` + this.floorsId[el])
             .then((response) => {
               if (response.data != null) {
                 this.floorName.push(response.data.number)
@@ -256,21 +254,21 @@ export default {
         this.floor.location = this.location
         const formData = new FormData()
         formData.append('myFile', this.selectedImage, this.selectedImage.name)
-        axios.post('http://localhost:3000/image', formData)
+        this.$http.post('http://localhost:3000/api/image', formData)
           .then(response => {
             this.floor.image = response.data._id
             this.floor.id_building = this.$route.params.id_building
             this.userId = JSON.parse(localStorage.getItem('user'))._id
             this.floor.id_user = this.userId
-            axios.post(`http://localhost:3000/floor`, this.floor)
+            this.$http.post(`http://localhost:3000/api/floor`, this.floor)
               .then(response => {
                 this.floorId = response.data._id
                 this.buildingId = this.$route.params.id_building
-                axios.get(`http://localhost:3000/building/` + this.buildingId)
+                this.$http.get(`http://localhost:3000/api/building/` + this.buildingId)
                   .then(response => {
                     this.building = response.data
                     this.building.floors.push(this.floorId)
-                    axios.put(`http://localhost:3000/building/` + this.buildingId, this.building)
+                    this.$http.put(`http://localhost:3000/api/building/` + this.buildingId, this.building)
                       .then(response => {
                         this.$router.push({
                           name: 'FloorList',

@@ -61,8 +61,6 @@
 </template>
 
 <script>
-
-import axios from 'axios'
 import FreeTransform from 'vue-free-transform'
 
 export default {
@@ -118,7 +116,7 @@ export default {
     this.floorId = this.$route.params.id_floor
     this.buildingId = this.$route.params.id_building
 
-    axios.get(`http://localhost:3000/floor/` + this.floorId)
+    this.$http.get(`http://localhost:3000/api/floor/` + this.floorId)
       .then((response) => {
         if (response.data != null) {
           this.center = response.data.center
@@ -139,7 +137,7 @@ export default {
           this.realImgScale = response.data.scaleX
           this.imgRotation = response.data.angleImage * Math.PI / 180
           this.image = true
-          axios.get(`http://localhost:3000/image/` + response.data.image[0])
+          this.$http.get(`http://localhost:3000/api/image/` + response.data.image[0])
             .then((response) => {
               if (response.data != null) {
                 var tmp = response.data.path.replace('dist/', '')
@@ -182,7 +180,7 @@ export default {
     onSubmit (evt) {
       evt.preventDefault()
       this.floorId = this.$route.params.id_floor
-      axios.get(`http://localhost:3000/floor/` + this.floorId)
+      this.$http.get(`http://localhost:3000/api/floor/` + this.floorId)
         .then(response => {
           this.floor = response.data
           this.floor.number = this.floorNumber
@@ -209,7 +207,7 @@ export default {
 
           this.floor.location = this.$refs.map.getCoordinateFromPixel([(pos[0] + centro[0]), (pos[1] + centro[1])])
 
-          axios.put(`http://localhost:3000/floor/` + this.$route.params.id_floor, this.floor)
+          this.$http.put(`http://localhost:3000/api/floor/` + this.$route.params.id_floor, this.floor)
             .then(response => {
               this.$router.push({
                 name: 'ShowFloor',

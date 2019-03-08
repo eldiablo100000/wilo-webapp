@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import md5 from 'js-md5'
 export default{
   name: 'RegisterPage',
@@ -64,7 +63,7 @@ export default{
       else {
         this.user.password = md5(this.password)
         this.usernameOk = true
-        axios.get(`http://localhost:3000/user`)
+        this.$http.get(`http://localhost:3000/auth/user`)
           .then(response => {
             console.log(response.data)
             for (var el in response.data) {
@@ -75,7 +74,7 @@ export default{
             }
             if (this.usernameOk) {
               this.user.is_admin = false
-              axios.post('http://localhost:3000/user', this.user)
+              this.$http.post('http://localhost:3000/auth/user', this.user)
                 .then(response => {
                   console.log(response.data)
                   this.$router.push({

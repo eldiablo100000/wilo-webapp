@@ -22,9 +22,6 @@
 </template>
 
 <script>
-
-import axios from 'axios'
-
 export default {
   name: 'BuildingList',
   data () {
@@ -63,10 +60,10 @@ export default {
   },
   created () {
     this.features = []
-    axios.get(`http://localhost:3000/user/` + JSON.parse(localStorage.getItem('user'))._id)
+    this.$http.get(`http://localhost:3000/auth/user/` + JSON.parse(localStorage.getItem('user'))._id)
       .then(response => {
         for (var el in response.data.user.buildings) {
-          axios.get('http://localhost:3000/building/' + response.data.user.buildings[el])
+          this.$http.get('http://localhost:3000/api/building/' + response.data.user.buildings[el])
             .then(response => {
               this.buildings.push(response.data)
             })
