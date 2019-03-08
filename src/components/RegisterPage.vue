@@ -74,6 +74,7 @@ export default{
               }
             }
             if (this.usernameOk) {
+              this.user.is_admin = false
               axios.post('http://localhost:3000/user', this.user)
                 .then(response => {
                   console.log(response.data)
