@@ -4,19 +4,17 @@
 
 ## Pre-requisites
 nodejs (used v8.10.0)
-npm (used 3.5.2)
-mongodb (used 3.6.3)
 
-### Linux installation
-```` bash
-    sudo apt-get install nodejs npm mongodb
-````
-###TODO
-Dockerize application to run in 2 or 3 container
+npm (used 3.5.2)
+
+mongodb (used 3.6.3)
 
 ## Build Setup
 
 ```` bash
+# install pre-requisites
+sudo apt-get install nodejs npm mongodb
+
 # install dependencies
 npm run setup
 
@@ -29,4 +27,6 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ````
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+##TODO
+Dockerize application to run in 2 or 3 container
