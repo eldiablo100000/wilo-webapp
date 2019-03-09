@@ -1,5 +1,5 @@
 var express = require('express');
-var router = express.Router();
+var router = express.Router({ mergeParams: true });
 var mongoose = require('mongoose');
 var Image = require('../models/Image.js');
 var multer = require('multer');
@@ -34,7 +34,7 @@ router.post('/', upload.single('myFile'), function(req, res, next) {
   const image = {
     filename: req.file.filename,
     originalname: req.file.originalname,
-    path: req.file.path 
+    path: req.file.path
   }
   Image.create(image, function (err, post) {
     if (err) return next(err);

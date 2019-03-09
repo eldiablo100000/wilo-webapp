@@ -25,6 +25,8 @@ import AdminAnchorList from '@/components/Admin/AnchorList'
 import LoginPage from '@/components/LoginPage'
 import LogoutPage from '@/components/LogoutPage'
 import RegisterPage from '@/components/RegisterPage'
+import ShowUser from '@/components/Users/ShowUser'
+import EditUser from '@/components/Users/EditUser'
 
 Vue.use(Router)
 let router = new Router({
@@ -200,6 +202,26 @@ let router = new Router({
       path: '/admin/users',
       name: 'AdminUserList',
       component: AdminUserList,
+      meta:
+        {
+          requiresAuth: true,
+          is_admin: true
+        }
+    },
+    {
+      path: '/admin/user/:id_user',
+      name: 'ShowUser',
+      component: ShowUser,
+      meta:
+        {
+          requiresAuth: true,
+          is_admin: true
+        }
+    },
+    {
+      path: '/admin/user/:id_user',
+      name: 'EditUser',
+      component: EditUser,
       meta:
         {
           requiresAuth: true,

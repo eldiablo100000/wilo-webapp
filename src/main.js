@@ -18,7 +18,7 @@ import axios from 'axios'
 Vue.prototype.$http = axios
 var accessToken = localStorage.getItem('token')
 if (accessToken) {
-  Vue.prototype.$http.defaults.headers.common['Authorization'] = `Bearer ` + accessToken
+  Vue.prototype.$http.defaults.headers.common['Authorization'] = accessToken
 }
 Vue.use(VueCookies)
 

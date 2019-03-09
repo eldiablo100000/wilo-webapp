@@ -48,10 +48,10 @@ export default {
       })
   },
   methods: {
-    details (building) {
+    details (user) {
       this.$router.push({
         name: 'ShowUser',
-        params: { id_building: building._id }
+        params: { id_user: user._id }
       })
     }
   }
