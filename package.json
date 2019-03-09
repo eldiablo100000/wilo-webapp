@@ -5,6 +5,7 @@
   "author": "Natale Vadalà <nato.vada@gmail.com>",
   "private": true,
   "scripts": {
+    "setup": "npm i && cp FreeTransform.common.js node_modules/vue-free-transform/dist/FreeTransform.common.js",
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run build && node ./bin/www",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
