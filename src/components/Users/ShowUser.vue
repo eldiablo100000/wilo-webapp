@@ -48,7 +48,6 @@ export default {
       })
     },
     edituser (userid) {
-      alert(userid)
       this.$router.push({
         name: 'EditUser',
         params: { id_user: userid }
