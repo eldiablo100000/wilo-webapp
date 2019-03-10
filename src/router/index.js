@@ -29,6 +29,8 @@ import LogoutPage from '@/components/LogoutPage'
 import RegisterPage from '@/components/RegisterPage'
 import ShowUser from '@/components/Users/ShowUser'
 import EditUser from '@/components/Users/EditUser'
+import AdminShowUser from '@/components/Users/AdminShowUser'
+import AdminEditUser from '@/components/Users/AdminEditUser'
 
 Vue.use(Router)
 let router = new Router({
@@ -46,6 +48,24 @@ let router = new Router({
       path: '/about',
       name: 'About',
       component: About,
+      meta:
+        {
+          requiresAuth: true
+        }
+    },
+    {
+      path: '/user/:id_user',
+      name: 'ShowUser',
+      component: ShowUser,
+      meta:
+        {
+          requiresAuth: true
+        }
+    },
+    {
+      path: '/edit-user/:id_user',
+      name: 'EditUser',
+      component: EditUser,
       meta:
         {
           requiresAuth: true
@@ -221,8 +241,8 @@ let router = new Router({
     },
     {
       path: '/admin/user/:id_user',
-      name: 'ShowUser',
-      component: ShowUser,
+      name: 'AdminShowUser',
+      component: AdminShowUser,
       meta:
         {
           requiresAuth: true,
@@ -231,8 +251,8 @@ let router = new Router({
     },
     {
       path: '/admin/edit-user/:id_user',
-      name: 'EditUser',
-      component: EditUser,
+      name: 'AdminEditUser',
+      component: AdminEditUser,
       meta:
         {
           requiresAuth: true,

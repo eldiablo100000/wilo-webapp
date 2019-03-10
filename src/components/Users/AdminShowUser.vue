@@ -4,6 +4,7 @@ user<template>
       <b-col cols="12">
         <h2>
           Show User
+          <b-link @click.stop="GoToUserList()">(User List)</b-link>
         </h2>
         <b-jumbotron>
           <template slot="header">
@@ -32,7 +33,7 @@ user<template>
 <script>
 
 export default {
-  name: 'ShowUser',
+  name: 'AdminShowUser',
 
   data () {
     return {
@@ -47,12 +48,12 @@ export default {
   methods: {
     GoToUserList () {
       this.$router.push({
-        name: 'UserList'
+        name: 'AdminUserList'
       })
     },
     edituser (userid) {
       this.$router.push({
-        name: 'EditUser',
+        name: 'AdminEditUser',
         params: { id_user: userid }
       })
     },
@@ -92,7 +93,7 @@ export default {
       this.$http.delete(`http://localhost:3000/auth/user/` + userid)
         .then(response => {
           this.$router.push({
-            name: 'LoginPage'
+            name: 'AdminUserList'
           })
         })
         .catch(e => {

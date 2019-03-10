@@ -118,6 +118,13 @@ export default {
               this.errors.push(e)
             })
         }
+        this.$http.delete('http://localhost:3000/api/image/' + this.floors[i].image)
+          .then(response => {
+            console.log('eliminata immagine')
+          })
+          .catch(e => {
+            this.errors.push(e)
+          })
       }
       for (var k in this.building.floors) {
         this.$http.delete('http://localhost:3000/api/floor/' + this.building.floors[k])

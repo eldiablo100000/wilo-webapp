@@ -4,7 +4,6 @@
       <b-col cols="12">
         <h2>
           User List
-          <b-link href="#/add-user">(Add User)</b-link>
         </h2>
         <b-table :class="$parent.selectedTheme" striped hover :items="users" :fields="fields">
           <template slot="actions" slot-scope="row">
@@ -50,7 +49,7 @@ export default {
   methods: {
     details (user) {
       this.$router.push({
-        name: 'ShowUser',
+        name: 'AdminShowUser',
         params: { id_user: user._id }
       })
     }

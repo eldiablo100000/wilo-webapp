@@ -18,7 +18,7 @@
               <b-nav-item-dropdown right>
                 <template :class="selectedTheme" slot="button-content" v-if="!authenticated"><em>Not authenticated</em></template>
                 <template :class="selectedTheme" slot="button-content" v-else><em>{{user.username}}</em></template>
-                <b-dropdown-item :class="selectedTheme" href="#">Profile</b-dropdown-item>
+                <b-dropdown-item :class="selectedTheme" @click="GoToShowUser()">Profile</b-dropdown-item>
                 <b-dropdown-item :class="selectedTheme" v-if="!authenticated" href="#/auth/login">Signin</b-dropdown-item>
                 <b-dropdown-item :class="selectedTheme" v-else href="#/auth/logout">Signout</b-dropdown-item>
               </b-nav-item-dropdown>
@@ -158,6 +158,12 @@ export default {
       } else {
         this.myclass = 'demo extended'
       }
+    },
+    GoToShowUser () {
+      this.$router.push({
+        name: 'ShowUser',
+        params: { id_user: this.user._id }
+      })
     }
   },
   watch: {
