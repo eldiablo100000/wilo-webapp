@@ -22,6 +22,8 @@ import AdminUserList from '@/components/Admin/UserList'
 import AdminFloorList from '@/components/Admin/FloorList'
 import AdminAnchorList from '@/components/Admin/AnchorList'
 
+import About from '@/components/About'
+
 import LoginPage from '@/components/LoginPage'
 import LogoutPage from '@/components/LogoutPage'
 import RegisterPage from '@/components/RegisterPage'
@@ -35,6 +37,15 @@ let router = new Router({
       path: '/',
       name: 'Home',
       component: CreateBuilding,
+      meta:
+        {
+          requiresAuth: true
+        }
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: About,
       meta:
         {
           requiresAuth: true
@@ -219,7 +230,7 @@ let router = new Router({
         }
     },
     {
-      path: '/admin/user/:id_user',
+      path: '/admin/edit-user/:id_user',
       name: 'EditUser',
       component: EditUser,
       meta:

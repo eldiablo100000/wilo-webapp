@@ -11,15 +11,17 @@ user<template>
             {{user.username}}
           </template>
           <template slot="lead">
-            ID: {{user.id}}<br>
+            ID: {{user._id}}<br>
             Name: {{user.name}}<br>
             Surname: {{user.surname}}<br>
             Username: {{user.username}}<br>
+            Is admin: {{user.is_admin}}
           </template>
           <hr class="my-4">
           <p>
             Updated Date: {{user.updated_date}}
           </p>
+
           <b-btn variant="success" @click.stop="edituser(user._id)">Edit</b-btn>
           <!-- <b-btn variant="danger" @click.stop="deleteuser(user._id)">Delete</b-btn> -->
         </b-jumbotron>
@@ -46,6 +48,7 @@ export default {
       })
     },
     edituser (userid) {
+      alert(userid)
       this.$router.push({
         name: 'EditUser',
         params: { id_user: userid }
@@ -55,7 +58,7 @@ export default {
     //   for (var i in this.floors) {
     //     for (var j in this.floors[i].anchors) {
     //       this.$http.delete('http://localhost:3000/api/anchor/' + this.floors[i].anchors[j])
-    //         .then(response => {
+    //         .then(response => {/admin/user/5c83eda2eaa73822ccc57eaa
     //           console.log('Deleted user')
     //         })
     //         .catch(e => {
@@ -102,10 +105,11 @@ export default {
   },
   created () {
     this.features = []
-    this.$http.get(`http://localhost:3000/api/user/` + this.$route.params.id_user)
+    this.$http.get(`http://localhost:3000/auth/user/` + this.$route.params.id_user)
       .then(response => {
         if (response.data != null) {
-          this.user = response.data
+          this.user = response.data.user
+          console.log(this.user.user)
         }
       })
       .catch(e => {

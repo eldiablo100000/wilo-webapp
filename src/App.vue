@@ -3,13 +3,13 @@
     <div v-bind:class="myclass">
       <div>
         <b-navbar toggleable="lg" type="dark" :class="selectedTheme">
-          <b-navbar-brand href="#">Wilo</b-navbar-brand>
+          <b-navbar-brand href="#/">Wilo</b-navbar-brand>
 
           <b-navbar-toggle target="nav_collapse" />
 
           <b-collapse is-nav id="nav_collapse">
             <b-navbar-nav>
-              <b-nav-item :class="selectedTheme" href="#">About Wilo</b-nav-item>
+              <b-nav-item :class="selectedTheme" href="#/about">About Wilo</b-nav-item>
             </b-navbar-nav>
             <b-navbar-nav class="ml-auto">
               <b-form-checkbox switch v-model="checked" name="check-button">
