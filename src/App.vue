@@ -286,16 +286,8 @@ body {
   border: 2px solid!important;
   border-color: #ff8533!important;
 }
-// table {
-//   color: white!important;
-// }
-// .dark-theme a {
-//   background-color: black;
-//   color: white!important;
-// }
-// .white-theme a {
-//   background-color: white;
-//   color: black!important;
-// }
+.table-hover tbody tr:hover {
+  color: #ff8533!important;
+}
 
 </style>

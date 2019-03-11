@@ -146,18 +146,24 @@ export default {
     deleteanchor (anchorid) {
       this.$http.delete('http://localhost:3000/api/anchor/' + anchorid)
         .then((result) => {
-          this.$http.get('http://localhost:3000/api/floor/' + this.$route.params.id_floor)
+          this.$http.get('http://localhost:3000/api/floor/' + this.anchor.id_floor)
             .then((result) => {
               var index = result.data.anchors.indexOf(anchorid)
               if (index > -1) {
                 result.data.anchors.splice(index, 1)
                 this.floor = result.data
               }
-              this.$http.put('http://localhost:3000/api/floor/' + this.$route.params.id_floor, this.floor)
+              this.$http.put('http://localhost:3000/api/floor/' + this.anchor.id_floor, this.floor)
                 .then((result) => {
-                  this.$router.push({
-                    name: 'AnchorList'
-                  })
+                  if (this.anchor.id_user === JSON.parse(localStorage.getItem('user'))._id) {
+                    this.$router.push({
+                      name: 'AnchorList'
+                    })
+                  } else {
+                    this.$router.push({
+                      name: 'AdminAnchorList'
+                    })
+                  }
                 })
                 .catch(e => {
                   this.errors.push(e)

@@ -7,22 +7,19 @@
           <b-link :href="anchorList">(Anchor List)</b-link>
         </h2>
         <b-form>
-          <b-form-group class="fieldsetHorizontal"
-                    :label-cols="4"
-                    breakpoint="md"
-                    label="Enter Name">
-            <b-form-input id="name" :state="state" v-model.trim="anchor.name" style="width: 50%; margin: 0 auto;"></b-form-input>
+          <b-form-group
+            label="Enter Name"
+            style="width: 50%; margin: 0 auto; margin-top: 2%;">
+            <b-form-input id="name" :state="state" v-model.trim="anchor.name"></b-form-input>
           </b-form-group>
-          <b-form-group class="fieldsetHorizontal"
-                    :label-cols="4"
-                    breakpoint="md"
-                    label="Enter Description">
-                    <b-form-textarea id="description"
-                    v-model="anchor.description"
-                    placeholder="Enter something"
-                    :rows="2"
-                    :max-rows="6"
-                    style="width: 50%; margin: 0 auto;">{{anchor.description}}</b-form-textarea>
+          <b-form-group
+            label="Enter Description"
+            style="width: 50%; margin: 0 auto; margin-top: 2%;">
+            <b-form-textarea id="description"
+            v-model="anchor.description"
+            placeholder="Enter something"
+            :rows="2"
+            :max-rows="6">{{anchor.description}}</b-form-textarea>
             </b-form-group>
         </b-form>
         <b-button @click="reset" style="margin-top: 2%;" variant="warning">Change Anchor</b-button>
@@ -155,10 +152,16 @@ export default {
     save () {
       this.$http.put(`http://localhost:3000/api/anchor/` + this.$route.params.id_anchor, this.anchor)
         .then(response => {
-          this.$router.push({
-            name: 'ShowAnchor',
-            params: { id_building: this.$route.params.id_building, id_floor: this.$route.params.id_floor, id_anchor: this.$route.params.id_anchor }
-          })
+          if (this.anchor.id_user === JSON.parse(localStorage.getItem('user'))._id) {
+            this.$router.push({
+              name: 'ShowAnchor',
+              params: { id_building: this.$route.params.id_building, id_floor: this.$route.params.id_floor, id_anchor: this.$route.params.id_anchor }
+            })
+          } else {
+            this.$router.push({
+              name: 'AdminAnchorList'
+            })
+          }
         })
         .catch(e => {
           this.errors.push(e)

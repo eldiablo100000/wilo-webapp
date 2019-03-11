@@ -91,6 +91,7 @@ export default {
       }
       this.$http.delete(`http://localhost:3000/auth/user/` + userid)
         .then(response => {
+          localStorage.setItem('auth', null)
           this.$router.push({
             name: 'LoginPage'
           })

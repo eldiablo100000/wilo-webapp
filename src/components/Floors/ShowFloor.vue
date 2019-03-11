@@ -168,18 +168,24 @@ export default {
         .then(result => {
           this.$http.delete('http://localhost:3000/api/floor/' + floorid)
             .then((result) => {
-              this.$http.get('http://localhost:3000/api/building/' + this.$route.params.id_building)
+              this.$http.get('http://localhost:3000/api/building/' + this.floor.id_building)
                 .then((result) => {
                   var index = result.data.floors.indexOf(floorid)
                   if (index > -1) {
                     result.data.floors.splice(index, 1)
                     this.building = result.data
                   }
-                  this.$http.put('http://localhost:3000/api/building/' + this.$route.params.id_building, this.building)
+                  this.$http.put('http://localhost:3000/api/building/' + this.floor.id_building, this.building)
                     .then((result) => {
-                      this.$router.push({
-                        name: 'FloorList'
-                      })
+                      if (this.floor.id_user === JSON.parse(localStorage.getItem('user'))._id) {
+                        this.$router.push({
+                          name: 'FloorList'
+                        })
+                      } else {
+                        this.$router.push({
+                          name: 'AdminFloorList'
+                        })
+                      }
                     })
                     .catch(e => {
                       this.errors.push(e)

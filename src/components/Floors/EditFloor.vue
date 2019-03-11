@@ -7,16 +7,14 @@
           <router-link :to="{ name: 'ShowFloor', params: { id: floor._id } }">(Show Floor)</router-link>
         </h2>
         <b-form @submit="onSubmit">
-          <b-form-group id="fieldsetHorizontal"
-                    horizontal
-                    :label-cols="4"
-                    breakpoint="md"
-                    label="Enter Number">
-            <b-form-input id="number" :state="state" v-model.trim="floorNumber" style="width:50%; margin: 0 auto;"></b-form-input>
+          <b-form-group
+            label="Enter Number"
+            style="width:50%; margin: 0 auto; margin-top: 2%;">
+            <b-form-input id="number" :state="state" v-model.trim="floorNumber"></b-form-input>
           </b-form-group>
-          <b-button type="submit" variant="primary">Update</b-button>
+          <b-button type="submit" variant="primary" style="margin-top: 2%;">Update</b-button>
         </b-form>
-        <b-button @click="ModifyImage" variant="warning"> Riposiziona Immagine </b-button>
+        <b-button @click="ModifyImage" variant="warning" style="margin-top: 2%;"> Riposiziona Immagine </b-button>
       </b-col>
     </b-row>
     <div style="height: 100%; width: 100%;  ">
@@ -209,19 +207,23 @@ export default {
 
           this.$http.put(`http://localhost:3000/api/floor/` + this.$route.params.id_floor, this.floor)
             .then(response => {
-              this.$router.push({
-                name: 'ShowFloor',
-                params: { id_building: this.$route.params.id_building, id_floor: this.$route.params.id_floor }
-              })
+              if (this.floor.id_user === JSON.parse(localStorage.getItem('user'))._id) {
+                this.$router.push({
+                  name: 'ShowFloor',
+                  params: { id_building: this.$route.params.id_building, id_floor: this.$route.params.id_floor }
+                })
+              } else {
+                this.$router.push({
+                  name: 'AdminFloorList'
+                })
+              }
             })
             .catch(e => {
               this.errors.push(e)
-              console.log(e)
             })
         })
         .catch(e => {
           this.errors.push(e)
-          console.log(e + '2')
         })
     }
   },

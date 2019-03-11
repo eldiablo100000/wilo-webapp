@@ -7,17 +7,16 @@
                <b-link @click.stop="GoToBuildingList()">(Building List)</b-link>
             </h2>
             <b-form @submit="onSubmit">
-               <b-form-group class="fieldsetHorizontal"
-                  :label-cols="4"
-                  label="Enter Title">
-                  <b-form-input id="title" :state="state" v-model.trim="building.title" style="width: 50%; margin: 0 auto;"></b-form-input>
+               <b-form-group
+                  label="Enter Title"
+                  style="width: 50%; margin: 0 auto; margin-top: 2%;">
+                  <b-form-input id="title" :state="state" v-model.trim="building.title"></b-form-input>
                </b-form-group>
-               <b-form-group class="fieldsetHorizontal"
-                  :label-cols="4"
-                  breakpoint="md"
-                  label="Enter Address">
+               <b-form-group
+                  label="Enter Address"
+                  style="width: 50%; margin: 0 auto; margin-top: 2%;">
                   <!-- start map -->
-                  <div style="width: 75vh; height: 40vh; margin: 0 auto; ">
+                  <div>
                      <vl-map ref="map" v-if="showMap" data-projection="EPSG:3857" renderer="webgl">
                         <vl-view :center.sync="center" :rotation.sync="rotation" :zoom.sync="zoom"  />
                         <vl-layer-tile>
@@ -38,18 +37,16 @@
                   </div>
                   <!-- end map -->
                </b-form-group>
-               <b-form-group class="fieldsetHorizontal"
-                  :label-cols="4"
-                  breakpoint="md"
-                  label="Enter Description">
+               <b-form-group
+                  label="Enter Description"
+                  style="width: 50%; margin: 0 auto; margin-top: 2%;">
                   <b-form-textarea id="description"
                      v-model="building.description"
                      placeholder="Enter something"
                      :rows="2"
-                     :max-rows="6"
-                     style="width: 50%; margin: 0 auto;">{{building.description}}</b-form-textarea>
+                     :max-rows="6">{{building.description}}</b-form-textarea>
                </b-form-group>
-               <b-button type="submit" variant="primary">Save</b-button>
+               <b-button type="submit" variant="primary" style="margin-top: 2%;">Save</b-button>
             </b-form>
          </b-col>
       </b-row>
@@ -132,12 +129,10 @@ export default {
                   })
                   .catch(e => {
                     this.errors.push(e)
-                    console.log(e)
                   })
               })
               .catch(e => {
                 this.errors.push(e)
-                console.log(e)
               })
           })
           .catch(e => {
@@ -154,7 +149,6 @@ export default {
         for (var el in response.data.user.buildings) {
           this.$http.get('http://localhost:3000/api/building/' + response.data.user.buildings[el])
             .then((response) => {
-              console.log(response.data)
               this.buildingName.push(response.data.title)
               var tmp = {
                 id: response.data.title,

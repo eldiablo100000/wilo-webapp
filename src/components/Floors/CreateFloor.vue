@@ -5,22 +5,21 @@
       <b-link :href="floorList">(Floor List)</b-link>
     </h2>
     <b-form>
-      <b-form-group class="fieldsetHorizontal"
-        :label-cols="4"
-        breakpoint="md"
-        label="Enter Number">
-        <b-form-input id="number" :state="state" v-model.trim="floor.number" style="width: 50%; margin: 0 auto;"></b-form-input>
+      <b-form-group
+        label="Enter Number"
+        style="width: 50%; margin: 0 auto; margin-top: 2%;">
+        <b-form-input id="number" :state="state" v-model.trim="floor.number"></b-form-input>
       </b-form-group>
     </b-form>
     <div id="click">
       <div v-if="!image">
         <h2>Select an image</h2>
-        <input type="file" @change="onFileChange">
+        <input type="file" @change="onFileChange" style="margin-top: 2%;">
       </div>
       <div v-else>
-        <b-button @click="removeImage" variant="danger">Remove image</b-button>
+        <b-button @click="removeImage" variant="danger" style="margin-top: 2%;">Remove image</b-button>
       </div>
-      <b-button @click="save" variant="primary">Save!</b-button>
+      <b-button @click="save" variant="primary" style="margin-top: 2%;">Save!</b-button>
     </div>
     <div class="wrapper" position="absolute">
       <div class="workspace" ref="workspace">
@@ -127,7 +126,6 @@ export default {
       selectedFeatures: [],
       selectedImage: null,
       showMap: true,
-      step: 1000000,
       zoom: 19,
       floorName: [],
       continuePost: undefined
@@ -281,12 +279,10 @@ export default {
                   })
                   .catch(e => {
                     this.errors.push(e)
-                    console.log(e)
                   })
               })
               .catch(e => {
                 this.errors.push(e)
-                console.log(e)
               })
           })
           .catch(e => {

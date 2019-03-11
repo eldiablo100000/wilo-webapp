@@ -7,22 +7,19 @@
           <b-link :href="anchorList">(Anchor List)</b-link>
         </h2>
         <b-form>
-          <b-form-group class="fieldsetHorizontal"
-                    :label-cols="4"
-                    breakpoint="md"
-                    label="Enter Name">
-            <b-form-input id="name" :state="state" v-model.trim="anchor.name" style="width: 50%; margin: 0 auto;"></b-form-input>
+          <b-form-group
+            label="Enter Name"
+            style="width: 50%; margin: 0 auto; margin-top: 2%;">
+            <b-form-input id="name" :state="state" v-model.trim="anchor.name"></b-form-input>
           </b-form-group>
-          <b-form-group class="fieldsetHorizontal"
-                  :label-cols="4"
-                  breakpoint="md"
-                  label="Enter Description">
-                  <b-form-textarea id="description"
-                  v-model="anchor.description"
-                  placeholder="Enter something"
-                  :rows="2"
-                  :max-rows="6"
-                  style="width: 50%; margin: 0 auto;">{{anchor.description}}</b-form-textarea>
+          <b-form-group
+            label="Enter Description"
+            style="width: 50%; margin: 0 auto; margin-top: 2%;">
+            <b-form-textarea id="description"
+            v-model="anchor.description"
+            placeholder="Enter something"
+            :rows="2"
+            :max-rows="6">{{anchor.description}}</b-form-textarea>
           </b-form-group>
         </b-form>
       </b-col>

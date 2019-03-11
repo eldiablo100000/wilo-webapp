@@ -5,7 +5,7 @@
     </h2>
     Are you sure to log out?
     <div id="click">
-        <b-button @click="logout" variant="primary">Yes</b-button>
+        <b-button @click="logout" variant="primary" style="margin-top: 2%;">Yes</b-button>
     </div>
   </div>
 </template>
@@ -15,9 +15,6 @@ export default{
   name: 'LogoutPage',
   data () {
     return {
-      errors: [],
-      username: '',
-      password: ''
     }
   },
   methods: {

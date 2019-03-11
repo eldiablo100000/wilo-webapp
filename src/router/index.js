@@ -282,6 +282,7 @@ let router = new Router({
   ]
 })
 router.beforeEach((to, from, next) => {
+  console.log(localStorage.getItem('auth'))
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (localStorage.getItem('auth') == null) {
       next({

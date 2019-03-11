@@ -11,7 +11,6 @@
             {{building.title}}
           </template>
           <template slot="lead">
-            <!-- Title: {{building.title}}<br> -->
             City: {{building.city}}<br>
             Number: {{building.number}}<br>
             Road: {{building.road}}<br>
@@ -112,7 +111,6 @@ export default {
         for (var j in this.floors[i].anchors) {
           this.$http.delete('http://localhost:3000/api/anchor/' + this.floors[i].anchors[j])
             .then(response => {
-              console.log('eliminata ancora')
             })
             .catch(e => {
               this.errors.push(e)
@@ -120,7 +118,6 @@ export default {
         }
         this.$http.delete('http://localhost:3000/api/image/' + this.floors[i].image)
           .then(response => {
-            console.log('eliminata immagine')
           })
           .catch(e => {
             this.errors.push(e)
@@ -129,7 +126,6 @@ export default {
       for (var k in this.building.floors) {
         this.$http.delete('http://localhost:3000/api/floor/' + this.building.floors[k])
           .then(response => {
-            console.log('eliminato piano')
           })
           .catch(e => {
             this.errors.push(e)
@@ -137,18 +133,24 @@ export default {
       }
       this.$http.delete('http://localhost:3000/api/building/' + buildingid)
         .then((result) => {
-          this.$http.get('http://localhost:3000/auth/user/' + JSON.parse(localStorage.getItem('user'))._id)
+          this.$http.get('http://localhost:3000/auth/user/' + this.building.id_user)
             .then(result => {
               var index = result.data.user.buildings.indexOf(buildingid)
               if (index > -1) {
                 result.data.user.buildings.splice(index, 1)
                 this.user = result.data.user
               }
-              this.$http.put('http://localhost:3000/auth/user/' + JSON.parse(localStorage.getItem('user'))._id, this.user)
+              this.$http.put('http://localhost:3000/auth/user/' + this.building.id_user, this.user)
                 .then(result => {
-                  this.$router.push({
-                    name: 'BuildingList'
-                  })
+                  if (this.building.id_user === JSON.parse(localStorage.getItem('user'))._id) {
+                    this.$router.push({
+                      name: 'BuildingList'
+                    })
+                  } else {
+                    this.$router.push({
+                      name: 'AdminBuildingList'
+                    })
+                  }
                 })
                 .catch(e => {
                   this.errors.push(e)
